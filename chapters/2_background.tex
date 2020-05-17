@@ -1,0 +1,32 @@
+\chapter{Background}
+
+\section{Jolie Programming Language}
+
+\input{chapters/background/jolie-typeDefinition}
+
+\section{Module System}
+
+Module system is a system consisting of composition of an independent executable program unit. A program unit contains every definition and functionality intended to solve one specific problem, each program unit is called Modules in the module system. Each module can be parsed into a module interface, which defines a name of public symbols and the required symbols from other modules. The module interface allows other modules access providing symbols and use its implementation details in their environment. The Module System targets the decomposition of large applications into smaller pieces. This led the developer of the supported module system programming language to reuse their codes and allow the concept of package managing tools, which helps engage its community to collaborate more and grow faster.
+
+Usage of terms in the Module system varies between programming languages as their implementation detail of the module system. Before diving into the module's system of each selected popular programming language, the reader will be introduced with the term that is used within their context.
+
+Import statement is the statement that is commonly used in the Modular programming language to access and retrieve definitions between modules. It is generally responsible for two actions. Firstly locate the target module and resolve the definition to the local execution environment.
+
+In the sections below, we will look at popular programming languages that are famous for its module system. We focus on the behavior of their design choice of import system and import statement syntax.
+
+\input{chapters/background/module-python.tex}
+
+% SoC && processes หลักในการทำงาน
+% - Jolie Components ตาม syntax
+%    - symbol declaration
+
+
+%        - TypeDefinition
+%        - InterfaceDefinition
+%    - behavior declaration
+%        - Ports
+%        - EmbedService
+%    - program example
+
+% Module System ในภาษาต่างๆ
+% - Python

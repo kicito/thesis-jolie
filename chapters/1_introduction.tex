@@ -1,0 +1,154 @@
+\chapter*{Introduction}
+
+% introduction 
+% ความเป็นมาและความสำคัญของปัญหา,จุดประสงค์,ขอบเขต,benefit ที่จะได้จากโปรเจคนี้
+
+% จุดประสงค์ เพื่อศึกษาส่วนประกอบของภาษาโปรแกรมมิ่งที่รองรับ module system และพัฒนา Module system สำหรับภาษา Jolie
+
+% เกริ่นนำ 1 paragraph
+% idea 1 -----------------
+% ปัจจุบันภาษาโปรแกรมมิ่งมีหลายรูปแบบของการให้บริการ
+% โดยแบ่งออกเป็นระดับ..เพื่อให้รองรับ composing dif serv.
+% และ jolie ก็เป็นภาษาหนึ่งที่เกิดมาเพื่อทำ...
+% ซึ่งมีลักษณะเป็น SOC ที่จะช่วยให้การดำเนินโปรเจคที่มีลักษณะ...มีความยืดหยุ่น หรือดีขึ้นยังไงบ้าง
+% ดังนั้นจึงเป็นที่มาของโปรเจคเล่มนี้ ในการที่จะ ศึกษาส่วนประกอบของภาษาโปรแกรมมิ่งที่รองรับ module system และพัฒนา Module system สำหรับภาษา Jolie
+
+
+
+%idea 2 ---------------------
+% ทำไมถึงมี SOC / Modular เพราะsoftware มีความเปน module?
+% มีแล้วช่วยให้ software development ดีขึ้นยังไงลงดีเทลหน่อยนึง
+% ด้วยประโยชน์ของภาษาที่รองรับ modular programmingจะช่วยให้การพัฒนาsoftware ดีขึ้นยังไง ยกตัวอย่าง
+% ดังนั้นนี่จึงเป็นที่มาของ โปรเจคนี้โดยมีวัตถุประสงดังนี้ 
+% บอกจุดประสงค์ ---> ศึกษาส่วนประกอบของภาษาโปรแกรมมิ่งที่รองรับ module system และพัฒนา Module system สำหรับภาษา Jolie 
+% บอกขอบเขตของโปรเจคที่เราจะทำ(ของพี่แดนเขียนขอบเขตไว้ใน stucture of this thesis
+% ของเราก็เขียนว่า feature อะไรบ้างที่เพิ่มเข้าไป
+% ปิดท้ายด้วย benefit ที่จะได้จากการศึกษาและเพิ่ม feature ของ jolie
+
+% What - why - how
+% ทำไมถึงมี SOC / Modular เพราะsoftware มีความเปน module?
+
+
+% Separating of concern, SOC Module System
+
+Modular System is the system that assembled from a units of self-functional components so called a module into one larger and more complex component. It has been consider as a good practice for developing a software, if done correctly, it contributes to a manageable, interchangeable, and reuseable software \cite{MMM}. Designing a modular system required applying a principle of separating the concerns the principle has been develop and use in many aspects in designing a software from architectural of software to the implementation details or the Modular Programming.
+
+Modular Programming is a design of software that separating a program in to smaller set of functional components, called a module. A module can refer to definition or program execution unit from others and acquire them in the local execution environment. The concept is widely used and support by major modern programming languages. Even though if the programming language doesn't natively support a module system, it could be accomplished by applying a code convention guideline for example, a C programing language code convention for module system \cite{staff_2001}. 
+
+
+% SOC เพื่อ ปูไปยัง Jolie
+% Service-Oriented Computing (\textbf{SOC}) is a computing paradigm for developing an application by composing different services.
+% Each of service defines it's own role and functionality in the application context\cite{papazoglou2003service}. 
+% A service, or so called a program, proceeds it's execution by passing message from one to another. 
+% The interest on \textbf{SOC} concept has been continuously gain attraction since \cite{JOLIE}.
+% One of the research field related to \textbf{SOC} is the study of concurrency theory behind a process flow language, from it's specification of process by passing message, it can be formalizing the existing work flow language into message passing process calculus such as \(\pi\)-calculus.
+% Similarly in industrial field, despite of missing the usage of term \textbf{SOC}, is focusing on the standardize the structured message; It is emphasized on constructing a seamless integration between service providers.
+
+% Developing a service-oriented software had been criticized for being too constrained by the application it serve \cite{mckendrick_2009} \cite{SOA_opengroup}.
+% This leads to an attempt to realizing the concept in the current state and implementation approach for \textbf{SOC}.
+% The successful attempt of defining a modern service-oriented approach for develop a system is Microservice, where many of constrains has been relaxed in order to make implementation feasible for . 
+
+% Jolie
+Jolie is a service-oriented programming language which addressing the difficulty of developing a distributed system of services. Jolie helps programmer to program any service-oriented architectural design style from language itself, unlike other general programming language which usually required a combination of external technology building on top of each other to define a service. The layout of a Jolie service consist of three components defining in a structured block like C and Java programming languages. These components are Service's interfaces, location and protocol for communication, and workflow for process behavior for the the operation it accepts. 
+
+% By using a set of expressive service based primitives. Jolie is also defined as a programming language for develop microservices as a code \cite{DBLP:journals/corr/GuidiLMM17}.  Jolie is 
+% Supported modulesystem programming language
+
+
+% ตีสิสนี้ทำอะไร
+% implement module system for jolie (ปจบ support include)
+% current status 
+The goal of this thesis is to develop a foundation of module system for Jolie programming languages. We explore the design choices module system an develop one which is suit best for Jolie's. The current working status is pending for being merged in to the master branch of Jolie the main development repository is available at \url{https://github.com/kicito/jolie}.
+We also have some implementation experimental enhancement in Jolie type system based on previous work for Jolie \cite{DBLP:journals/corr/TchitchiginSMEM16}. 
+
+% intro to microservice
+% Dragoni et al. studied and identified the history of the service-oriented architectural design and classified Microservice as a second iteration of an software design architecture that adopting \textbf{SOC} concept.
+% Microservice has been exponentially gained it's popularity from since the term first coined in 2005 by Dr. Peter Rodgers, one of the major reason of Microservice success is due to the availability of tools and technology, this let development team in a company adopts the design pattern easily.
+
+% SOA
+% From the very top level, a software design style that embracing the modular design is called service-oriented architecture (\textbf{SOA}). \textbf{SOA} is a software architecture design that is focusing on the composition of services via a communication over a network protocol. The majority of \textbf{SOA} is implemented with Web Services technology, where services are composed together with the internet protocol such as SOAP, or HTTP. The implementation of \textbf{SOA} has been suffered by many difficulties mostly due to the following: lacking of tooling and testing framework \cite{vithanage_2014} \cite{JPM} and standard definition on the composition protocol between services. The latter reason had led to publication of several company owned definitions \cite{cesar2020} \cite{ibmcloudeducation2019}. \textbf{SOA} has contribute to a business value in many industry, it provides a standard of specification to ensure a seamless experience for connecting multiple systems together, for example, OpenTravel Alliance is an association by travel companies, which is focusing on develop a message structure for communication between global travel agency. It can be seen that majority of system that has adopt \textbf{SOA} is mostly a group of existing companies which shared the enterprise business context. From these reason has led to the difficulty on for a software architect to design a proper \textbf{SOA} style in a small system, and resulted in a problematic software with high technical dept.
+
+
+
+
+
+% The early stage of \textbf{SOA} was focusing on defining a document format, in order to allow a service to be reuseable by different web service provider or
+
+% maybe to background
+% In \textbf{SOA}, A service is consist of four properties which are \cite{SOA_opengroup} :
+
+% \begin{itemize}
+%     \item a logical representation of a repeatable business activity that has a specified outcome
+%     \item self-contained
+%     \item may be composed of other services
+%     \item a “black box” to consumers of the service
+% \end{itemize}
+
+% \textbf{SOA} is being renown from 2005 from the rising of World-Wide web, where the emerging of web services has start to claim their interest from industry aspects. The \textbf{SOA} during those time was about working on definition of documents to be communicate with others to be able to query. this 
+
+% The \textbf{SOA} had not initially got well received, due to it's complexity of the implementation and challenging of developing a testing framework \cite{vithanage_2014}.
+
+% The top level of designing a software that applying this fundamental is called
+% % collection of components defines a service, which usually responsible for a certain context in a business unit,
+
+
+% With modular system, the program is analyzed and build up from bottom point of view; separating the concerns that has to be address in order to achieve the end product.
+
+% Separation of concern
+
+% It also helps reducing complexity on designing a system.
+
+% Once it finished and get build up by composing as a whole.
+
+% Separating of concerns has been develop in many aspects of development cycle, from the high level architectural design such as
+
+% % what Module system for jolie
+% Modular system, a system that built from composing a small unit so called module, has becoming a well adopted principle for
+
+% Separation of concern is a
+
+% A Modular program is a program that
+
+% Sepa
+
+
+
+% Modular programming is one of the key
+
+
+
+
+% Jolie คืออะไร (ที่มา)
+% % Microservice
+% % เริ่มจาก SoC -> SOCK -> Jolie
+% % มาจาก process calculi SOCK
+% % Microservice is a programming practice that focusing on decomposing an application into small components which responsible for a single functionality for
+% % 
+% %  SOC
+% Service-Oriented Computing (\textbf{SOC}) is a computing paradigm for developing an application by composing different services. Each of service defines it's own functionality and role in the application context\cite{papazoglou2003service}. A service, or so called a program, proceeds it's execution by passing message from one to another. The interest on \textbf{SOC} concept has been continuously gain attraction since \cite{JOLIE}. One of the research field related to \textbf{SOC} is the study of concurrency theory behind \textbf{SOC}'s workflow language, from it's specification of process by passing message, it can be formalizing the existing work flow language into message passing process calculus such as \(\pi\)-calculus. Similarly in industrial field, despite of missing the usage of term \textbf{SOC}, Dragoni et al. studied and identified Microservice as a second iteration of an software design architecture that adopting \textbf{SOC} concept. Microservice has been exponentially gained it's popularity from since the term first coined in 2005 by Dr. Peter Rodgers, one of the major reason of Microservice success is due to the availability of tools and technology, this let development team in a company adopts the design pattern easily.
+
+% % SoA patterns chroreography and orchestration
+% Approaches for designing a service-oriented application can be classified, by composition of services, in two patterns. The definitions of these two patterns have been developed from observing arts performance. The first approach, \textbf{choreography}, is the pattern where composition of service is done by considering as each of services perform their execution on it's own context, exposing an interfaces and it's location for others to connect. A service in choreography
+% % A simple metaphor for describe this approach is considering a dancer who is performing their dance on a stage, without any leader, they perform their art by their self, only make a contract to other when the timing is right.
+% On the other hand, \textbf{orchestration} is a pattern of centralizing the service's behavior by having a single service so call an orchestrator, coordinate and conduct a group of service to perform a task.
+
+% % Jolie
+% \textbf{Jolie} is a service-oriented programming language developed based on \textbf{SOCK}; a calculus focusing on formalizing a model of communication between services and it's composition \cite{SOCK}. \textbf{SOCK} calculus took an inspiration well known calculi such as \textbf{CCS}, a calculus of communication systems, analyzed together with Web Service technology then redesign it to model a service-oriented system such as Web Service. Jolie use a block structured programming syntax similar to C and Java combined with effort for make the language simple and straightforward from it's author. This resulted to a flatten the learning curve for anyone who is already familiar to coding wanted to learn Jolie.
+
+
+% The concept of separating the concerns design principle has been mentioned on a published paper from   , the Service-oriented architecture (\textbf{SOA})
+
+
+% % Modular Programming คืออะไร (ที่มา)
+% % มีรูปแบบยังไง
+% % ประโยชน์
+% % ภาษาอะไรมีบ้าง
+% % Module system
+% Modular programming is one of the key component in modern programming languages. The emphasis of modularity is to separate functionality or concerns of a program to be an independent module such that it is self sufficient; it contains every information needed to perform a specific task.
+
+
+
+
+% % Scope working importstatement for Jolie, alternate file Layout for jolie execution file
+
+\input{chapters/introduction/structureOfThesis.tex}

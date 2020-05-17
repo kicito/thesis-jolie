@@ -1,32 +1,60 @@
-\documentclass[a4paper, 12pt]{article}
+\documentclass[12pt]{book}
+\usepackage[utf8]{inputenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[style=alphabetic]{biblatex}
+\usepackage{listings}
+\usepackage{xcolor}
 
+\graphicspath{ {images/} }
+\addbibresource{references/*.bib}
+
+\lstset{% This applies to ALL lstlisting
+    backgroundcolor=\color{yellow!10},%
+    numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt,%
+    }%
+
+% Applies only when you use it
+\lstdefinestyle{ANTLR}{
+    basicstyle=\small\ttfamily\color{magenta},%
+    breaklines=true,%                                      allow line breaks
+    moredelim=[s][\color{green!50!black}\ttfamily]{'}{'},% single quotes in green
+    moredelim=*[s][\color{black}\ttfamily]{options}{\}},%  options in black (until trailing })
+    commentstyle={\color{gray}\itshape},%                  gray italics for comments
+    morecomment=[l]{//},%                                  define // comment
+    emph={%
+        STRING%                                            literal strings listed here
+        },emphstyle={\color{blue}\ttfamily},%              and formatted in blue
+    alsoletter={:,|,;},%
+    morekeywords={:,|,;},%                                 define the special characters
+    keywordstyle={\color{black}},%                         and format them in black
+}
+
+
+\title{
+{Jolie: Toward Production ready}\\
+{\large University of Southern Denmark}\\
+}
 
 \author{
     Narongrit Unwerawattana\\
     Department of Mathematics and Computer Science\\
     \texttt{naunw18@student.sdu.dk}\vspace{40pt} \\
-
 }
  
 \begin{document}
+\maketitle
 
-\begingroup% MS Thesis
-\drop=0.1\textheight
-\vspace*{\drop}
-\centering
-{\LARGE THE UNIVERSITY}\\[2\baselineskip]
-{\LARGE\sffamily Conundrums: \\ puzzles for the mind}\par
-\vfill
-{\LARGE THESIS}\par
-\vspace{\drop}
-{\large some remarks concerning the supervisor \\
-and the time and place of the examination \\
-and other administrative details}\par
-\vfill
-{\large\bfseries The Candidate}\par
-\vspace*{\drop}
-\endgroup
+\tableofcontents
+% \listoffigures
+% \listoftables
 
-First document. This is a simple example, with no 
-extra parameters or packages included.
+\include{chapters/1_introduction}
+\include{chapters/2_background}
+\include{chapters/3_modulesystem}
+\include{chapters/4_conclusion}
+\include{chapters/5_appendix}
+
+\printbibliography
+
 \end{document}
