@@ -1,54 +1,107 @@
+% Content layout for Module system
+
+% history
+% definitions
+% import stmt syntax
+% import mechanism
+
+
 \subsection{Python Module System}
 
-The Python module system was inspired by Modula-3, which introduces a definition of modules and that is also used in Python.  Python also acquired the Modula-3 import statement syntax so-called dotted-separate name to allow traversing between items within a module target.  Python’s import system behaviour has been gradually evolving. Here in this chapter, we will discuss how Python 3.0 defined their import system and their import statements behaviour.
+The Python module system history and it's design can be trace back to Modula-3, as its concept of modularity is influenced many modern programming languages including Python.
+Python acquired the Modula-3 usage of \texttt{dot} notation for traversing between modules and elements inside it.
 
-In order to understand a programming language’s import system, the definitions of packages, modules, and symbols have to be defined first, these definitions are retrieved from official Python 3 documentation
+Python’s module system has been gradually evolving as the showing in more than 50 proposals related to module system in Python Enhancement Proposals (PEP) \cite{pep0}. Here in this chapter, we will discuss how Python 3.0 defined their module system and their importing mechanism.
 
-A module in python is an object with a list of python definitions and executable statements. These statements are executed during the initialization of the module. In the file system perspective a module is file with py extension, and module is named after the file name.
+A \textbf{module} is an object with a list of python definitions and executable statements. These statements are executed during the initialization of the module. In the file system perspective a module is file with py extension, and module is named after the file name.
 
-A package is also a module which might contain submodules or a subpackages, in an execution environment packages is a module with an \_\_path\_\_ attribute. Python packages are directories in the file system. In the current version of Python, the packages are categorized into two types called regular packages and namespace packages. A regular package is a package that is used in Python pior version 3.2. It’s implementation is a directory containing \_\_init\_\_.py file. A namespace package, defined as directory in a file system without \_\_init\_\_.py file. It is a combination of python’s specific element called portions. Which is a set of files in a single directory or an entry in a zip file. Portions in a namespace package may reside in different locations in the python search location. Namespace package is mainly designed to support an ability to separate submodules in multiple locations as long as the portion is found by the module finder.
+A \textbf{package} is a module which might contain sub-modules or a sub-packages.
+Thus, in file system, a directories are recognized as Python packages.
+In current version of Python, the packages are categorized into two types called regular packages and namespace packages.
+A \textbf{regular package} is a package that is implemented as a directory containing \textbf{\_\_init\_\_.py} file.
+The directory without a \textbf{\_\_init\_\_.py} is consider as a newer type package so-called \textbf{namespace package}.
+The namespace package was introduced to natively support the declaration of a module from different location \cite{pep420}. The element in namespace package is called a portion which can be a set of files in a single directory or an entry in a zip file.
 
-A regular package is a directory containing \_\_init\_\_.py file. This file is executed when the package of this type is imported, and any object defined in \_\_init\_\_.py will be bound to package namespace. The \_\_init\_\_.py file is also used by package developer to control definitions to be importwhen the local importer specify a wildcard character(*) as an identifier target; this is done by assigning exported symbols to \_\_all\_\_  symbol.
+\subsubsection{Import Statement}
 
-Despite various ways for a module to invoke an import mechanism, we mainly focus on an import statement of Python. The location of the target module can be specified by a dotted separate module name, while the target symbols is used to indicate symbol name in local namespace to be referred later for import statement caller or a wildcard character. The syntax of import statements in Python is defined as follows.
+Despite various ways for a module to invoke an import mechanism, we mainly focus on an import statement of Python.
+The location of the target module can be specified by a dotted separate module name, while the target symbols is used to indicate symbol name in local namespace to be referred later for import statement caller or a wildcard character.
+The syntax of import statements in Python is defined as follows in ~\ref{fig:python-import-stmt-syntax}.
 
+% A regular package is a directory containing \_\_init\_\_.py file. This file is executed when the package of this type is imported, and any object defined in \_\_init\_\_.py will be bound to package namespace. The \_\_init\_\_.py file is also used by package developer to control definitions to be import when the local importer specify a wildcard character(*) as an identifier target; this is done by assigning exported symbols to \_\_all\_\_  symbol.
 
-% \begin{lstlisting}[style=ANTLR ,float, caption={Import statement syntax for python 3},captionpos=b]
-% import_stmt: import_name | import_from;
-% import_name: 'import' dotted_as_names;
-% // note below: the ('.' | '...') is necessary because '...' is tokenized as ELLIPSIS
-% import_from: ('from' (('.' | '...')* dotted_name | ('.' | '...')+)
-%               'import' ('*' | '(' import_as_names ')' | import_as_names));
-% import_as_name: NAME ('as' NAME)?;
-% dotted_as_name: dotted_name ('as' NAME)?;
-% import_as_names: import_as_name (',' import_as_name)* (',')?;
-% dotted_as_names: dotted_as_name (',' dotted_as_name)*;
-% dotted_name: NAME ('.' NAME)*;
-% \end{lstlisting}
+\begin{figure}[ht]
+    \begin{framed}
+        \begin{grammar}
+            <importStmt>
+            ::= <importName>
+            | <importFrom>
 
-An import statement of python has two forms, it is either in form of import ... and from … import ... statements. Both statements create identical instructions to the module importer, choice of use is subjectively open to the developer to pick. The syntax of these to form is differ from each other in the following way.
+            <importName>
+            ::= `import' <dottedAsNames>
 
-The first form of import, import item.subitem.subsubitem, each item except the last element must be a package, while the last item can only be either a module or a package; the definition symbol cannot be the last element in this form.
+            <importFrom>
+            ::= `from' ( `.' )* ( <dottedName> | `.' ) `import' ( `*' | <importAsNames> )
 
-For the second form, from package import item, the item element can be a submodule or any definition symbol declared within the package. In this form import statement, it performs a lookup to symbol item inside the package, if not found, the process continues with an attempt to import module item. The table below shows the translation of symbols identified in different form of import symbol
+            <importAsNames>
+            ::= <importAsName> ( `,' <importAsName> )*
 
+            <importAsName>
+            ::= <NAME> ( `as' <NAME> )?
 
-ImportStatement
-Identifier detail
-import item
-item can either be a package or module
-import item.subitem
-item is a package while subitem is a submodule in item
-from pkg import item, item2
+            <dottedAsNames>
+            ::= <dottedAsName> ( `,' <dottedAsName> )*
 
+            <dottedAsName>
+            ::= <dottedName> ( `as' <NAME> )?
 
+            <dottedName>
+            ::= <NAME> ( `.' <NAME> )*
 
-If pkg is a module, item and item2 are definition symbols in pkg
-If pkg is a package, item and item2 can either be a submodule in pkg or a definition defined in pkg.
-from pkg.mod import item
-pkg is a package and mod is a submodule in pkg, while item can be a submodule of mod, or a definition symbol defined in mod
-Import statement translation
+            <NAME> ::= <ID>
+        \end{grammar}
+    \end{framed}
+    \caption{Python importstatement syntax }
+    \label{fig:python-import-stmt-syntax}
+\end{figure}
 
-The import statement, after completing its execution, resulted in a set of defined definitions ready to use in the caller’s execution context. In order to achieve this goal, import statement combines two operations i.e. searching of the named module and binding result of loaded module to a name in local scope. Search operations involve certain side-effects to the execution environment, such as importing the parent packages, and updating a module’s cache object. While the binding result process is simply assignment of the target imported module’s definitions into appropriate symbols.
-Python performs an execution of an import statement by an abstraction object called Importer. The importer consists of two abstraction objects; finders and loaders. Finders are responsible for performing module lookup from the import statement. Each finder constructs a fully qualified name of the module target by its strategy and produces necessary information for the loader to load a module afterward. Preset finders in python are one that is able to find built-in modules, frozen modules, and the last one which will perform a lookup at the list of locations defined in the import path. The loader uses the result from finder to execute the module and create a module object  and save it’s result to the cache and binds name according to the calling import statement in the local execution environment.
-Python mechanism to locate a module is performed by a finder. A finder can be extended by two types of finders which are based on the main location where the finder should attempt to find the module. Firstly the MetaPathFinder will perform a lookup at a list of paths passing through the finding method. The second type of finder, the PathEntryFinder, performs look up only to the path that is assigned during its creation.
+An import statement of python has two forms, it is either in form of \texttt{<importName>} and \texttt{<importFrom>} statements. Both statements create identical instructions to the module importer, choice of use is subjectively open to the developer to pick. The semantic of these to form is differ from each other in the following way.
+
+The first form of import, \texttt{<importName>}, every \texttt{<NAME>} declared in \texttt{<dottedName>} excepted last one must be a package, while the last \texttt{<NAME>} can only be either a module or a package; it cannot referred to a definition symbol inside a module.
+
+For the second form, \texttt{<importFrom>}, the item element can be a module or any definition symbol declared within the package. In this form, it performs a lookup to symbol item inside the package, if not found, the process continues with an attempt to import module item. The table below shows the translation of symbols identified in different form of import symbol. Figure ~\ref{table:python-import-def} shows the comparison of elements in import statement.
+
+\begin{table}[ht]
+    \centering
+    \begin{tabular}{ |l|p{0.7\linewidth}| }
+        \hline
+        Statement                         & Element explanation                                                                                                             \\
+        \hline
+        import item                       & \textbf{item} can either be a package or a module.                                                                              \\
+        \hline
+        import item.subitem               & \textbf{item} is a package while \textbf{subitem} is a module in \textbf{item}.                                                 \\
+        \hline
+        from pkg import item, item2       &
+        \makecell[l]
+        {If \textbf{pkg} is a module,                                                                                                                                       \\ \textbf{item} and \textbf{item2} are definition symbols in \textbf{pkg}                                                            \\
+            If \textbf{pkg} is a package,                                                                                                                                   \\ \textbf{item} and \textbf{item2} can either be a module in \textbf{pkg} or \\ a definition defined in \textbf{pkg}.
+        }                                                                                                                                                                   \\
+        \hline
+        from pkg.mod import item & \textbf{pkg} is a package and mod is a module in \textbf{pkg}, while \textbf{item} can be a module of \textbf{mod}, or a definition symbol defined in \textbf{mod}. \\
+        \hline
+    \end{tabular}
+    \caption{Python import element definition}
+    \label{table:python-import-def}
+\end{table}
+
+After completing the execution of import statement, which resulted in a set of defined definitions ready to use in the caller’s execution context.
+In order to achieve this goal, import statement combines searching of the named module and binding result of loaded module to appropriate name.
+In the implementation level, this two operation are perform by an \texttt{importer} The importer consists of two abstraction objects; finders and loaders.
+Finders are responsible for performing module lookup, while loaders use the result from finder to execute and create a module object which later is saved to the cache.
+Lastly loader binds name as defined in import statement to the local execution environment.
+
+Python mechanism of locating a module is performed by a \texttt{finder}.
+A finder is extended by two types of finders which are based on the main location where the finder should attempt to find the module.
+Firstly the \texttt{MetaPathFinder} will perform a lookup at a list of paths passing through the finding method.
+The second type of finder, the \texttt{PathEntryFinder}, performs look up only to the path that is assigned during its creation.
+Searching operations may cause certain side-effects to the execution environment. In case of importing a module inside package, it is process by importing each parent packages from top level until the module is reached, which means it also executes the initialization instructions of every module target's parent packages.

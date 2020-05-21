@@ -91,7 +91,7 @@ The behaviors in Jolie define a composition of tasks, so called a processes, whi
 
 In addition to the support of basic statements as other programming languages, Jolie natively supports a communication statements, which consist of two patterns, i.e. One-Way operation and Request-Response operation. As the name suggested, One-Way operation send a message through port and continue, while Request-Response waits for a response message from the target port then continue. With these concepts, a Jolie program encapsulate a whole communication procedure within a single statement. From the syntax, the \(<operationName>\), \(<outputPortName>\) are an identifier referring to the calling operation and port name respectively, while \(expr\) is an basic expression that is use to send and storing the received data.
 
-Another service-oriented statement supported by Jolie is an Nondeterministic Choice defined in \(<ndInputChoices>\), which determine a workflow of the service, when the accepted operation get called. It is useful when a service is acting as provider in the system. The workflow consist of two parts of execution definition defined in \(processes\) syntax rule. Firstly, defined within square brackets scope, normally used for building an response for return to client since it is executing upon the operation is invoked. The second one, defined after the brackets, is performed after service has responded to the client, it useful in a situation where there are blocking tasks that do not contributed to the response message.
+Another service-oriented statement supported by Jolie is an Nondeterministic Choice defined in \(<ndInputChoices>\), which determine a workflow of the service, when the accepted operation get called. It is useful when a service is acting as provider in the system. The workflow consist of two parts of execution definition defined in \(<processes>\) syntax rule. Firstly, defined within square brackets scope, normally used for building an response for return to client since it is executing upon the operation is invoked. The second one, defined after the brackets, is performed after service has responded to the client, it useful in a situation where there are blocking tasks that do not contributed to the response message.
 
 \begin{figure}[h]
     \begin{framed}
@@ -103,10 +103,16 @@ Another service-oriented statement supported by Jolie is an Nondeterministic Cho
             \alt `;' \hfill (sequential composition)
 
             <process> ::= \dots
-            \alt <ndInputChoices> \hfill (nondeterministic Choice)
+            \alt <ndInputChoices> \hfill (non-deterministic Choice)
             \alt <inputStmt> \hfill (input operation statement)
             \alt <outputStmt> \hfill (output operation statement)
 
+            <ndInputChoices>
+            ::= <ndInputChoice>+
+
+            <ndInputChoice>
+            ::= '[' <inputStmt> `{' <processes> `}' ? ']' <processes>?
+            
             <inputStmt>
             ::= <operationName> '(' <expr>? ')' \hfill (one-way)
             \alt
@@ -116,12 +122,6 @@ Another service-oriented statement supported by Jolie is an Nondeterministic Cho
             ::= <operationName> `@' <outputPortName> '(' <expr>? ')' \hfill (one-way)
             \alt
             <operationName> `@' <outputPortName> '(' <expr>? ')' '(' <expr>? ')' \hfill (request-response)
-
-            <ndInputChoices>
-            ::= <ndInputChoice>+
-
-            <ndInputChoice>
-            ::= '[' <inputStmt> `{' <processes> `}' ? ']' <processes>?
         \end{grammar}
     \end{framed}
     \caption{Jolie Grammar for deployment instruction part}
@@ -174,15 +174,15 @@ The including target string can specify as a Java JAR url like \texttt{<scheme>:
 
 \subsection{Jolie example program}
 
-Once we are familiar with the basic concept of Jolie, we can demonstrate an example program of Jolie service, a Sum Service and it's client.
+Once we are familiar with the basic concept of Jolie, we can demonstrate an example program of Jolie service, a sum service which take two integer and sum them together. We also going demonstrate how to invoke an operation of a service.
 
-Firstly, the interface declaration file defined a list of shared definition between the client and sum service. which are type call \texttt{intPair} and the interface defining a operation that is used for communicate.
+Firstly, the interface declaration file defined a list of shared definition between the client and sum service. which are type call \texttt{intPair} and the interface defining a operation that is used for communication.
 
-\begin{listing}[h]
-    \lstset{language=Jolie,
-        style=codeStyle
-    }
-    \begin{lstlisting}[frame=tlrb]{sumIface.iol}
+\begin{listing}[ht]
+\lstset{language=Jolie,
+    style=codeStyle
+}
+\begin{lstlisting}[frame=tlrb]{sumIface.iol}
 // sumIface.iol
 type intPair: void{
     x : int
@@ -192,18 +192,19 @@ interface SumIface{
     requestResponse: sum(intPair)(int)
 }
 \end{lstlisting}
-    \caption{Sum service interface}
-    \label{list:example-iol}
+\caption{Sum service interface}
+\label{list:example-iol}
 \end{listing}
 
-\begin{listing}[h]
+Then we define the sum server ~\ref{list:example-sum}, which capable of performing a sum operation when it is called through an input port \texttt{IP}. In line 9 of server service, we instruct the service to execute a workflow instruction when receive an invocation. Lastly in our main behavior, we create a non deterministic choice as a handler for the operation defined in \texttt{SumIface}.
 
-    \lstset{language=Jolie,
-        style=codeStyle,
-        numbers=left,
-        firstnumber=1
-    }
-    \begin{lstlisting}[frame=tlrb]{calculator.ol}
+\begin{listing}
+\lstset{language=Jolie,
+    style=codeStyle,
+    numbers=left,
+    firstnumber=1
+}
+\begin{lstlisting}[frame=tlrb]{calculator.ol}
 include "sumIface.iol" // include interface file
 
 inputPort IP{
@@ -212,7 +213,7 @@ inputPort IP{
     interfaces:SumIface
 }
 
-execution 
+execution { concurrent }
 
 main{
     [sum(req)(res){
@@ -224,20 +225,17 @@ main{
     \label{list:example-sum}
 \end{listing}
 
-\begin{listing}[h]
+For our example of the service's client, we firstly include the standard library `console', which exposes us the ability to perform console related tasks eg. print and receive console input. Later at line 4 we declare a communication channel called \texttt{Calculator} which bind the communication channel to server's input port. Lastly we declare a behavior of the client, we basically build a message value and send it through invoke a operation \texttt{sum} in the output port.  
 
-
+\begin{listing}
     \lstset{language=Jolie,
         style=codeStyle,
         numbers=left,
         firstnumber=1
     }
     \begin{lstlisting}[frame=tlrb]{client.ol}
-include "console.iol" 
-// use build-in service "console"
-
-include "sumIface.iol" 
-// include an interface file 
+include "console.iol" // use build-in service "console"
+include "sumIface.iol" // include an interface file 
 
 outputPort Calculator{
     location:"socket://localhost:3000"
@@ -264,11 +262,11 @@ main{
 
 Module system is a system consisting of composition of an independent executable program unit. A program unit contains every definition and functionality intended to solve one specific problem, each program unit is called Modules in the module system. Each module can be parsed into a module interface, which defines a name of public symbols and the required symbols from other modules. The module interface allows other modules access providing symbols and use its implementation details in their environment. The Module System targets the decomposition of large applications into smaller pieces. This led the developer of the supported module system programming language to reuse their codes and allow the concept of package managing tools, which helps engage its community to collaborate more and grow faster.
 
-Import statement is the statement that is commonly used in the Modular programming language to access and retrieve definitions between modules. It is generally responsible for two actions. Firstly locate the target module and resolve the definition to the local execution environment.
+Import statement is the statement that is commonly used in the Modular programming language to access and retrieve definitions between modules. It is generally responsible for locating the target module, and resolve the definition to the local execution environment.
 
 Usage of terms in the Module system varies between programming languages as their implementation detail of the module system. Before diving into the module's system of each selected popular programming language, the reader will be introduced with the term that is used within their context.
 
-In the sections below, we will look at popular programming languages that are famous for its module system. We focus on the behavior of their design choice of import system and import statement syntax.
+In the sections below, we will look at popular programming languages that are famous for its module system. We focus on the behavior of their design choice of Module system and importing mechanism.
 
 \input{chapters/background/module-python.tex}
 
