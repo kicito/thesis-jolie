@@ -3,18 +3,6 @@
 % introduction 
 % ความเป็นมาและความสำคัญของปัญหา,จุดประสงค์,ขอบเขต,benefit ที่จะได้จากโปรเจคนี้
 
-% จุดประสงค์ เพื่อศึกษาส่วนประกอบของภาษาโปรแกรมมิ่งที่รองรับ module system และพัฒนา Module system สำหรับภาษา Jolie
-
-% เกริ่นนำ 1 paragraph
-% idea 1 -----------------
-% ปัจจุบันภาษาโปรแกรมมิ่งมีหลายรูปแบบของการให้บริการ
-% โดยแบ่งออกเป็นระดับ..เพื่อให้รองรับ composing dif serv.
-% และ jolie ก็เป็นภาษาหนึ่งที่เกิดมาเพื่อทำ...
-% ซึ่งมีลักษณะเป็น SOC ที่จะช่วยให้การดำเนินโปรเจคที่มีลักษณะ...มีความยืดหยุ่น หรือดีขึ้นยังไงบ้าง
-% ดังนั้นจึงเป็นที่มาของโปรเจคเล่มนี้ ในการที่จะ ศึกษาส่วนประกอบของภาษาโปรแกรมมิ่งที่รองรับ module system และพัฒนา Module system สำหรับภาษา Jolie
-
-
-
 %idea 2 ---------------------
 % ทำไมถึงมี SOC / Modular เพราะsoftware มีความเปน module?
 % มีแล้วช่วยให้ software development ดีขึ้นยังไงลงดีเทลหน่อยนึง
@@ -29,11 +17,33 @@
 % ทำไมถึงมี SOC / Modular เพราะsoftware มีความเปน module?
 
 
-% Separating of concern, SOC Module System
+% เขียนแนวว่า ปัจจุบันอุสาหกรรม software มีความใหญ่และซับซ้อนขึ้น ได้มีการศึกษาถึงวิธีและ practical guideline and methodology to create a หนึ่งในวิธีการที่จะทำให้โค้ด maintain ได้ง่ายขึ้นคือการ ทำให้ system มีความเป็น modular โดยการ apply Seperation of concerns to plan and write code, 
 
-Modular System is the system that assembled from a units of self-functional components so called a module into one larger and more complex component. It has been consider as a good practice for developing a software, if done correctly, it contributes to a manageable, interchangeable, and reuseable software \cite{MMM}. Designing a modular system required applying a principle of separating the concerns the principle has been develop and use in many aspects in designing a software from architectural of software to the implementation details or the Modular Programming.
+For a long time, The demand of principle and methodology of designing a software is always a point of discussion in software development.
+As the software is continuously evolving from time to time, Israeli et al. studied Linux kernel evolution for over 800 of new versions and found that the size, from various metric, has been increasing linearly from 1994 to 2008 \cite{10.1016/j.jss.2009.09.042}. Even for present day, the development of Linux kernel between 2019 to 2020, 1.3 million new lines of codes have been added to Linux kernel source code by 4,190 different contributors \cite{anderson2020}. For this reason, the goal of having a simple, maintainable details in software, from architectural point of view to the implementation level, is crucial for every software development cycle.
+The principle that is well known and adopted in many aspects of programming related field is Separation of Concerns (\textbf{SoC}). The aim of \textbf{SoC} is to separate the problem into a small set of sub-problems in order to help the practitioner focus on one single aspect, instead of being overwhelmed by the amount of complexity of the software as a whole. Among many other principles, modularizing the system to smaller components is one of the prominent practices.
 
-Modular Programming is a design of software that separating a program in to smaller set of functional components, called a module. A module can refer to definition or program execution unit from others and acquire them in the local execution environment. The concept is widely used and support by major modern programming languages. Even though if the programming language doesn't natively support a module system, it could be accomplished by applying a code convention guideline for example, a C programing language code convention for module system \cite{staff_2001}. 
+\begin{displayquote}
+    "the separation of concerns", which, even if not perfectly possible, is yet the only available technique for effective ordering of one's thoughts, that I know of. This is what I mean by "focussing one's attention upon some aspect" 
+    - Edsger W.Dijkstra\cite{dijkstra1974}
+\end{displayquote}
+
+Modular System is the system that is assembled from a smaller component unit so called a module into one larger and more complex component. It has been considered a good practice for developing a software. If done correctly, it contributes to a manageable, interchangeable, and reusable software \cite{MMM}. Designing a modular system required applying a principle of separating the concerns the principle has been developed and used in many aspects in designing a software from architectural to the implementation style or so-called the modular programming. A module in modular programming can refer to definition or program execution unit from others and acquire them in the local execution environment. The concept is widely used and supported by major modern programming languages. Even though if the programming language does not natively support a module system, it could be accomplished by applying a code convention guideline for example, a C programming language code convention for module system \cite{staff2001}.
+
+% Jolie
+Jolie\cite{JOLIE} is a service-oriented programming language which addresses the difficulty of developing a distributed system of services. Jolie helps programmer to program any service-oriented architectural design style from language itself, unlike other general programming languages which usually require a combination of external technology building on top of each other to define a service. The layout of a Jolie service consists of three components defining in a structured block like C and Java programming languages. These components are Service's interfaces, location and protocol for communication, and workflow for process behavior for the operation it accepts.
+
+
+% ตีสิสนี้ทำอะไร
+% implement module system for jolie (ปจบ support include)
+% current status 
+The goal of this thesis is to develop a foundation of module system for Jolie programming languages. We explore the design choices module system an develop one which is best-suited for Jolie's. The current working status is pending for being merged in to the master branch of Jolie the main development repository is available at \url{https://github.com/kicito/jolie}.
+We also have some implementation experimental enhancement in Jolie type system based on previous work for Jolie \cite{DBLP:journals/corr/TchitchiginSMEM16}.
+
+\input{chapters/introduction/structureOfThesis.tex}
+\input{chapters/introduction/usedNotation.tex}
+
+
 
 
 % SOC เพื่อ ปูไปยัง Jolie
@@ -48,18 +58,8 @@ Modular Programming is a design of software that separating a program in to smal
 % This leads to an attempt to realizing the concept in the current state and implementation approach for \textbf{SOC}.
 % The successful attempt of defining a modern service-oriented approach for develop a system is Microservice, where many of constrains has been relaxed in order to make implementation feasible for . 
 
-% Jolie
-Jolie is a service-oriented programming language which addressing the difficulty of developing a distributed system of services. Jolie helps programmer to program any service-oriented architectural design style from language itself, unlike other general programming language which usually required a combination of external technology building on top of each other to define a service. The layout of a Jolie service consist of three components defining in a structured block like C and Java programming languages. These components are Service's interfaces, location and protocol for communication, and workflow for process behavior for the the operation it accepts. 
-
 % By using a set of expressive service based primitives. Jolie is also defined as a programming language for develop microservices as a code \cite{DBLP:journals/corr/GuidiLMM17}.  Jolie is 
 % Supported modulesystem programming language
-
-
-% ตีสิสนี้ทำอะไร
-% implement module system for jolie (ปจบ support include)
-% current status 
-The goal of this thesis is to develop a foundation of module system for Jolie programming languages. We explore the design choices module system an develop one which is suit best for Jolie's. The current working status is pending for being merged in to the master branch of Jolie the main development repository is available at \url{https://github.com/kicito/jolie}.
-We also have some implementation experimental enhancement in Jolie type system based on previous work for Jolie \cite{DBLP:journals/corr/TchitchiginSMEM16}. 
 
 % intro to microservice
 % Dragoni et al. studied and identified the history of the service-oriented architectural design and classified Microservice as a second iteration of an software design architecture that adopting \textbf{SOC} concept.
@@ -150,5 +150,3 @@ We also have some implementation experimental enhancement in Jolie type system b
 
 
 % % Scope working importstatement for Jolie, alternate file Layout for jolie execution file
-
-\input{chapters/introduction/structureOfThesis.tex}

@@ -1,0 +1,17 @@
+\chapter{Jolie Module System}
+
+\section{Definitions}
+
+Before diving into the details, it is useful to define a definition of components in a module system. In Jolie,
+\begin{itemize}
+    \item
+          A \b{symbol} is a declaration of file level definition AST node. Symbol target is defined along with a module target in the import statement to specify which definition node it to be imported.
+    \item
+          A \b{module} is defined as a Jolie execution code in the file system. A module is a file contains symbols and the execution target for running the jolie code.
+    \item
+          A \b{package} is defined as either a directory in the file system or a  file. A package role in the jolie module system is a place to hold the modules and can be part of the module target.
+\end{itemize}
+
+
+% วิธีการพัฒนา
+% algorithm

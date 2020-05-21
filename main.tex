@@ -1,35 +1,112 @@
-\documentclass[12pt]{book}
+\documentclass[12pt,openany]{book}
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage[style=alphabetic]{biblatex}
-\usepackage{listings}
+\usepackage{biblatex}
+\usepackage{listings,lstautogobble}
 \usepackage{xcolor}
+\usepackage{csquotes}
+\usepackage{syntax}
+\usepackage{framed}
+\usepackage[skip=2pt]{caption} % example skip set to 2pt
+\usepackage[section]{placeins}
+\usepackage{textcomp}
+\usepackage[htt]{hyphenat}
+
+\usepackage{newfloat}
+\DeclareFloatingEnvironment[
+   fileext=lol,
+   name=Listing
+]{listing}
+\DeclareCaptionSubType{listing}
+
+ 
+\usepackage{subcaption}
+\DeclareCaptionSubType{listing}
+
+\definecolor{gray}{rgb}{0.4,0.4,0.4}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.6}
+\definecolor{cyan}{rgb}{0.0,0.6,0.6}
+
+\definecolor{pblue}{rgb}{0.13,0.13,1}
+\definecolor{pgreen}{rgb}{0,0.5,0}
+\definecolor{pred}{rgb}{0.9,0,0}
+\definecolor{pgrey}{rgb}{0.46,0.45,0.48}
 
 \graphicspath{ {images/} }
 \addbibresource{references/*.bib}
 
-\lstset{% This applies to ALL lstlisting
-    backgroundcolor=\color{yellow!10},%
-    numbers=left, numberstyle=\tiny, stepnumber=2, numbersep=5pt,%
-    }%
-
-% Applies only when you use it
-\lstdefinestyle{ANTLR}{
-    basicstyle=\small\ttfamily\color{magenta},%
-    breaklines=true,%                                      allow line breaks
-    moredelim=[s][\color{green!50!black}\ttfamily]{'}{'},% single quotes in green
-    moredelim=*[s][\color{black}\ttfamily]{options}{\}},%  options in black (until trailing })
-    commentstyle={\color{gray}\itshape},%                  gray italics for comments
-    morecomment=[l]{//},%                                  define // comment
-    emph={%
-        STRING%                                            literal strings listed here
-        },emphstyle={\color{blue}\ttfamily},%              and formatted in blue
-    alsoletter={:,|,;},%
-    morekeywords={:,|,;},%                                 define the special characters
-    keywordstyle={\color{black}},%                         and format them in black
+\DeclareSourcemap{
+  \maps[datatype=bibtex]{
+    \map[overwrite]{
+      \step[fieldsource=month, match=\regexp{\A(j|J)an(uary)?\Z}, replace=1]
+      \step[fieldsource=month, match=\regexp{\A(f|F)eb(ruary)?\Z}, replace=2]
+      \step[fieldsource=month, match=\regexp{\A(m|M)ar(ch)?\Z}, replace=3]
+      \step[fieldsource=month, match=\regexp{\A(a|A)pr(il)?\Z}, replace=4]
+      \step[fieldsource=month, match=\regexp{\A(m|M)ay\Z}, replace=5]
+      \step[fieldsource=month, match=\regexp{\A(j|J)un(e)?\Z}, replace=6]
+      \step[fieldsource=month, match=\regexp{\A(j|J)ul(y)?\Z}, replace=7]
+      \step[fieldsource=month, match=\regexp{\A(a|A)ug(ust)?\Z}, replace=8]
+      \step[fieldsource=month, match=\regexp{\A(s|S)ep(tember)?\Z}, replace=9]
+      \step[fieldsource=month, match=\regexp{\A(o|O)ct(ober)?\Z}, replace=10]
+      \step[fieldsource=month, match=\regexp{\A(n|N)ov(ember)?\Z}, replace=11]
+      \step[fieldsource=month, match=\regexp{\A(d|D)ec(ember)?\Z}, replace=12]
+    }
+  }
 }
 
+\definecolor{comment}{RGB}{0,128,0} % dark green
+\definecolor{string}{RGB}{255,0,0}  % red
+\definecolor{keyword}{RGB}{0,0,255} % blue
+
+\lstset{
+  showspaces=false,
+  showtabs=false,
+  breaklines=true,
+  showstringspaces=false,
+  breakatwhitespace=true,
+  basicstyle=\ttfamily,
+  tabsize=2
+}
+
+\lstdefinestyle{codeStyle}{
+  commentstyle=\color{pgreen},
+  keywordstyle=\color{pblue},
+  stringstyle=\color{pred},
+  moredelim=[il][\textcolor{pgrey}]{$$},
+  moredelim=[is][\textcolor{pgrey}]{\%\%}{\%\%}
+}
+
+\lstdefinelanguage{Jolie}{
+  morekeywords={as,csets,type,configType,raw,any,undefined,void,default,
+  if,for,while,spawn,foreach,else,define,main,include,from,
+  constants,inputPort,outputPort,interface,execution,cset,
+  nullProcess,RequestResponse,OneWay,throw,throws,install,
+  scope,embedded,init,synchronized,global,is_defined,
+  is_int,is_bool,is_long,is_string,bool,long,int,string,
+  double,undef,with,location,protocol,interfaces,aggregates,courier,
+  redirects,import,embed,service,binding,foreign,InputPort,OutputPort,implementation},
+  morekeywords=[2]{>>,select,match},
+  sensitive,%
+	morecomment=[l]//,%
+	morecomment=[s]{/*}{*/},%
+	morestring=[b]",%
+  morestring=[b]',%
+  classoffset=1, % starting new class
+  otherkeywords={;,|,@},
+  classoffset=0% returning to previous class
+}[keywords,comments,strings]%
+
+\lstdefinelanguage{XML}
+{
+  morestring=[b]",
+  morestring=[s]{>}{<},
+  morecomment=[s]{<?}{?>},
+  stringstyle=\color{black},
+  identifierstyle=\color{darkblue},
+  keywordstyle=\color{cyan},
+  morekeywords={xmlns,version,type}% list your attributes here
+}
 
 \title{
 {Jolie: Toward Production ready}\\
@@ -45,15 +122,16 @@
 \begin{document}
 \maketitle
 
-\tableofcontents
 % \listoffigures
 % \listoftables
 
-\include{chapters/1_introduction}
-\include{chapters/2_background}
-\include{chapters/3_modulesystem}
-\include{chapters/4_conclusion}
-\include{chapters/5_appendix}
+
+\include{chapters/1-introduction}
+\tableofcontents
+\include{chapters/2-background}
+\include{chapters/3-modulesystem}
+\include{chapters/4-conclusion}
+\include{chapters/5-appendix}
 
 \printbibliography
 
