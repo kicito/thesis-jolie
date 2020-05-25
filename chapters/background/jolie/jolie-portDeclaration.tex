@@ -10,8 +10,8 @@ Jolie also equipped with the primitives to define the advance composition of the
 \begin{figure}[ht]
     \begin{framed}
         \begin{grammar}
-            <outputPort>
-            ::= `outputPort' <portName> `{' <portConfigurationPair>+ `}'
+
+            <outputPort> ::= `outputPort' \\ <portName> `{' <portConfigurationPair>+ `}'
 
             <inputPort>
             ::= `inputPort' <portName> `{' ( <portConfigurationPair> | <inputPortConfigurationPair> )+ `}'
@@ -34,7 +34,7 @@ Jolie also equipped with the primitives to define the advance composition of the
 
 \FloatBarrier
 
-For an example of this section, we create a service as depicted at ~\ref{listing:example-port-graphic}.
+For an example of this section, we create a service as depicted at ~\ref{list:example-port-graphic}.
 The service \texttt{program} acts as a producer of the operations in \texttt{personInterface}, where the communication channel is defined in \texttt{personInputPort}.
 This service is also acted as a consumer of \texttt{loggerInterface} defined by an output port \texttt{LoggerOutputPort}.
 One key takeaway from this example is aggregation at line 11 makes \texttt{personInputPort} accepts additional operation defined in the \texttt{personInterface}. There are different scenarios which altered the behavior when the client invoke an aggregated operation. For this specific example, since the operations in \texttt{loggerInterface} are distinct to interface defined in the input port, Jolie will automatically forward the message to the origin aggregation output port.
@@ -45,7 +45,7 @@ For the interaction between ports through input/output operations which we will 
     \includegraphics[width=10cm]{ExamplePort}
     \centering
     \caption{A service for port example}
-    \label{listing:example-port-graphic}
+    \label{list:example-port-graphic}
 \end{figure}
 
 \begin{listing}[ht]
@@ -55,7 +55,7 @@ For the interaction between ports through input/output operations which we will 
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb]{typeDef-Jolie}
+    \begin{lstlisting}[frame=tlrb, caption= {Jolie Port declaration example}, label={list:example-port} ]{port-Jolie}
 outputPort LoggerOutputPort {
     location: "socket://logger-service-location:3000"
     protocol: sodep
@@ -76,8 +76,6 @@ main {
     }
 }
 \end{lstlisting}
-    \caption{Jolie Port declaration example}
-    \label{listing:example-port}
 \end{listing}
 
 \FloatBarrier

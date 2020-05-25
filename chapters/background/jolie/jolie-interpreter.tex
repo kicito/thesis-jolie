@@ -1,0 +1,23 @@
+\subsubsection{Jolie implementation}
+
+In this section we will give an introduction to the implementation of Jolie programming language. After finished this chapter, the reader should follow the implementation design and changes that had made in Jolie internal implementation for support of the module system.
+
+The implementation of Jolie language is based on interpretation approach. Therefore, the interpreter is responsible for total life-cycle of a Jolie program; parsing a program until executing it. There are four components that working together in order to interpret a Jolie program, a parser which parse source code into an Abstract Syntax Tree (AST), each Jolie behavior statement is later transform into a tree of Jolie executable process called OOIT (Object-oriented interpretation tree), the runtime environment which store the state and the responsible for executing the process, lastly, the Communication Core (CommCore) is the foundation of communication between Jolie runtime environment.
+
+The workflow of interpreting a Jolie source code is following:
+
+\begin{enumerate}
+    \item The command-line configuration get parsed, this include locate the executing target file.
+    \item The source code get parsed in parser, where the AST is created.
+    \item The each program's component nodes in AST get verified it's semantic. And resolve the type link definition
+    \item The interpretation tree, or the runtime executable object, is generated from AST.
+    \item The CommCore is initialized from the communication ports configuration declared in AST node.
+    \item The embedding services is initialized and communication related variable is set.
+    \item The runtime execute init/main procedure definition process.
+\end{enumerate}
+
+Type link definition is a definition that is referred to a type that is already defined. This may in a form of \lstinline{ type A : B } where B is a type definition previously defined in the program. The abstract syntax \texttt{A} gets resolved and linked to \texttt{B} during the verification of semantic in  
+
+
+
+%  parse configuration

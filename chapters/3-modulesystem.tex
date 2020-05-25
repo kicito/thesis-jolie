@@ -1,17 +1,172 @@
 \chapter{Jolie Module System}
 
+In this chapter, we present the module system for Jolie.
+Similarly to how we presented python module system, we will walk-though the definitions, components, import mechanism, and lastly the redesign of Jolie's code file layout.
+
 \section{Definitions}
 
-Before diving into the details, it is useful to define a definition of components in a module system. In Jolie,
+Before diving into the details, it is beneficial to define a definition of components in a module system. In Jolie:
+
 \begin{itemize}
     \item
-          A \b{symbol} is a declaration of file level definition AST node. Symbol target is defined along with a module target in the import statement to specify which definition node it to be imported.
+          A \texttt{symbol} is a declaration of file level definition AST node. Symbol target is defined along with a module target in the import statement to specify which definition node it to be imported.
     \item
-          A \b{module} is defined as a Jolie execution code in the file system. A module is a file contains symbols and the execution target for running the jolie code.
+          A \texttt{module} is defined as a Jolie execution code in the file system. A module is a file contains symbols and the execution target for running the jolie code.
     \item
-          A \b{package} is defined as either a directory in the file system or a  file. A package role in the jolie module system is a place to hold the modules and can be part of the module target.
+          A \texttt{package} is defined as either a directory in the file system or a file. A package role in the jolie module system is a place to hold the modules and can be part of the module target. A file with \texttt{.jap} extension, the Jolie's JAR-like achieve. is consider as a package which it's entry can be referred as a module.
 \end{itemize}
 
+\section{Import Statement}
+An import statement allows Jolie module to gain an accessibility to symbols from others and copy the definitions into local execution the statement syntax is shown in figure ~\ref{fig:jolie-import-stmt-syntax}.
 
-% วิธีการพัฒนา
-% algorithm
+\begin{figure}[ht]
+    \begin{framed}
+        \begin{grammar}
+            <importStmt>
+            ::= `from' <importingTargetModule> `import' <importingTargetSymbols>
+
+            <importingTargetModule> ::= ( `.' )* ( <dottedName> | `.' )
+
+            <dottedName>
+            ::= <NAME> ( `.' <NAME> )*
+
+            <importingTargetSymbols> ::=  `*' | <importAsNames>
+
+            <importAsNames>
+            ::= <importAsName> ( `,' <importAsName> )*
+
+            <importAsName>
+            ::= <NAME> ( `as' <NAME> )?
+
+            <NAME> ::= <ID>
+        \end{grammar}
+    \end{framed}
+    \caption{Jolie import statement syntax }
+    \label{fig:jolie-import-stmt-syntax}
+\end{figure}
+
+Import statement consisted of importing module target which is a dotted separated packages name with a module as the last element. Followed by a list of importing symbols target or a wildcard character ( `*' ), which targets every symbols in the importing target.
+Jolie import statement is similar to the one that Python has, thus this makes it approachable to programmers who are new to the language.
+the main advantage behind the decision of using \texttt{from \dots import \dots} syntax is the essence of specifying a module target before symbols helps the language server extension on editor to perform better suggestion to symbols.
+
+\section{Symbol and Symbol Table}
+
+Concept of Symbols has been widely used in programming languages. Generally, The term is referred to an unique entities defined and used in the execution environment, the defined entities are such as a variable names, functions names, classes and so on.
+The Symbol table is responsible for maintaining a data structure of this information, along with it's description such as the occurrences, declaration scope, and it's type. This data structure is useful for many phases in the complier processes such as the analysis tasks and the optimization.
+
+For the support of module system in Jolie, the Symbol Table is used as a truth table of the declaration symbols in the source code.
+It is implemented with hash table and is associate to a single module.
+The symbol contains an essential information for performing a binding in later stage this include: symbol name, declaration syntax node, scope and the privacy.
+Scope indicates location of the declaration node of the certain symbol either Internal or External; internal symbol specify that the symbol definition is declared within the module; on contrary, external symbol, created from an import statement, specify the the definition is declared from the external source.
+Privacy is used for controlling the access of the symbol from the external module. It can be defined as \texttt{public}, which allow access from external module, on contrary, \texttt{private} prohibit the access from external. A symbol will be set as public by default; it can be defined as private by adding `private' keyword.
+
+As a result of symbol table introduction, we have the definitions abstract syntaxes shown in ~\ref{sec:jolie-def} and additionally, the Service node, implemented as a symbols. The Service node is a new abstract syntax of Jolie for declaring a service, which we will get back to in later section.
+
+Consider a following jolie code snippet:
+
+\begin{figure}[h]
+    \begin{subfigure}[b]{\textwidth}
+        \lstset{language=Jolie,
+            style=codeStyle,
+            numbers=left,
+            firstnumber=1
+        }
+        \begin{lstlisting}[frame=tlrb]{ndChoice}
+from .B import b_type as b_imported
+type A {
+    a_type: int
+}
+private type from_b: b_imported
+\end{lstlisting}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \begin{tabular}{ |c|l|l|l| }
+            \hline
+            Symbol name & scope    & privacy & binding abstract syntax \\
+            \hline
+            b_imported  & external(.B) & private  & NONE                    \\
+            A           & local    & public  & $<$ type: A $>$         \\
+            from_b      & local    & private & $<$ type: from_b $>$    \\
+            \hline
+        \end{tabular}
+    \end{subfigure}
+    \caption{Jolie Symbol table }
+    \label{fig:jolie-ex-symbol-table}
+\end{figure}
+
+From figure ~\ref{fig:jolie-ex-symbol-table} which demonstrates the construction of Symbol table. There are three Symbols of type definitions: 
+\begin{itemize}
+    \item \texttt{b_import}, originated from an import statement, is instantiated as an \texttt{external(.B)} which determine that the definition node is referring to an external source at relative location module named B. 
+    \item \texttt{A}, as being defined within local execution, is a local scope symbol with public, the default privacy.
+    \item \texttt{from_b}, however, has a keyword private before the actual declaration, thus, this symbol cannot be import by others.
+\end{itemize}
+
+\section{ Name Resolution }
+
+The introduction of Symbol Table allows Jolie interpreter parses the definition referencing in abstract syntax by using lazy evaluation strategy.
+During parsing phase, Jolie interpreter assigned an empty named symbol object which will be resolved to an expected abstract syntax by performing name resolution.
+
+Using Name resolution, it is a process of resolving the identifier token to the expected program component. 
+The name resolution for Jolie external symbols are done by perform a lookup operation to the module source. 
+
+% ADD figure
+
+\section{ Module Finding }
+
+In order to fulfill the value in binding abstract syntax of \texttt{b_import} in out previous example, module finding mechanism has to be defined. The finder, an abstraction of object responsible for module finding, takes the module's target from symbol. And determine the type of finder to perform the task. The current implementation of Jolie module system support two type; an Absolute Finder, which perform a lookup at a set of defined path locations; and the Relative Finder, which perform a lookup from a path relatively to the import statement caller. The Finder performs module finding task and make sure that the import target is exists in file system, if the finding failed, module not found error is raised and the interpreter should stop it's execution.
+
+\subsection{ Absolute Path Resolution }
+
+For absolute import, which perform a search for the module at a defined path locations, is used for importing a library which is not reside in the package specific modules. The use case for such import is the build-in modules. 
+
+The procedure for the absolute path resolution is following:
+
+Let \texttt{P} be the list of string constructed from split \texttt{.} from module target string,  
+
+Let \texttt{FIRST} the first element before \texttt{.} in \texttt{P}
+
+Let \texttt{REST} the remainder elements after \texttt{FIRST}
+
+Let \texttt{WDIR} be the working directory of execution process
+
+Let \texttt{PACKLIBS} be the list of package directories
+
+\begin{enumerate}
+    \item resolve \texttt{P} directly from \texttt{WDIR}, return resolved location if found, else, continue
+    \item resolve \texttt{FIRST.jap} from \texttt{WDIR/lib} 
+        \item if found, look for entry \texttt{REST} and return if the entry if found, else, continue
+    \item for \texttt{DIR} in \texttt{PACKLIBS}
+        \item resolve \texttt{P} from \texttt{DIR} return resolved location if found, else, continue
+    \item throws ModuleNotFoundException
+\end{enumerate}
+
+\section { Service Node }
+
+ServiceNode is a new abstract syntax represent a definition of a Service.
+In the implementation level, it is responsible for store the deployment instructions and behaviors of a Jolie’s service.
+In order to gain most of the module system in Jolie,  We move all service’s behaviors to a named, blocked of an identifier, while at module level abstract syntax are intended to keep definition nodes such as types and interfaces.
+With this change, we can use the import mechanism to import and embed a service easily, without requiring a path as before ~\ref{sec:embedded}.
+The changes of Jolie grammar in file structure is shown in figure below:
+
+\begin{figure}[h]
+    \begin{framed}
+        \begin{grammar}
+            <jolie> ::= <importStmt>* <definitions>* 
+
+            <definitions> ::= `private'? <definition>
+
+            <definition> ::=  <typeDefinition>
+            \dots
+            \alt <serviceNode>
+
+            <serviceNode> ::= `service' <ID> \\ `{' <deplInstruction>* `main' `{' <behaviors> `}'`}'
+
+        \end{grammar}
+    \end{framed}
+    \caption{Jolie Grammar}
+    \label{fig:JolieGrammar}
+\end{figure}
+
+% \subsection{SymbolInfo}
+
+% \section{Import Mechanism}

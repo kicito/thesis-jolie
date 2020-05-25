@@ -1,4 +1,5 @@
 \subsubsection{Interface Definition}
+\label{sec:jolie-interface-def}
 
 The usage of Interface Definition in Jolie is to express a group of operations for the message passing communication. The operations in Jolie can be either a request-response type, or a one-way type. The type of operation defines an execution behavior of the service either to it is expected a message back from the server or not. The syntax for interface definition is shown in ~\ref{fig:InterfaceDefinitonSyntax}
 
@@ -29,14 +30,12 @@ By extending the type we had before, we can declare an interface as following
 \lstset{language=Jolie,
 	style=codeStyle
 }
-\begin{lstlisting}[frame=tlrb]{typeDef-Jolie}
+\begin{lstlisting}[frame=tlrb, caption= {Jolie Interface declaration example} ]{typeDef-Jolie}
 interface personInterface{
 	requestResponse: createPerson(person)(bool)
 	oneWay: createPersonAsync(person)
 }
 \end{lstlisting}
-\caption{Jolie Interface declaration example}
-
 \end{listing}
 
 Here we define an interface of two operations, which required the passing message to be a structure of type `person". When invoking `createPerson" operation, the calling service will wait and expect a boolean value to be return from the target service to be execute. While `createPersonAsync' operation will just send the message and continue.

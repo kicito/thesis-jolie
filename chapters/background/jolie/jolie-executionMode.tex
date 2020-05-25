@@ -1,6 +1,6 @@
 \subsubsection{Execution modality}
 
-In the previous port decoration example ~\ref{listing:example-port}, the runtime execution terminates after service has finished the workflow of \texttt{createPerson} operation. But as a service, we would like it to accept multiple invocation without termination.
+In the previous port decoration example at ~\ref{list:example-port}, the runtime execution terminates after service has finished the workflow of \texttt{createPerson} operation. But as a service, we would like it to accept multiple invocation without termination.
 Jolie offers a primitive to set the program execution behavior through \texttt{execution} statement which accepts three types of execution behaviors as follows:
 
 \begin{itemize}
@@ -24,7 +24,7 @@ Jolie offers a primitive to set the program execution behavior through \texttt{e
     \caption{Jolie Execution Modality Syntax}
 \end{figure}
 
-Thus, it is possible to change the service behavior in ~\ref{listing:example-port} to accept multiple operations invocation concurrently by adding one single line of code as shown in line 5 of ~\ref{listing:example-port-concurrent}
+Thus, it is possible to change the service behavior in figure ~\ref{list:example-port} to accept multiple operations invocation concurrently by adding one single line of code as shown in line 5 of figure ~\ref{list:example-port-concurrent}
 
 \begin{listing}[ht]
 
@@ -33,7 +33,7 @@ Thus, it is possible to change the service behavior in ~\ref{listing:example-por
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb]{typeDef-Jolie}
+    \begin{lstlisting}[frame=tlrb, caption= {Jolie concurrent service example}, label={list:example-port-concurrent} ]{typeDef-Jolie}
 outputPort LoggerOutputPort { ... }
 
 inputPort personInputPort { ... }
@@ -46,8 +46,6 @@ main {
     }
 }
 \end{lstlisting}
-    \caption{Jolie concurrent service example}
-    \label{listing:example-port-concurrent}
 \end{listing}
 
 \FloatBarrier

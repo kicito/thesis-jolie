@@ -1,6 +1,6 @@
 \subsubsection{Embedding Services}
-
-Jolie offers a handy mechanism to embedded an external service into a local execution. Jolie support different technologies to be embedded as a service, as it is not limited to a service defined in Jolie language. Currently Jolie supports two additional services from external technology, which are Java and Javascript. Table ~\ref{table:embedded-technology-path} The defined technology give Jolie program to expect different content in \(\langle Path \rangle\) as defined in ~\ref{fig:embedded-syntax}
+\label{sec:embedded}
+Jolie offers a handy mechanism to embedded an external service into a local execution. Jolie support different technologies to be embedded as a service, as it is not limited to a service defined in Jolie language. Currently Jolie supports two additional services from external technology, which are Java and Javascript. Table ~\ref{table:embedded-technology-path} The defined technology give Jolie program to expect different content in \(\langle Path \rangle\) as defined in table ~\ref{fig:embedded-syntax}
 
 \begin{table}[h]
     \centering
@@ -25,9 +25,9 @@ Jolie offers a handy mechanism to embedded an external service into a local exec
 
             <embedTechnology> ::= 'Java' | 'Javascript' | 'Jolie';
 
-            <Path> ::= StringLiteral;
+            <path> ::= StringLiteral;
 
-            <PortName> ::= <ID>;
+            <portName> ::= <ID>;
 
             <internalService>
             ::= 'service' <ServiceName> `{' processes `}';
@@ -37,7 +37,7 @@ Jolie offers a handy mechanism to embedded an external service into a local exec
     \label{fig:embedded-syntax}
 \end{figure}
 
-The syntax of \(\langle PortName \rangle\) defined an output port name to be binding to the embedding service. There are three cases to be considered here, which is detailed in the list below:
+The syntax of \(\langle portName \rangle\) defined an output port name to be binding to the embedding service. There are three cases to be considered here, which is detailed in the list below:
 
 \begin{itemize}
     \item If it is left blank, the embedding service will be launch as a standalone service.
@@ -45,7 +45,7 @@ The syntax of \(\langle PortName \rangle\) defined an output port name to be bin
     \item If it is pointing to new outputPort, the embedding service will automatically create a new output port and bind communication protocol to embedded service.
 \end{itemize}
 
-The example below ~\ref{listing:jolie-embeded} shows an usage of embedded statement in Jolie. Here the communication protocol and the location at line 1 is not defined in code, but it will be bound automatically to the communication port of embedded service before main starts to execute. 
+The example below in figure ~\ref{list:jolie-embeded} shows an usage of embedded statement in Jolie. Here the communication protocol and the location at line 1 is not defined in code, but it will be bound automatically to the communication port of embedded service before main starts to execute. 
 
 \begin{listing}[ht]
 
@@ -54,7 +54,7 @@ The example below ~\ref{listing:jolie-embeded} shows an usage of embedded statem
     numbers=left,
     firstnumber=1
 }
-\begin{lstlisting}[frame=tlrb]{typeDef-Jolie}
+\begin{lstlisting}[frame=tlrb, caption= {Jolie Embedding example}, label={list:jolie-embedded} ]{typeDef-Jolie}
 outputPort personService {
     interfaces: personInterface
 }
@@ -69,7 +69,7 @@ main {
 }
 \end{lstlisting}
 \caption{Jolie Embedding example}
-\label{listing:jolie-embeded}
+\label{list:jolie-embeded}
 \end{listing}
 
 \FloatBarrier
