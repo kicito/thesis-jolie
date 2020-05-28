@@ -1,0 +1,21 @@
+
+\section{ Name Resolution }
+
+The introduction of Symbol Table allows Jolie interpreter parses the definition referencing in abstract syntax by using lazy evaluation strategy. This benefits Jolie developer by allowing symbol referencing without worry about definition order. To illustrate the problem Jolie had before, consider the following source code:
+\begin{listing}[ht]
+    \lstset{language=Jolie,
+        style=codeStyle
+    }
+    \begin{lstlisting}[frame=tlrb]{definitionOrder.ol}
+define bar{
+    foo
+}
+
+define foo {
+    bar
+}
+\end{lstlisting}
+\end{listing}
+
+The execution is failed to parse since the parser cannot find a procedure definition \texttt{foo} when attempt to parse token foo inside procedure \texttt{bar}.
+By introducing name resolution to the current workflow, it is possible to write and use definition without a concern on the order. During parsing phase, Jolie interpreter assigns an empty named symbol object which will be resolved to an expected abstract syntax by performing name resolution.

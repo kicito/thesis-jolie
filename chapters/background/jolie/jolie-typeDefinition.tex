@@ -3,13 +3,13 @@
 
 Type system in Jolie is based on structural type system and is used to define the structure of message of send and receive messages. A type can be defined as a nested tree where each nodes contain value and it's children. Jolie support common primitive types with an additional two build-in types \textbf{raw} and \textbf{any}. The \textbf{raw} type is an internal type that is used for passing data and it cannot be created by the programmer. The \textbf{any} type indicates that the value can be in any form of the basic types. One of the key feature of jolie data storing is that every variable is storing a dynamic array.
 
-As every variable in jolie is a dynamic array, cardinality can be define to ensure the range of occurrences for node in form of \textit{[ min, max ]} where min and max is a positive number indicate the range. The common quantifier shorthands such as ? and * is also support here. If cardinality is not defined, it will use default value of [1,1]. From this specification, an expression referring to a variable without an index is consider as referring to the value at its first index, as shown in the reference of \texttt{pet} field in figure ~\ref{fig:TypeDefinitonUsage}. 
+As every variable in jolie is a dynamic array, cardinality can be define to ensure the range of occurrences for node in form of \textit{[ min, max ]} where min and max is a positive number indicate the range. The common quantifier shorthands such as ? and * is also support here. If cardinality is not defined, it will use default value of [1,1]. From this specification, an expression referring to a variable without an index is consider as referring to the value at its first index, as shown in the reference of \texttt{pet} field in listing ~\ref{list:TypeDefinitonUsage}. 
 
 The syntax of Jolie type definition grammar is shown in ~\ref{fig:TypeDefinitonSyntax} where \(<ID>\) is a name defined for it's type structure.
 
 A type can be defined in three ways:
 \begin{itemize}
-	\item \texttt{typeInline} is a structural composition of types, as illustrated in Figure ~\ref{fig:TypeDefinitonUsage}.
+	\item \texttt{typeInline} is a structural composition of types, as illustrated in listing ~\ref{list:TypeDefinitonUsage}.
 	\item \texttt{typeLink} is a definition aliasing to a previously defined type.
 	\item \texttt{typeChoice} is a type that can be represent from multiple types.
 \end{itemize}
@@ -38,7 +38,7 @@ A type can be defined in three ways:
 			<nativeType> ::= 'void' | 'string' | 'raw' | 'any' | 'int' | 'double' | 'long' | 'bool'
 		\end{grammar}
 	\end{framed}
-	\caption{Jolie Grammar\protect\footnotemark}
+	\caption{Jolie Type Definition Grammar\protect\footnotemark}
 	\label{fig:TypeDefinitonSyntax}
 \end{figure}
 
@@ -89,7 +89,7 @@ showspaces=false
 \end{lstlisting}
 \end{sublisting}
 \caption{ Jolie type Example }
-\label{fig:TypeDefinitonUsage}
+\label{list:TypeDefinitonUsage}
 \end{listing}
 
 \FloatBarrier

@@ -1,0 +1,33 @@
+
+\section{Import Statement}
+An import statement allows Jolie module to gain an accessibility to symbols from others and copy the definitions into local execution the statement syntax is shown in figure ~\ref{fig:jolie-import-stmt-syntax}.
+
+\begin{figure}[ht]
+    \begin{framed}
+        \begin{grammar}
+            <importStmt>
+            ::= `from' <importingTargetModule> `import' <importingTargetSymbols>
+
+            <importingTargetModule> ::= ( `.' )* ( <dottedName> | `.' )
+
+            <dottedName>
+            ::= <NAME> ( `.' <NAME> )*
+
+            <importingTargetSymbols> ::=  `*' | <importAsNames>
+
+            <importAsNames>
+            ::= <importAsName> ( `,' <importAsName> )*
+
+            <importAsName>
+            ::= <NAME> ( `as' <NAME> )?
+
+            <NAME> ::= <ID>
+        \end{grammar}
+    \end{framed}
+    \caption{Jolie import statement syntax }
+    \label{fig:jolie-import-stmt-syntax}
+\end{figure}
+
+Import statement consisted of importing module target which is a dotted separated packages name with a module as the last element. Followed by a list of importing symbols target or a wildcard character ( `*' ), which targets every symbols in the importing target.
+Jolie import statement is similar to the one that Python has, thus this makes it approachable to programmers who are new to the language.
+the main advantage behind the decision of using \texttt{from \dots import \dots} syntax is the essence of specifying a module target before symbols helps the language server extension on editor to perform better suggestion to symbols.

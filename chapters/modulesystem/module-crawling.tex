@@ -1,0 +1,158 @@
+l
+\section{ Module Crawling }
+
+In order to fulfill the value in binding abstract syntax of \texttt{b_import} in out previous example. The crawling procedure, which constructs a set of required Module Records for the execution of a program, is fulfilled by a Module Crawler. It is an object introduced in Jolie module system, which consists of module finders and program parser.
+The crawling process take an initial module record and scan for dependent module symbol, particularly one with external scope, attempt to find and parse the depending module target until every module record is available for the second step of filling module table entry. The pseudo code for it's procedure is defined in procedure \texttt{crawl} in figure ~\ref{algo:crawl}.
+
+\begin{algorithm}[h]
+    \caption{Crawl module}
+    \label{algo:crawl}
+    \begin{algorithmic}[1]
+
+        \Require{A crawling module record $root$}
+        \Ensure {A hash table of required module records $result$}
+
+        \Procedure {Crawl}{$root$}
+
+        \State $Q\gets \Call{FetchDependency}{root}$ \Comment{module to crawl}
+        \State \Call{$result.put$}{$root$} \Comment{add root to result}
+
+        \While{$Q$ is not empty}
+        \State $module\gets \Call{Q.poll}{}$
+
+        \If{$module$ in $result$}
+        \textbf{continue} \Comment{record is already parsed}
+        \EndIf
+
+        \State $record\gets$ \Call{parse}{$module$} \Comment{parse source into a module record}
+
+        \State $deps\gets \Call{FetchDependency}{record}$
+        \ForAll {$d$ in $deps$}
+        \If{$d$ not in $Q$}
+        \State \Call{$Q.add$}{$d$}
+        \EndIf
+        \EndFor
+        \State \Call{$result.put$}{$record$} \Comment{add record to result}
+
+        \EndWhile
+        \EndProcedure
+
+
+
+        \Function {FetchDependency}{$mr$}
+        \State $deps\gets$ new list
+        \ForAll{$s$ in $mr$'s external scope symbols}
+        \State $moduleTarget\gets$ module target of $s$
+        \State $source\gets \Call{find}{moduleTarget}$ \Comment{find operation by finder}
+
+        \State \Call{$deps.insert$}{$source$}
+        \EndFor
+
+        \State \textbf{return} $deps$ \Comment{list of dependency module for $mr$}
+        \EndFunction
+
+    \end{algorithmic}
+\end{algorithm}
+\FloatBarrier
+
+
+Module finding is performed by sub-component of the module crawler called finder. The current implementation of Jolie module system has two type of finder; an Absolute Finder, which perform a lookup at a set of defined path locations; and the Relative Finder, which perform a lookup from a path relatively to the import statement caller. The Finder performs module finding task and make sure that the import target is exists in file system, if the finding failed, module not found error is raised and the interpreter should stop it's execution.
+
+\subsection{ Absolute Path Resolution }
+
+For absolute import, which perform a search for the module at a defined path locations, is used for importing a library which is not reside in the package specific modules. The use case for such import is the build-in modules.
+
+The absolute path finder performs lookup in two different locations; working directory of the execution process is the first place to perform lookup, where finder directly tries to resolve the target module. then continue to the directory \texttt{lib} to look for \texttt{first.jap} where \texttt{first} is a first token defined in module target. Lastly, the finder will perform module lookup to the extensible list of directories defined in special path called \texttt{packLib}. It contains a path to a build-in libraries and can extend through command-line arguments. The procedure for the absolute path resolution is shown in figure ~\ref{algo:absolutePath}:
+
+\begin{algorithm}[h]
+    \caption{AbsolutePathResolution Procedure}
+    \label{algo:absolutePath}
+    \begin{algorithmic}[1]
+        \Require{A module target $target$}
+        \Require{A working directory of execution process $wdir$}
+        \Require{A list of package directories $libs$}
+
+        \Ensure {A location to the existed module in file system}
+
+        \Procedure {find}{}
+        \State $P\gets$ \Call{$target.split$}{`.'} \Comment{package/module tokens}
+        \State $first\gets P[0]$ \Comment{first element of $P$}
+        \State $rest\gets P[1...]$ \Comment{elements after first of $P$}
+
+        \State $module \gets$\Call{resolve}{$wdir$, $P$}
+        \If{$module$ existed}
+        \State \textbf{return} $module$ \Comment{target module located in $wdir$}
+        \EndIf
+
+        \State $japPack \gets$\Call{resolve}{$wdir$, `lib', $first$}
+        \If{$japPack$ existed and has jap extension}
+        \If{$japPack$ has $rest$ as a entry}
+        \State \textbf{return} $japPack$
+        \EndIf
+        \EndIf
+
+        \ForAll{$lib$ in $libs$}
+        \State $module \gets$\Call{resolve}{$lib$, $P$}
+        \If{$module$ existed}
+        \State \textbf{return} $module$ \Comment{target module located in $lib$}
+        \EndIf
+        \EndFor
+
+        \State \textbf{return} None \Comment{lookup failed}
+
+        \EndProcedure
+
+    \end{algorithmic}
+\end{algorithm}
+
+Consider figure ~\ref{fig:jolie-absolute-import}, which demonstrates a working directory tree representation and a working code snippet in \texttt{main.ol}, shows the relation between module targets to the actual working directory structure. The import statement defined in first line get resolve into a ./packages/somePackage.ol, while second line demonstrates an example of importing a jap archive file. Lastly the last line express an example of importing a built-in module \texttt{console}.
+
+\begin{figure}[]
+    \begin{forest}
+        for tree={
+        font=\ttfamily,
+        grow'=0,
+        child anchor=west,
+        parent anchor=south,
+        anchor=west,
+        calign=first,
+        edge path={
+                \noexpand\path [draw, \forestoption{edge}]
+                (!u.south west) +(7.5pt,0) |- node[fill,inner sep=1.25pt] {} (.child anchor)\forestoption{edge label};
+            },
+        before typesetting nodes={
+                if n=1
+                    {insert before={[,phantom]}}
+                    {}
+            },
+        fit=band,
+        before computing xy={l=15pt},
+        }
+        [.
+            [lib
+                    [someLib.jap
+                            [module.ol]
+                    ]
+            ]
+            [packages
+                    [somePackage.ol]
+            ]
+        main.ol
+        ]
+    \end{forest}
+
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb]{import-statement-absolute.ol}
+from someLib.module import componentA
+from packages.somePackage import componentB
+from console import consoleService
+\end{lstlisting}
+    \caption{A demonstration of absolute import usage in jolie}
+    \label{fig:jolie-absolute-import}
+\end{figure}
+
+\FloatBarrier

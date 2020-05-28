@@ -1,0 +1,35 @@
+
+\subsection{Code Example}
+
+
+\subsection{Service Injection Pattern}
+
+
+\begin{listing}
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb,
+basicstyle=\footnotesize]{service-injection.ol}
+
+from .console import ConsoleService, ConsoleInterface
+from .printer import main as PrinterService
+
+service main(){
+
+    outputPort Console {
+        interfaces: ConsoleInterface
+    }
+
+    //embed ConsoleService() in new Console
+    embed PrinterService() in Console
+
+    main{
+        print@Console("Hello")()
+    }
+}
+\end{lstlisting}
+
+\end{listing}

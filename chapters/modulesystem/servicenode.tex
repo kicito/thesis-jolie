@@ -1,0 +1,74 @@
+
+\section{Service Node}
+
+ServiceNode is a new abstract syntax represent a definition of a Service.
+In the implementation level, it is responsible for store the deployment instructions and behaviors of a Jolie’s service.
+In order to gain most of the module system in Jolie,  We move all service’s behaviors to a named, blocked of an identifier, while at module level abstract syntax are intended to keep definition nodes such as types and interfaces.
+With this change, we can use the import mechanism to import and embed a service easily, without requiring a path as before ~\ref{sec:embedded}.
+The changes of Jolie grammar in file structure is shown in figure ~\ref{fig:jolie-servicenode-grammar}:
+
+\begin{figure}[h]
+    \begin{framed}
+        \begin{grammar}
+            <jolie> ::= <importStmt>* <definitions>*
+
+            <definitions> ::= `private'? <definition>
+
+            <definition> ::=  <typeDefinition>
+            \dots
+            \alt <serviceNode>
+
+            <serviceNode> ::= `service' <ID> \\ `{' <deplInstruction>* `main' `{' <behaviors> `}'`}'
+
+        \end{grammar}
+    \end{framed}
+    \caption{Jolie Service Node Grammar}
+    \label{fig:jolie-servicenode-grammar}
+\end{figure}
+
+\subsubsection*{Main Service}
+
+Main service, is a service node that is named \texttt{main} which is a special node that Jolie will look for when finding a target service node.
+
+\subsection{Embedding Service Node}
+
+\subsubsection{Parameterize Port}
+
+\subsection{Backward compatibility}
+
+Since Jolie module system is relatively new and cause a breaking change on the previous version, we decided to keep the backward compatible with the old syntax. If the interpreter detected old syntax or jolie file, the AST will be transform by moving all behavior and deployment instruction nodes into the newly created main Service Node while definition nodes will remain in top level definitions. The method of detecting old syntax is relatively easy, one of trivial method is to detect whether the AST contain an Procedure Definition named \texttt{main}.
+
+\begin{algorithm}[h]
+    \caption{TransformJolieCodeToModule}
+    \label{algo:transfrom}
+    \begin{algorithmic}[1]
+        \Require{An abstract syntax tree of Jolie program $program$}
+        \Ensure {An abstract syntax tree of Jolie Module $result$}
+
+        \Procedure {transform}{}
+        \State $moduleProgram\gets$ new list\Comment{new module's program node}
+        \State $serviceProgram\gets$ new list\Comment{new new Service program node}
+
+        \ForAll{$node$ in $program$}
+        \If{$node$ is $Symbol$}
+        \If{$node$ is $Procedure$ and $node$ named \texttt{`main"} or \texttt{`init"} }
+        \State \Call{$serviceProgram.add$}{$node$}
+        \Else
+        \State \Call{$moduleProgram.add$}{$node$}
+        \EndIf
+        \Else{
+            \If{$node$ is $ImportStatement$}
+            \State \Call{$moduleProgram.add$}{$node$}
+            \Else
+            \State \Call{$serviceProgram.add$}{$node$}
+            \EndIf
+        }
+        \EndIf
+        \EndFor
+        \State $serviceNode \gets$ new service node from $serviceProgram$
+        \State \Call{$moduleProgram.add$}{$serviceNode$}
+        \State $result \gets$ $moduleProgram$
+        \EndProcedure
+
+    \end{algorithmic}
+\end{algorithm}

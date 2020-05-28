@@ -34,7 +34,7 @@ Firstly, the interface declaration file defined a list of shared definition betw
     \lstset{language=Jolie,
         style=codeStyle
     }
-    \begin{lstlisting}[frame=tlrb,caption={Sum service interface}, label={list:example-iol}]{sumIface.iol}
+    \begin{lstlisting}[frame=tlrb,caption={Sum service interface}, basicstyle=\footnotesize, label={list:example-iol}]{sumIface.iol}
 // sumIface.iol
 type intPair: void{
     x : int
@@ -48,13 +48,13 @@ interface SumIface{
 
 Then we define the sum server shown in figure ~\ref{list:example-sum}, which capable of performing a sum operation when it is called through an input port \texttt{IP}. In line 9 of server service, we instruct the service to execute a workflow instruction when receive an invocation. Lastly in our main behavior, we create a non deterministic choice as a handler for the operation defined in \texttt{SumIface}.
 
-\begin{listing}
+\begin{listing}[ht]
     \lstset{language=Jolie,
         style=codeStyle,
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb, caption= {Sum service}, label={list:example-sum} ]{sumservice.ol}
+    \begin{lstlisting}[frame=tlrb,basicstyle=\footnotesize, caption= {Sum service}, label={list:example-sum} ]{sumservice.ol}
 include "sumIface.iol" // include interface file
 
 inputPort IP{
@@ -75,13 +75,13 @@ main{
 
 For our example of the service's client, we firstly include the standard library `console', which exposes us the ability to perform console related tasks eg. print and receive console input. Later at line 4 we declare a communication channel called \texttt{Calculator} which bind the communication channel to server's input port. Lastly we declare a behavior of the client, we basically build a message value and send it through invoke a operation \texttt{sum} in the output port.
 
-\begin{listing}
+\begin{listing}[ht]
     \lstset{language=Jolie,
         style=codeStyle,
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb,caption= {Sum client example}, label={list:example-client}]{client.ol}
+\begin{lstlisting}[frame=tlrb, basicstyle=\footnotesize, caption= {Sum Service client} , label={list:example-client}]{client.ol}
 include "console.iol" // use build-in service "console"
 include "sumIface.iol" // include an interface file 
 
@@ -103,3 +103,5 @@ main{
 }
 \end{lstlisting}
 \end{listing}
+
+\FloatBarrier

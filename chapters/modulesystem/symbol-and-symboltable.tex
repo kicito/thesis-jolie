@@ -1,0 +1,95 @@
+
+\section{Symbol and Symbol Table}
+
+Concept of Symbols has been widely used in programming languages. Generally, The term is referred to an unique entities defined and used in the execution environment, the defined entities are such as a variable names, functions names, classes and so on.
+The Symbol table is responsible for maintaining a data structure of this information, along with it's description such as the occurrences, declaration scope, and it's type. This data structure is useful for many phases in the complier processes such as the analysis tasks and the optimization.
+
+For the support of module system in Jolie, the Symbol Table is used as a truth table of the declaration symbols in the source code.
+It is implemented with hash table and is associate to a single module.
+The symbol contains an essential information for performing a binding in later stage this include: symbol name, scope, privacy, and a pointer to abstract syntax node.
+Scope indicates location of the declaration node of the certain symbol either Internal or External; internal symbol specify that the symbol definition is declared within the module; on contrary, external symbol, created from an import statement, specify that the definition is declared from the external source.
+Privacy is used for controlling the access of the symbol from the external module. It can be defined as \texttt{public}, which allow access from external module, on contrary, \texttt{private} prohibit the access from external. A symbol will be set as public by default; it can be defined as private by adding `private' keyword.
+
+As a result of symbol table introduction, we have the definitions abstract syntaxes as defined in ~\ref{sec:jolie-def} and additionally, the Service node, implemented as a symbols. The Service node is a new abstract syntax of Jolie for declaring a service, which we will get back to in later section.
+
+The construction of symbol target consists of two stages; first stage, each node of definitions in AST get visited and assign to the symbol table, at the completion of this stage, every symbols that is defined within the module get assign its binding declaration abstraction node; on the second stage, executed after every related modules symbol table are finish their first stage creation, the entry of external scope record get assigned their corresponding abstract syntax node by a simple name lookup to the referring module's symbol table.
+
+\begin{figure}[ht]
+    \begin{subfigure}[b]{\textwidth}
+        \lstset{language=Jolie,
+            style=codeStyle,
+            numbers=left,
+            firstnumber=1
+        }
+        \begin{lstlisting}[frame=tlrb,
+            basicstyle=\footnotesize]{symboltable.ol}
+from C import *
+from .B import b_type as b_imported
+type A {
+    a_type: int
+}
+private type from_b: b_imported
+\end{lstlisting}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \begin{tabular}{ |c|l|l|l| }
+            \hline
+            Symbol name & scope        & privacy & binding abstract syntax \\
+            \hline
+            C*          & external(C)  & private & NONE                    \\
+            b_imported  & external(.B) & private & NONE                    \\
+            A           & local        & public  & $<$ type: A $>$         \\
+            from_b      & local        & private & $<$ type: from_b $>$    \\
+            \hline
+        \end{tabular}
+    \end{subfigure}
+    \caption{Jolie code and its Symbol table}
+    \label{fig:jolie-ex-symbol-table}
+\end{figure}
+
+From figure ~\ref{fig:jolie-ex-symbol-table} which demonstrates the construction of Symbol table.
+There are three entries gets created at first step of symbol table creation. The detail of each symbol is following:
+
+\begin{itemize}
+    \item \texttt{C*}, originated from an import statement, is instantiated as an \texttt{external(C*)} which determine that the definition node is referring to an external source module named B. In this first step, the symbol name get assigned as a unique name which to be removed later.
+    \item \texttt{b_import}, originated from an import statement, is instantiated as an \texttt{external(.B)} which determine that the definition node is referring to an external module named B at relative location respect to execution node.
+    \item \texttt{A}, as being defined within local execution, is a local scope symbol with public, the default privacy.
+    \item \texttt{from_b}, however, has a keyword private before the actual declaration, thus, this symbol cannot be import by others.
+\end{itemize}
+
+After this step, the partially created symbol table of the module is created. This partially filled symbol table has an information of binding abstract syntax which is defined within its module. While the external scope symbol are left without pointer to a binding abstract syntax. In order to complete this field, we can simply perform a lookup to symbol table of the module target that the declaration is originated.
+
+Consider figure ~\ref{fig:jolie-ex-symbol-table} which defined a symbol of module \texttt{C} and the completed symbol table from previous example. Entry \texttt{C*} get replaced by exposed symbol in its module.
+
+\begin{figure}[ht]
+    \begin{subfigure}[b]{\textwidth}
+        \begin{tabular}{ |c|l|l|l| }
+            \hline
+            Symbol name & scope & privacy & binding abstract syntax   \\
+            \hline
+            C1          & local & public  & $<$ type: C1 $>$          \\
+            C2          & local & private & $<$ type: C2 $>$          \\
+            CIface      & local & public  & $<$ interface: CIface $>$ \\
+            \hline
+        \end{tabular}
+    \end{subfigure}
+    \begin{subfigure}[b]{\textwidth}
+        \begin{tabular}{ |c|l|l|l| }
+            \hline
+            Symbol name & scope        & privacy & binding abstract syntax        \\
+            \hline
+            C1          & external(C)  & private & $<$ type: C1 $>$ in C          \\
+            CIface      & external(C)  & private & $<$ interface: CIface $>$ in C \\
+            b_imported  & external(.B) & private & $<$ type: b_type $>$ in B      \\
+            A           & local        & public  & $<$ type: A $>$                \\
+            from_b      & local        & private & $<$ type: from_b $>$           \\
+            \hline
+        \end{tabular}
+    \end{subfigure}
+    \caption{Jolie Symbol table after completion}
+    \label{fig:jolie-ex-symbol-table}
+\end{figure}
+
+\subsubsection*{Module Record}
+
+From here, we can defined a new abstraction object in Jolie interpreter ecosystem. Considering that the symbol table is a representation of symbol usage in a single module, and a module is parsed into a single AST. Thus, for the simplicity of both implementation an the explanation for later in this report. The Module record is an object consisted of an AST and symbol table of a module it's referred to.

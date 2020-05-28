@@ -14,6 +14,9 @@
 \usepackage[htt]{hyphenat}
 \usepackage{makecell}
 \usepackage{lmodern}% http://ctan.org/pkg/lm
+\usepackage{algorithm}% http://ctan.org/pkg/algorithms
+\usepackage{algpseudocode}% http://ctan.org/pkg/algorithmicx}
+\usepackage{forest}
 
 \usepackage{newfloat}
 \DeclareFloatingEnvironment[
@@ -87,7 +90,7 @@
   scope,embedded,init,synchronized,global,is_defined,
   is_int,is_bool,is_long,is_string,bool,long,int,string,
   double,undef,with,location,protocol,interfaces,aggregates,courier,
-  redirects,import,embed,service,binding,foreign,InputPort,OutputPort,implementation},
+  redirects,import,embed,service,binding,foreign,InputPort,OutputPort,implementation,private},
   morekeywords=[2]{>>,select,match},
   sensitive,%
 	morecomment=[l]//,%
@@ -124,16 +127,16 @@
 \begin{document}
 \maketitle
 
-% \listoffigures
-% \listoftables
+\listoffigures
+\listoftables
 
 
 \include{chapters/1-introduction}
 \tableofcontents
 \include{chapters/2-background}
 \include{chapters/3-modulesystem}
-\include{chapters/4-conclusion}
-\include{chapters/5-appendix}
+\include{chapters/4-experimental}
+% \include{chapters/5-appendix}
 
 \printbibliography
 

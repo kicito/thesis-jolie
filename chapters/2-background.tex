@@ -7,7 +7,7 @@ It is the first service-oriented programming language such that each of a a sing
 The goal of Jolie is to bring the formalized model of a service and composition calculus \textbf{SOCK} \cite{10.1007/11948148-27} and the practical workflow language WS-BPEL\cite{OASIS}.
 For the syntax of language, Jolie use a block structured programming syntax similar to C and Java combined with effort to make the language simple and straightforward; as a result, learning curve for Jolie is flat for those who are already familiar with coding.
 
-In this section, we briefly explain the Jolie program structure and it's components that are involved in Jolie module system. For those who keen to know more about advance topic in Jolie are recommended to visit \cite{joliedoc, JOLIE}. The missing topics that are not cover in this section are it's fault handling, an advance service composition such as the operation interceptor, so called the courier, and interfaces extension.
+In this section, we briefly explain the Jolie program structure and it's components that are involved in Jolie module system. For those who keen to know more about advance topics in Jolie are recommended to visit \cite{joliedoc, JOLIE}.
 
 Jolie program, or a service, is a file containing Jolie definitions which consists of three types of components, namely, the definitions, the service deployment description, and the service behavior.
 
@@ -22,10 +22,10 @@ Figure ~\ref{fig:JolieGrammar} demonstrate a syntax of Jolie program.
 \begin{figure}[h]
     \begin{framed}
         \begin{grammar}
-            <jolie> ::= <includeStmt>* <definitions>* <deplInstruction>*  `main' `{' <behaviors> `}'
+            <jolie> ::= <includeStmt>* <definition>* <deplInstruction>*  `main' `{' <behaviors> `}'
         \end{grammar}
     \end{framed}
-    \caption{Jolie Grammar}
+    \caption{Jolie Program Syntax}
     \label{fig:JolieGrammar}
 \end{figure}
 
@@ -42,12 +42,12 @@ The definition declaration is a set of an information related to a service. The 
 
 \input{chapters/background/jolie/jolie-procedureDefinition}
 
-Here we can revisit the syntax of the \(<definition>\) rules as following
+We can revisit the syntax of the \(<definition>\) rules as it can be represented by three components which are types, interfaces, and procedures as shown in figure ~\ref{fig:jolie-definition}
 
 \begin{figure}[h]
     \begin{framed}
         \begin{grammar}
-            <definitions> ::= <typeDefinition>
+            <definition> ::= <typeDefinition>
             \alt <interfaceDeclaration>
             \alt <procedureDefinition>
         \end{grammar}
@@ -150,9 +150,6 @@ createPerson(person)(result){
 \FloatBarrier
 
 \input{chapters/background/jolie/jolie-include}
-
-
-\subsection{Jolie implementation}
 
 \input{chapters/background/jolie/jolie-interpreter}
 
