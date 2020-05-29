@@ -63,26 +63,19 @@ Consider figure ~\ref{fig:jolie-ex-symbol-table} which defined a symbol of modul
 
 \begin{figure}[ht]
     \begin{subfigure}[b]{\textwidth}
-        \begin{tabular}{ |c|l|l|l| }
+        \begin{tabular}{ |c|l|l|l|l| }
             \hline
-            Symbol name & scope & privacy & binding abstract syntax   \\
+            Source              & Symbol name & scope        & privacy & binding abstract syntax        \\
             \hline
-            C1          & local & public  & $<$ type: C1 $>$          \\
-            C2          & local & private & $<$ type: C2 $>$          \\
-            CIface      & local & public  & $<$ interface: CIface $>$ \\
+            \multirow{3}{*}{C}  & C1          & local        & public  & $<$ type: C1 $>$               \\
+                                & C2          & local        & private & $<$ type: C2 $>$               \\
+                                & CIface      & local        & public  & $<$ interface: CIface $>$      \\
             \hline
-        \end{tabular}
-    \end{subfigure}
-    \begin{subfigure}[b]{\textwidth}
-        \begin{tabular}{ |c|l|l|l| }
-            \hline
-            Symbol name & scope        & privacy & binding abstract syntax        \\
-            \hline
-            C1          & external(C)  & private & $<$ type: C1 $>$ in C          \\
-            CIface      & external(C)  & private & $<$ interface: CIface $>$ in C \\
-            b_imported  & external(.B) & private & $<$ type: b_type $>$ in B      \\
-            A           & local        & public  & $<$ type: A $>$                \\
-            from_b      & local        & private & $<$ type: from_b $>$           \\
+            \multirow{4}{*}{.B} & C1          & external(C)  & private & $<$ type: C1 $>$ in C          \\
+                                & CIface      & external(C)  & private & $<$ interface: CIface $>$ in C \\
+                                & b_imported  & external(.B) & private & $<$ type: b_type $>$ in B      \\
+                                & A           & local        & public  & $<$ type: A $>$                \\
+                                & from_b      & local        & private & $<$ type: from_b $>$           \\
             \hline
         \end{tabular}
     \end{subfigure}
@@ -92,4 +85,4 @@ Consider figure ~\ref{fig:jolie-ex-symbol-table} which defined a symbol of modul
 
 \subsubsection*{Module Record}
 
-From here, we can defined a new abstraction object in Jolie interpreter ecosystem. Considering that the symbol table is a representation of symbol usage in a single module, and a module is parsed into a single AST. Thus, for the simplicity of both implementation an the explanation for later in this report. The Module record is an object consisted of an AST and symbol table of a module it's referred to.
+From here, we can defined a new abstraction object in Jolie interpreter ecosystem. Considering that the symbol table is a representation of symbol usage in a module, and a module is parsed into a single AST. Thus, for the simplicity of both implementation an the explanation for later in this report. The Module Record is an object consisted of an AST and symbol table of a module it's referred to.

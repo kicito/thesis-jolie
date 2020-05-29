@@ -1,11 +1,13 @@
 
 \section{Service Node}
 
-ServiceNode is a new abstract syntax represent a definition of a Service.
-In the implementation level, it is responsible for store the deployment instructions and behaviors of a Jolie’s service.
-In order to gain most of the module system in Jolie,  We move all service’s behaviors to a named, blocked of an identifier, while at module level abstract syntax are intended to keep definition nodes such as types and interfaces.
-With this change, we can use the import mechanism to import and embed a service easily, without requiring a path as before ~\ref{sec:embedded}.
-The changes of Jolie grammar in file structure is shown in figure ~\ref{fig:jolie-servicenode-grammar}:
+As the adjustment of Jolie execution file definition has changed, the file structure layout has to be modified as well.  At top level definitions, the abstract syntax of definition nodes such as types and interfaces are remained. But the service related syntax nodes such as behavioral and instruction on deployment has to be moved into a proper scope which represent a definition of a service. This lead to an introduction of a new syntax node in Jolie module system; such node is called a \textit{Service Node}.
+
+In the implementation level, Service Node is responsible for storing deployment instructions and behaviors of a service and can optionally accepted a value as a parameter, which can be passed to during embedding process.
+With this change, we can use the import mechanism to import and embed a service easily, by specify a service as an identifier, rather than using string defining a path as before.
+The definition of service node also cover the declaration of the external technology service, in particular, the one that we used for existed embedding mechanism ~\ref{sec:embedded}.
+In this new implementation of foreign technology service node, it can be view as a special type of jolie service which can interact with foreign technology.
+The grammar for Jolie module system is defined in figure ~\ref{fig:jolie-servicenode-grammar}
 
 \begin{figure}[h]
     \begin{framed}
@@ -18,19 +20,92 @@ The changes of Jolie grammar in file structure is shown in figure ~\ref{fig:joli
             \dots
             \alt <serviceNode>
 
-            <serviceNode> ::= `service' <ID> \\ `{' <deplInstruction>* `main' `{' <behaviors> `}'`}'
+            <serviceNode> ::= `service' <technology>? <ID> <param>? \\ `{' <deplInstruction>* `main' `{' <behaviors> `}'`}'
 
+            <technology> ::= <java> | <javascript> | <jolie>
+
+            <jolie> ::= `Jolie'
+
+            <java> ::= `Java' `(' <StringLiteral> `)'
+
+            <javascript> ::= `Javascript' `(' <StringLiteral> `)'
+
+            <param> ::= `(' <ID> : <paramType> `)'
+
+            <paramType> ::= <ID>
         \end{grammar}
     \end{framed}
     \caption{Jolie Service Node Grammar}
     \label{fig:jolie-servicenode-grammar}
 \end{figure}
 
-\subsubsection*{Main Service}
+\begin{listing}[h]
 
-Main service, is a service node that is named \texttt{main} which is a special node that Jolie will look for when finding a target service node.
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb, caption= {Jolie Service Node Example}, label={list:jolie-servicenode} ]{servicenode-jolie}
+interface mulIface{
+    requestResponse: mul(int)(int)
+}
+
+service mulService ( factor: int )  {
+    
+    inputPort IP {
+        interfaces : mulIface
+        protocol: sodep
+        location : "socket://localhost:3000"
+    }
+
+    execution{ concurrent }
+
+    main {
+        [mul(req)(res){
+            res = req * factor
+        }]
+    }
+}
+    \end{lstlisting}
+\end{listing}
+
+Listing ~\ref{list:jolie-servicenode} illustrates a code snippet for declaration of service node. It is in clear view that the definitions that direct the behavior of a service is encapsulate in a Service Node called \textit{mulService}, This service accepted a value of integer, which determine a second factor of multiplication operation. It is also exposes the communication channel through an interface \textit{mulIface}, which is declared at file level scope and can be imported by an external module.
+
+\FloatBarrier
+
+\subsubsection*{Jolie Script}
+
+Running a Jolie interpreter instance always involving a translation of a service abstraction into an OOIT, before it can begin the execution.
+For this reason, along with the introduction of module system where every service is encapsulate in a service node, which make it is ambiguous for an interpreter to decided which service node to be an execution target, there is a requirement of the target service node  when a module is called as a execution target. Hereby, we introduce the definition of an executable Jolie module so called \texttt{Jolie script}.
+
+A Jolie script is a Jolie module that included a service definition named \texttt{main}, which can be executed from the command
+
+
+
+
+\begin{listing}[h]
+    \lstset{language=Jolie,
+        style=codeStyle
+    }
+    \begin{lstlisting}[frame=tlrb, caption= {A Jolie script version of ~\ref{list:procedure}}, label={list:jolie-procedure-script}]{procedure-script-Jolie}
+    define doubleX{
+        X = X * 2
+    }
+    
+   service main {
+        X = 5
+        doubleX
+        // now X == 10
+    }
+    \end{lstlisting}
+\end{listing}
+
+Main service, is a service node that is named \texttt{main}, is a special node that Jolie will look for when finding a target service node when executing a jolie module, consider .
 
 \subsection{Embedding Service Node}
+
+
 
 \subsubsection{Parameterize Port}
 

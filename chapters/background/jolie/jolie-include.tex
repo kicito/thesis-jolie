@@ -26,9 +26,9 @@ The including target string can specify as a Java JAR url like \texttt{<scheme>:
 
 \subsection{Jolie example program}
 
-Once we are familiar with the basic concept of Jolie, we can demonstrate an example program of Jolie service, a sum service which take two integer and sum them together. We also going demonstrate how to invoke an operation of a service.
+Once we are familiar with the basic concept of Jolie, we can demonstrate an example program of Jolie service, a \textit{Sum Service} which take two integers and sum them together. We also going demonstrate a client which attempt to invoke an operation of this service. In this example there are three files involved, a single definition file, and two others are for service declaration.
 
-Firstly, the interface declaration file defined a list of shared definition between the client and sum service. which are type call \texttt{intPair} and the interface defining a operation that is used for communication.
+Firstly, the interface declaration file defined a list of shared definition between the client and Sum Service. It contain a definition of type \textit{intPair} and an interface \textit{SumIface}, which defined an operation that is used for communication.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -46,7 +46,7 @@ interface SumIface{
 \end{lstlisting}
 \end{listing}
 
-Then we define the sum server shown in figure ~\ref{list:example-sum}, which capable of performing a sum operation when it is called through an input port \texttt{IP}. In line 9 of server service, we instruct the service to execute a workflow instruction when receive an invocation. Lastly in our main behavior, we create a non deterministic choice as a handler for the operation defined in \texttt{SumIface}.
+Then we define the sum server shown in figure ~\ref{list:example-sum}, which capable of performing a sum operation when it is called through an input port \textit{IP}. In line 9 of server service, we instruct the service to execute a workflow instruction when receive an invocation. Lastly in our main behavior, we create a non deterministic choice as a handler for the operation defined in \textit{SumIface}.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -55,10 +55,10 @@ Then we define the sum server shown in figure ~\ref{list:example-sum}, which cap
         firstnumber=1
     }
     \begin{lstlisting}[frame=tlrb,basicstyle=\footnotesize, caption= {Sum service}, label={list:example-sum} ]{sumservice.ol}
-include "sumIface.iol" // include interface file
+include 'sumIface.iol' // include interface file
 
 inputPort IP{
-    location:"socket://localhost:3000"
+    location:'socket://localhost:3000'
     protocol:sodep 
     interfaces:SumIface
 }
@@ -82,11 +82,11 @@ For our example of the service's client, we firstly include the standard library
         firstnumber=1
     }
 \begin{lstlisting}[frame=tlrb, basicstyle=\footnotesize, caption= {Sum Service client} , label={list:example-client}]{client.ol}
-include "console.iol" // use build-in service "console"
-include "sumIface.iol" // include an interface file 
+include 'console.iol' // use build-in service 'console'
+include 'sumIface.iol' // include an interface file 
 
 outputPort Calculator{
-    location:"socket://localhost:3000"
+    location:'socket://localhost:3000'
     protocol:sodep 
     interfaces:SumIface
 }

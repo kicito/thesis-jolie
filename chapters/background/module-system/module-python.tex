@@ -9,7 +9,7 @@
 \subsection{Python Module System}
 
 The Python module system history and it's design can be trace back to Modula-3, as its concept of modularity is influenced many modern programming languages including Python.
-Python acquired the Modula-3 usage of \texttt{dot} notation for traversing between modules and elements inside it.
+Python acquired the Modula-3\cite{modula-3} usage of \texttt{dot} notation for traversing between modules and elements inside it\cite{python-foreward-essay}.
 
 Python’s module system has been gradually evolving as the showing in more than 50 proposals related to module system in Python Enhancement Proposals (PEP) \cite{pep0}. Here in this chapter, we will discuss how Python 3.0 defined their module system and their importing mechanism.
 
@@ -77,17 +77,17 @@ For the second form, \texttt{<importFrom>}, the item element can be a module or 
         \hline
         Statement                   & Element explanation                                                                                                                                                 \\
         \hline
-        import item                 & \textbf{item} can either be a package or a module.                                                                                                                  \\
+        import item                 & \textit{item} can either be a package or a module.                                                                                                                  \\
         \hline
-        import item.subitem         & \textbf{item} is a package while \textbf{subitem} is a module in \textbf{item}.                                                                                     \\
+        import item.subitem         & \textit{item} is a package while \textit{subitem} is a module in \textit{item}.                                                                                     \\
         \hline
         from pkg import item, item2 &
         \makecell[l]
-        {If \textbf{pkg} is a module,                                                                                                                                                                     \\ \textbf{item} and \textbf{item2} are definition symbols in \textbf{pkg}                                                            \\
-            If \textbf{pkg} is a package,                                                                                                                                                                 \\ \textbf{item} and \textbf{item2} can either be a module in \textbf{pkg} or \\ a definition defined in \textbf{pkg}.
+        {If \textit{pkg} is a module,                                                                                                                                                                     \\ \textit{item} and \textit{item2} are definition symbols in \textit{pkg}                                                            \\
+            If \textit{pkg} is a package,                                                                                                                                                                 \\ \textit{item} and \textit{item2} can either be a module in \textit{pkg} or \\ a definition defined in \textit{pkg}.
         }                                                                                                                                                                                                 \\
         \hline
-        from pkg.mod import item    & \textbf{pkg} is a package and mod is a module in \textbf{pkg}, while \textbf{item} can be a module of \textbf{mod}, or a definition symbol defined in \textbf{mod}. \\
+        from pkg.mod import item    & \textit{pkg} is a package and mod is a module in \textit{pkg}, while \textit{item} can be a module of \textit{mod}, or a definition symbol defined in \textit{mod}. \\
         \hline
     \end{tabular}
     \caption{Python import element definition}

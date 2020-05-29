@@ -15,7 +15,7 @@ Jolie definition declarations represent type structure definition and interface 
 
 A deployment description defines the communication layer of the service, such as protocol, location and the operation name accepted by a communication ports.
 
-The detail of a service workflow is defined in service behavior part. The communication and computation instructions are composed together to a complex executable workflow which later will be execute at runtime. 
+The detail of a service workflow is defined in service behavior part. The communication and computation instructions are composed together to a complex executable workflow which later will be execute at runtime.
 
 Figure ~\ref{fig:JolieGrammar} demonstrate a syntax of Jolie program.
 
@@ -131,21 +131,15 @@ Another service-oriented statement supported by Jolie is an Nondeterministic Cho
 \end{figure}
 
 Now lets look back to the Jolie service in example ~\ref{list:example-port}, at line 15-18
+
+\begin{lstlisting}{ndChoice}
+    createPerson(person)(result){
+        log@LoggerOutputPort(person)
+        result = true
+    }
+\end{lstlisting}
 The statement \texttt{createPerson(person)(result)} tells the runtime execution to wait for a receiving operation \texttt{createPerson} and assign the receiving message to \texttt{person} variable then an execution proceed with the processes defined in brace scope. After the execution in the brace finished, the value in variable \texttt{result} will be sent back to the operation caller.
 
-\begin{listing}[h]
-    \lstset{language=Jolie,
-        style=codeStyle,
-        numbers=left,
-        firstnumber=1
-    }
-    \begin{lstlisting}[frame=tlrb]{ndChoice}
-createPerson(person)(result){
-    log@LoggerOutputPort(person)
-    result = true
-}
-\end{lstlisting}
-\end{listing}
 
 \FloatBarrier
 
@@ -162,7 +156,7 @@ Import statement is the statement that is commonly used in the Modular programmi
 
 Usage of terms in the Module system varies between programming languages as their implementation detail of the module system. Before diving into the module's system of each selected popular programming language, the reader will be introduced with the term that is used within their context.
 
-We had review the following programming languages such as 
+We had review the following programming languages such as
 
 In the sections below, we mainly focus on Python programming language, since it's rich of documentation wise on it's history and their design choice available and it inspired our implementation of Jolie's module system.
 
