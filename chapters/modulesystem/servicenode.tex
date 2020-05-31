@@ -1,11 +1,10 @@
-
 \section{Service Node}
 
 As the adjustment of Jolie execution file definition has changed, the file structure layout has to be modified as well.  At top level definitions, the abstract syntax of definition nodes such as types and interfaces are remained. But the service related syntax nodes such as behavioral and instruction on deployment has to be moved into a proper scope which represent a definition of a service. This lead to an introduction of a new syntax node in Jolie module system; such node is called a \textit{Service Node}.
 
-In the implementation level, Service Node is responsible for storing deployment instructions and behaviors of a service and can optionally accepted a value as a parameter, which can be passed to during embedding process.
+In the implementation level, Service Node is responsible for storing deployment instructions and behaviors of a service. It may optionally accepted a parameter, which can be passed to during embedding process.
 With this change, we can use the import mechanism to import and embed a service easily, by specify a service as an identifier, rather than using string defining a path as before.
-The definition of service node also cover the declaration of the external technology service, in particular, the one that we used for existed embedding mechanism ~\ref{sec:embedded}.
+The definition of service node also covers declaration of the external technology service, in particular, the one that we used in existed embedding mechanism ~\ref{sec:embedded}.
 In this new implementation of foreign technology service node, it can be view as a special type of jolie service which can interact with foreign technology.
 The grammar for Jolie module system is defined in figure ~\ref{fig:jolie-servicenode-grammar}
 
@@ -47,14 +46,14 @@ The grammar for Jolie module system is defined in figure ~\ref{fig:jolie-service
         firstnumber=1
     }
     \begin{lstlisting}[frame=tlrb, caption= {Jolie Service Node Example}, label={list:jolie-servicenode} ]{servicenode-jolie}
-interface mulIface{
-    requestResponse: mul(int)(int)
+interface prefixerIface{
+    requestResponse: prefix(string)(string)
 }
 
-service mulService ( factor: int )  {
+service prefixService ( prefix: string )  {
     
     inputPort IP {
-        interfaces : mulIface
+        interfaces : prefixerIface
         protocol: sodep
         location : "socket://localhost:3000"
     }
@@ -62,30 +61,32 @@ service mulService ( factor: int )  {
     execution{ concurrent }
 
     main {
-        [mul(req)(res){
-            res = req * factor
+        [prefix(req)(res){
+            res = prefix + req
         }]
     }
 }
     \end{lstlisting}
 \end{listing}
 
-Listing ~\ref{list:jolie-servicenode} illustrates a code snippet for declaration of service node. It is in clear view that the definitions that direct the behavior of a service is encapsulate in a Service Node called \textit{mulService}, This service accepted a value of integer, which determine a second factor of multiplication operation. It is also exposes the communication channel through an interface \textit{mulIface}, which is declared at file level scope and can be imported by an external module.
+Listing ~\ref{list:jolie-servicenode} illustrates a code snippet for declaration of service node, \textit{prefixService}. The service accept a string as a parameter 
+
+ It is in clear view that the definitions that direct the behavior of a service is encapsulate in a Service Node called \textit{mulService}, This service accepted a value of integer, which determine a second factor of multiplication operation. It is also exposes the communication channel through an interface \textit{mulIface}, which is declared at file level scope and can be imported by an external module.
 
 \FloatBarrier
 
 \subsubsection*{Jolie Script}
 
-Running a Jolie interpreter instance always involving a translation of a service abstraction into an OOIT as one of the execution process.
+Running a Jolie interpreter instance involve a translation of a service abstraction into an OOIT as one of the execution process.
 As we have changed the definition of a service, in particular, a Jolie executable file is no longer represent a service, rather becoming a module.   
 We also introduce an encapsulation of the service abstraction into a service node, which multiple can be defined within a single module.
-For these reasons, making it ambiguous for an interpreter to decided which service node to be used as an translation target, it is essential to have a convention of target service node when a module is called as a execution target.
-Hereby, we introduce the definition of an executable Jolie module so called \texttt{Jolie script}.
+For these reasons, making it ambiguous for an interpreter to decided which service node to be used as an translation target, it is essential to have a convention of target service node when a module is given as a execution target.
+Hereby, we introduce the definition of an executable Jolie module so called \textit{Jolie script}.
 
-A Jolie script is a module that included a service node named \texttt{main}.
+A Jolie script is a module that included a service node named \texttt{main}. A main service node in Jolie script is a special declaration which is treated as a execution service by the interpreter. Moreover, it can also be used as an import target for the import statement.
 
 \begin{listing}[h]
-    \lstset{language=Jolie,
+    \lstset{lan guage=Jolie,
         style=codeStyle
     }
     \begin{lstlisting}[frame=tlrb, caption= {A Jolie script version of ~\ref{list:procedure}}, label={list:jolie-procedure-script}]{procedure-script-Jolie}
@@ -101,7 +102,7 @@ A Jolie script is a module that included a service node named \texttt{main}.
     \end{lstlisting}
 \end{listing}
 
-Main service, is a service node that is named \texttt{main}, is a special node that Jolie will look for when finding a target service node when executing a jolie module, consider .
+Consider figure ~\ref{list:jolie-procedure-script} which defined an equivalence outcome from ~\ref{list:procedure} but using a module system style. When running this script, the target interpretation of service uses main as a target execution even if there is multiple service node declared within a same file.
 
 \subsection{Embedding Service Node}
 
