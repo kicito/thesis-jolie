@@ -1,12 +1,11 @@
 \subsubsection{Embedding Services}
 \label{sec:embedded}
-
-One approach for composing a service-oriented application is \textit{orchestration} which centralizing the service's behavior by having a single service so called an orchestrator, coordinate and conduct a group of services to achieve a their responsibility together. This can be achieved with ease by embedding mechanism of Jolie, it allows multiple services be executed in a single execution environment, in a hierarchical order.
+One of the service composition patterns wildly use is \textit{Orchestration}, which centralizing system logic and behavior in a a single service so called an orchestrator, coordinate and conduct a group of services to achieve a their responsibility together. This can be achieved with ease by embedding mechanism of Jolie, it allows multiple services be executed in a single execution environment, in a hierarchical order.
 Moreover, it allows rapid communication of services via local memory communication, which deliver messages internally within the virtual machine.
 
 The embedding mechanism expands a service into two roles; \textit{embedder} and \textit{embedded} service. The embedder conducts services it embedded. This allow the developer to separate a complex Jolie service into a small single responsibility service which can later be reuse in another project. 
 
-The local memory communication channel can be defined by 
+The local memory communication channel can be defined by specify communication medium as \textit{local} in a Location field
 Jolie offers a handy mechanism to embedded an external service into a local execution. 
 
 Jolie support different technologies to be embedded as a service, as it is not limited to a service defined in Jolie language. Currently Jolie supports two additional services from external technology, which are Java and Javascript. Table ~\ref{table:embedded-technology-path} The defined technology give Jolie program to expect different content in \(\langle Path \rangle\) as defined in table ~\ref{fig:embedded-syntax}
