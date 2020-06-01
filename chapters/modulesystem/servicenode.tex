@@ -71,7 +71,7 @@ service prefixService ( prefix: string )  {
 
 Listing ~\ref{list:jolie-servicenode} illustrates a code snippet for declaration of service node, \textit{prefixService}. The service accept a string as a parameter 
 
- It is in clear view that the definitions that direct the behavior of a service is encapsulate in a Service Node called \textit{mulService}, This service accepted a value of integer, which determine a second factor of multiplication operation. It is also exposes the communication channel through an interface \textit{mulIface}, which is declared at file level scope and can be imported by an external module.
+It is in clear view that the definitions that direct the behavior of a service is encapsulate in a Service Node called \textit{mulService}, This service accepted a value of integer, which determine a second factor of multiplication operation. It is also exposes the communication channel through an interface \textit{mulIface}, which is declared at file level scope and can be imported by an external module.
 
 \FloatBarrier
 
@@ -83,14 +83,12 @@ We also introduce an encapsulation of the service abstraction into a service nod
 For these reasons, making it ambiguous for an interpreter to decided which service node to be used as an translation target, it is essential to have a convention of target service node when a module is given as a execution target.
 Hereby, we introduce the definition of an executable Jolie module so called \textit{Jolie script}.
 
-<<<<<<< HEAD
-A Jolie script is a module that included a service node named \texttt{main}. A main service node in Jolie script is a special declaration which is treated as a execution service by the interpreter. Moreover, it can also be used as an import target for the import statement.
-=======
 Jolie script, a main candidate for running Jolie program, is a module that included a service node named \texttt{main}. Considering the listing ~\ref{list:jolie-procedure-script} which is a rewritten version of the example we had before in ~\ref{list:procedure}, the only difference here is the behavior of the service is enclosed in a special service node named main. Which is a execution target when the script get pass to the command-line.
->>>>>>> a84fbad8850b6673ac4c54e3b347f48a75834b3b
+
+It is worth mentioning that running a non Jolie script modules, similar to running a Jolie program without a main procedure, is prohibited and program will terminate during semantic verifying step.
 
 \begin{listing}[h]
-    \lstset{lan guage=Jolie,
+    \lstset{language=Jolie,
         style=codeStyle
     }
 \begin{lstlisting}[frame=tlrb, caption= {A Jolie script version of ~\ref{list:procedure}}, label={list:jolie-procedure-script}]{procedure-script-Jolie}
@@ -106,16 +104,44 @@ service main {
 \end{lstlisting}
 \end{listing}
 
-<<<<<<< HEAD
-Consider figure ~\ref{list:jolie-procedure-script} which defined an equivalence outcome from ~\ref{list:procedure} but using a module system style. When running this script, the target interpretation of service uses main as a target execution even if there is multiple service node declared within a same file.
-=======
-It is worth mentioning that running a non Jolie script modules is prohibited and program will terminate during semantic verifying step.
->>>>>>> a84fbad8850b6673ac4c54e3b347f48a75834b3b
-
 \subsection{Embedding Service Node}
 
-An embedding mechanism is also extended into a service node. It enables implementation of service orchestration in 
-A service node can be embedded 
+As the definition of service has changed, we also needed to take a careful look at the embedding mechanism for supporting a service node. As per a distinct syntax between current Jolie implementation where it defined the embedding node through a string literal to service path in file system. We seperated a new statement, so-called \textit{embed}, for the declaration of embedding a service node. 
+
+The delcaration of the new embeding statement for a service node can be delcared in three ways, depending on the need of binding a port between the embbedder and the embedded service. The jolie developer can explicitly define a behavior of the embedding through a straightforward syntax similar to the original one. 
+
+In order to understand the implementation of the embedding service node. Firstly, the embedding a service required the embedder to pass a value that is a type of the embedder parameter if omited, the interpreter will pass a value of \textit{null} to a service node. If the value has a valid structure as defined constrain in the target embedding node. Then there are three cases of an expected result after executing an embedding statement.
+
+\begin{itemize}
+    \item 
+\end{itemize}
+
+
+            % embed someservice2(ConstLiteral) in new OP2
+
+\begin{figure}[h]
+    \begin{framed}
+        \begin{grammar}
+            <deplInstruction> ::= ... 
+            \alt <embedStmt>
+
+            <embedStmt> ::= `embed' <serviceName> <args>? <bindedPort>?  
+
+            <args> ::= `(' <expr> `)'
+
+            <serviceName> ::= <ID>
+
+            <bindingPort> ::= `in' `new'? <portID>
+
+            <portID> ::= <ID>
+
+        \end{grammar}
+    \end{framed}
+    \caption{Jolie Service Node Grammar}
+    \label{fig:jolie-servicenode-grammar}
+\end{figure}
+
+
 
 \subsubsection{Parameterize Service}
 
