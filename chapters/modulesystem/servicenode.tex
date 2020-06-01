@@ -83,30 +83,38 @@ We also introduce an encapsulation of the service abstraction into a service nod
 For these reasons, making it ambiguous for an interpreter to decided which service node to be used as an translation target, it is essential to have a convention of target service node when a module is given as a execution target.
 Hereby, we introduce the definition of an executable Jolie module so called \textit{Jolie script}.
 
+<<<<<<< HEAD
 A Jolie script is a module that included a service node named \texttt{main}. A main service node in Jolie script is a special declaration which is treated as a execution service by the interpreter. Moreover, it can also be used as an import target for the import statement.
+=======
+Jolie script, a main candidate for running Jolie program, is a module that included a service node named \texttt{main}. Considering the listing ~\ref{list:jolie-procedure-script} which is a rewritten version of the example we had before in ~\ref{list:procedure}, the only difference here is the behavior of the service is enclosed in a special service node named main. Which is a execution target when the script get pass to the command-line.
+>>>>>>> a84fbad8850b6673ac4c54e3b347f48a75834b3b
 
 \begin{listing}[h]
     \lstset{lan guage=Jolie,
         style=codeStyle
     }
-    \begin{lstlisting}[frame=tlrb, caption= {A Jolie script version of ~\ref{list:procedure}}, label={list:jolie-procedure-script}]{procedure-script-Jolie}
-    define doubleX{
-        X = X * 2
-    }
-    
-   service main {
-        X = 5
-        doubleX
-        // now X == 10
-    }
-    \end{lstlisting}
+\begin{lstlisting}[frame=tlrb, caption= {A Jolie script version of ~\ref{list:procedure}}, label={list:jolie-procedure-script}]{procedure-script-Jolie}
+define doubleX{
+    X = X * 2
+}
+
+service main {
+    X = 5
+    doubleX
+    // now X == 10
+}
+\end{lstlisting}
 \end{listing}
 
+<<<<<<< HEAD
 Consider figure ~\ref{list:jolie-procedure-script} which defined an equivalence outcome from ~\ref{list:procedure} but using a module system style. When running this script, the target interpretation of service uses main as a target execution even if there is multiple service node declared within a same file.
+=======
+It is worth mentioning that running a non Jolie script modules is prohibited and program will terminate during semantic verifying step.
+>>>>>>> a84fbad8850b6673ac4c54e3b347f48a75834b3b
 
 \subsection{Embedding Service Node}
 
-An embedding mechanism is also extended into a service node. It enables implantation of service orchestration in  
+An embedding mechanism is also extended into a service node. It enables implementation of service orchestration in 
 A service node can be embedded 
 
 \subsubsection{Parameterize Service}
