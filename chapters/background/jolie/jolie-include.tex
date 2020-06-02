@@ -73,7 +73,7 @@ main{
 \end{lstlisting}
 \end{listing}
 
-For our example of the service's client, we firstly include the standard library `console', which exposes us the ability to perform console related tasks eg. print and receive console input. Later at line 4 we declare a communication channel called \texttt{Calculator} which bind the communication channel to server's input port. Lastly we declare a behavior of the client, we basically build a message value and send it through invoke a operation \texttt{sum} in the output port.
+For our example of the service's client, we firstly include the standard library `console', which exposes us the ability to perform console related tasks eg. print and receive console input. Later at line 4 we declare a communication channel called \texttt{Calculator} which point the communication channel to the channel defined in Sum service. Lastly we declare a behavior of the client, we basically build a message value and send it through invoke a operation \texttt{sum} in the output port.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,

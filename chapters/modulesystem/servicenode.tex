@@ -106,16 +106,7 @@ service main {
 
 \subsection{Embedding Service Node}
 
-As the definition of service has changed, we also needed to take a careful look at the embedding mechanism for supporting a service node. As per a distinct syntax between current Jolie implementation where it defined the embedding node through a string literal to service path in file system. We seperated a new statement, so-called \textit{embed}, for the declaration of embedding a service node. 
-
-The delcaration of the new embeding statement for a service node can be delcared in three ways, depending on the need of binding a port between the embbedder and the embedded service. The jolie developer can explicitly define a behavior of the embedding through a straightforward syntax similar to the original one. 
-
-In order to understand the implementation of the embedding service node. Firstly, the embedding a service required the embedder to pass a value that is a type of the embedder parameter if omited, the interpreter will pass a value of \textit{null} to a service node. If the value has a valid structure as defined constrain in the target embedding node. Then there are three cases of an expected result after executing an embedding statement.
-
-\begin{itemize}
-    \item 
-\end{itemize}
-
+As the definition of service has changed, we also needed to take a careful look at the embedding mechanism for supporting a service node. As per a distinct syntax between current Jolie implementation where it defined the embedding node through a string literal to service path in file system. We separated a new statement, so-called \textit{embed}, for the declaration of embedding a service node. The syntax for declaring an embed statement is shown in figure ~\ref{fig:jolie-servicenode-embed-grammar}.
 
             % embed someservice2(ConstLiteral) in new OP2
 
@@ -125,7 +116,7 @@ In order to understand the implementation of the embedding service node. Firstly
             <deplInstruction> ::= ... 
             \alt <embedStmt>
 
-            <embedStmt> ::= `embed' <serviceName> <args>? <bindedPort>?  
+            <embedStmt> ::= `embed' <serviceName> <args>? <bindingPort>?  
 
             <args> ::= `(' <expr> `)'
 
@@ -137,13 +128,25 @@ In order to understand the implementation of the embedding service node. Firstly
 
         \end{grammar}
     \end{framed}
-    \caption{Jolie Service Node Grammar}
-    \label{fig:jolie-servicenode-grammar}
+    \caption{Embedding service node grammar}
+    \label{fig:jolie-servicenode-embed-grammar}
 \end{figure}
 
+The declaration of the new embedding statement for a service node can be declared in three ways, depending on the need of binding a port between the embedder and the embedded service. The jolie developer can explicitly define a behavior of the embedding through a straightforward syntax similar to the original one. 
 
+In order to understand the implementation of the embedding service node. Firstly, the embedding a service required passing a value that is a type declared in the embedder's parameter. if the value is omitted, the interpreter will pass a value of \textit{undefined} to a service node. If the value has a valid structure as defined constrain in the target embedding node. Following cases are consider:
+
+\begin{itemize}
+    \item if the binding port is not defined, the embedding service is initiate as a standalone service that doesn't has any binding communication channel between embedded and embedding service.
+    \item if the binding port is defined using an existed port, the embedding service is initiated with bounded communication channel between it's incoming port declared using local memory and the binding port in the embedder.
+    \item if the binding port is defined using \textit{new} keyword, the embedding service is initiated with bounded communication channel between it's incoming port declared using local memory and the newly created outgoing port in the embedder.
+\end{itemize}
+
+The evolution of embedding mechanism statement, by using a symbol referring to a service instead a string path, also helps Jolie's interpreter eliminates an error that might occur during resolving a target service path which was checking during runtime of the execution. As the abstraction node is resolved during name resolution step, this error is caught preemptively during before runtime execution. Moreover, it also helps generalizing path resolution algorithm for Jolie internal statements into one place, namely through the import statement.
 
 \subsubsection{Parameterize Service}
+
+A service node of Jolie is parameterize. 
 
 \subsection{Backward compatibility}
 
