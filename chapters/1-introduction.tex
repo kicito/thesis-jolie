@@ -19,29 +19,36 @@
 
 % เขียนแนวว่า ปัจจุบันอุสาหกรรม software มีความใหญ่และซับซ้อนขึ้น ได้มีการศึกษาถึงวิธีและ practical guideline and methodology to create a หนึ่งในวิธีการที่จะทำให้โค้ด maintain ได้ง่ายขึ้นคือการ ทำให้ system มีความเป็น modular โดยการ apply Seperation of concerns to plan and write code, 
 
-For a long time, The demand of principle and methodology of designing a software is always a point of discussion in software development.
-As the software is continuously evolving from time to time, Israeli et al. studied Linux kernel evolution for over 800 of new versions and found that the size, from various metric, has been increasing linearly from 1994 to 2008 \cite{10.1016/j.jss.2009.09.042}. Even for present day, the development of Linux kernel between 2019 to 2020, 1.3 million new lines of codes have been added to Linux kernel source code by 4,190 different contributors \cite{anderson2020}. For this reason, the goal of having a simple, maintainable details in software, from architectural point of view to the implementation level, is crucial for every software development cycle.
-The principle that is well known and adopted in many aspects of programming related field is Separation of Concerns (\textbf{SoC}). The aim of \textbf{SoC} is to separate the problem into a small set of sub-problems in order to help the practitioner focus on one single aspect, instead of being overwhelmed by the amount of complexity of the software as a whole. Among many other principles, modularizing the system to smaller components is one of the prominent practices.
+For a long time, The demand for the principle and methodology of designing software has always been a point of discussion in software development.
+As the software continuously evolved from time to time, Israeli et al. studied Linux kernel evolution for over 800 new versions and found that the size, from various metrics, has been increasing linearly from 1994 to 2008 \cite{10.1016/j.jss.2009.09.042}. Even for the present day, the development of the Linux kernel between 2019 to 2020, 1.3 million new lines of codes have been added to Linux kernel source code by 4,190 different contributors \cite{anderson2020}. For this reason, the goal of having straightforward, maintainable details in software, from an architectural point of view to the implementation level is crucial for every software development cycle.
+
+The principle that is well known and adopted in many aspects of the related programming field is the Separation of Concerns (\textbf{SoC}). SoC aims to separate the problem into a small set of sub-problems to help the practitioner focus on one aspect, instead of being overwhelmed by the development complexity as a whole. Among many other principles, modularizing the system to smaller components is one of the prominent practices widely used in the industry.
 
 \begin{displayquote}
-    "the separation of concerns", which, even if not perfectly possible, is yet the only available technique for effective ordering of one's thoughts, that I know of. This is what I mean by "focussing one's attention upon some aspect" 
+    "the separation of concerns", which, even if not perfectly possible, is yet the only available technique for effective ordering of one's thoughts, that I know of. This is what I mean by "focussing one's attention upon some aspect"
     - Edsger W.Dijkstra\cite{dijkstra1974}
 \end{displayquote}
 
-Modular System is the system that is assembled from a smaller component unit so called a module into one larger and more complex component. It has been considered a good practice for developing a software. If done correctly, it contributes to a manageable, interchangeable, and reusable software \cite{MMM}. Designing a modular system required applying a principle of separating the concerns the principle has been developed and used in many aspects in designing a software from architectural to the implementation style or so-called the modular programming. A module in modular programming can refer to definition or program execution unit from others and acquire them in the local execution environment. The concept is widely used and supported by major modern programming languages. Even though if the programming language does not natively support a module system, it could be accomplished by applying a code convention guideline for example, a C programming language code convention for module system \cite{staff2001}.
 
-% Jolie
-Jolie\cite{JOLIE} is a service-oriented programming language which addresses the difficulty of developing a distributed system of services. Jolie helps programmer to program any service-oriented architectural design style from language itself, unlike other general programming languages which usually require a combination of external technology building on top of each other to define a service. The layout of a Jolie service consists of three components defining in a structured block like C and Java programming languages. These components are Service's interfaces, location and protocol for communication, and workflow for process behavior for the operation it accepts.
+The principle that is well known and adopted in many aspects of the related programming field is the Separation of Concerns (\textbf{SoC}). SoC aims to separate the problem into a small set of sub-problems to help the practitioner focus on one aspect, instead of being overwhelmed by the development complexity as a whole. Among many other principles, modularizing the system to smaller components is one of the prominent practices widely used in the industry.
 
+Many software designs and principles adopt SoC as its fundamental principle to pursue an easy to maintain, interchangeable, and reusable software. From the architectural design point of view to the implementation detail aspect. From the very top level, Service-oriented architecture (\textbf{SOA}) focuses on the composition of services via communication over a network protocol. At the implementation level of software, modular programming is a design technique where the software is divided into several small, self-contain units, so-called a module. 
 
-% ตีสิสนี้ทำอะไร
-% implement module system for jolie (ปจบ support include)
-% current status 
-The goal of this thesis is to develop a foundation of module system for Jolie programming languages. We explore the design choices module system an develop one which is best-suited for Jolie's. The current working status is pending for being merged in to the master branch of Jolie the main development repository is available at \url{https://github.com/kicito/jolie}.
-We also have some implementation experimental enhancement in Jolie type system based on previous work for Jolie \cite{DBLP:journals/corr/TchitchiginSMEM16}.
+% // Service in SOA and Microservice
+The SOA concept is well known for more than a decade, as it helped reduce the integration cost of information between services by providing a standard of data format. However, the developers and designers suffer from the complexity of implementing an SOA; one of the difficulties is the standard definition of the compositional protocol between services. Consequently, adopting the SOA concept has a trade-off between the integration cost as a business value and the additional cost of development. As we see, the beneficial organization for SOA, such as IT-related large companies or the business association, invested and experimented with the concept and published the definitions on their own\cite{cesar2020, ibmcloudeducation2019}.
+% //https://opentravel.org/about-us/ 
 
-\input{chapters/introduction/structureOfThesis.tex}
-\input{chapters/introduction/usedNotation.tex}
+The SOA system's complexity caused it to suffer from gaining technical maturity; thus, the attempt to rebrand SOA for the real-world application has resulted in the Microservice Architecture, which considered as an the second iteration of SOA \cite{Dragoni2017}. Microservice Architecture is a widespread software architectural paradigm whereby a service is defined as a standalone service, which means that it may not be composed of a combination of services. This definition reduces the complexity of implementing as it forces the designer to encapsulate only single business logic into a service, which makes the Microservice easier to implement and become a prominent software design at present. In recent years, it has become state-of-the-art software development, adopted by companies such as Amazon, Google, and Facebook.
+
+Jolie\cite{JOLIE} is a service-oriented programming language that addresses the difficulty of developing a distributed system of services. Jolie helps the implementation of any service-oriented architectural design style by the programming language approach, unlike other general programming languages that usually require a combination of external technology building on top of each other to define a service. Jolie contributes a seamless experience for the developer in developing service as it provides the capability to define both communication method details and the workflow for the invocation operation.
+
+The goal of this thesis is to develop a foundation of the module system for Jolie programming languages. We explore the design choices module system a develop one that is best-suited for Jolie's. We also have an experimental implementation of enhancement in Jolie type system to allow Jolie developer to define value constraints for a type. It is inspired by the work defining a schema for the JavaScript Object Notation (JSON)(JSONschema team), which is a well-known
+data format used for communication between services in the present day.
+
+The current work progress for Jolie Module System is partially merged into the Jolie the main development \url{https://github.com/jolie/jolie} repository is available at \url{https://github.com/kicito/jolie}.
+
+% \input{chapters/introduction/structureOfThesis.tex}
+% \input{chapters/introduction/usedNotation.tex}
 
 
 
@@ -133,7 +140,9 @@ We also have some implementation experimental enhancement in Jolie type system b
 % On the other hand, \textbf{orchestration} is a pattern of centralizing the service's behavior by having a single service so call an orchestrator, coordinate and conduct a group of service to perform a task.
 
 % % Jolie
-% \textbf{Jolie} is a service-oriented programming language developed based on \textbf{SOCK}; a calculus focusing on formalizing a model of communication between services and it's composition \cite{SOCK}. \textbf{SOCK} calculus took an inspiration well known calculi such as \textbf{CCS}, a calculus of communication systems, analyzed together with Web Service technology then redesign it to model a service-oriented system such as Web Service. Jolie use a block structured programming syntax similar to C and Java combined with effort for make the language simple and straightforward from it's author. This resulted to a flatten the learning curve for anyone who is already familiar to coding wanted to learn Jolie.
+
+
+
 
 
 % The concept of separating the concerns design principle has been mentioned on a published paper from   , the Service-oriented architecture (\textbf{SOA})
