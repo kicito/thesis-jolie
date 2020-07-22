@@ -1,7 +1,7 @@
 \subsubsection{Procedure Definition}
 \label{sec:jolie-procedure-def}
 
-Jolie allows programmer to split process composition into a procedure, which can be invoked by calling the its name. Calling the procedure essentially tell the runtime execution to perform instruction within the caller scope. As an example at ~\ref{list:procedure}, calling \texttt{doubleX} in main scope cause \texttt{X} in the procedure to be referred to same \texttt{X} as the \texttt{main} scope. There are two types of special procedures in Jolie that define a target execution processes which are \texttt{init}, the initialization procedure, and \texttt{main}, the main execution target.
+Jolie allows the programmer to split process composition into a procedure that can be invoked by calling its name. Calling the procedure essentially tells the runtime execution to perform instruction within the caller scope. As an example at ~\ref{list:procedure}, calling \texttt{doubleX} in main scope cause \texttt{X} in the procedure to be referred to same \texttt{X} as the \texttt{main} scope. There are two types of special procedures in Jolie that define target execution processes, which are \texttt{init}, the initialization procedure, and \texttt{main}, the main execution target.
 
 \begin{figure}[h]
 	\begin{framed}

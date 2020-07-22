@@ -37,9 +37,9 @@ Jolie also equipped with the primitives to define the advance composition of the
 For an example of this section, we create a service as depicted at ~\ref{list:example-port-graphic}.
 The service \texttt{program} acts as a producer of the operations in \texttt{personInterface}, where the communication channel is defined in \texttt{personInputPort}.
 This service is also acted as a consumer of \texttt{loggerInterface} defined by an output port \texttt{LoggerOutputPort}.
-One key takeaway from this example is aggregation at line 11 makes \texttt{personInputPort} accepts additional operation defined in the \texttt{personInterface}. There are different scenarios which altered the behavior when the client invoke an aggregated operation. For this specific example, since the operations in \texttt{loggerInterface} are distinct to interface defined in the input port, Jolie will automatically forward the message to the origin aggregation output port.
+One key takeaway from this example is the usage of aggregation at line 11 makes \texttt{personInputPort} accepts additional operation defined in the \texttt{personInterface}. Different scenarios altered the behavior when an aggregated operation is invoked, for this specific example, since the operations in \texttt{loggerInterface} are distinct to the interface defined in the input port, Jolie will automatically forward the message to the origin aggregation output port.
 
-For the interaction between ports through input/output operations which we will look at it again in ~\ref{sec:jolie-behavior}.
+For the interaction between ports through input/output operations, we will look at again in ~\ref{sec:jolie-behavior}.
 
 \begin{figure}[ht]
     \includegraphics[width=10cm]{ExamplePort}
@@ -78,6 +78,6 @@ main {
 \end{lstlisting}
 \end{listing}
 
-In this section, we briefly show components for expressing a communication port in Jolie. Port can either be expressed as an incoming or outgoing communication. Both consists of fields which together which depict a details for deploying a service, such as the operations along with the message structure it accepts, the location it is using, and lastly the communication protocol. Jolie also equipped with a set of extra primitives which allows an advance composition on communication level, such as aggregation, aggregates between outgoing and incoming port, that allows the incoming port accepts and forward operations declared it the outgoing.
+In this section, we briefly show components for expressing a communication port in Jolie. Port can either be expressed as an incoming or outgoing communication. Both consist of fields that together depict details for deploying a service, such as the operations and the message structure it accepts, the location it is using, and the communication protocol. Jolie is also equipped with a set of other primitives that allows an advance composition on the communication level, such as aggregation, which aggregates outgoing and incoming port, allows the incoming port to accept and forward the message to the destination outgoing port.
 
 \FloatBarrier

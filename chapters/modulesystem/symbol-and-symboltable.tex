@@ -1,18 +1,17 @@
 
 \section{Symbol and Symbol Table}
 
-Concept of Symbols has been widely used in programming languages. Generally, The term is referred to an unique entities defined and used in the execution environment, the defined entities are such as a variable names, functions names, classes and so on.
-The Symbol table is responsible for maintaining a data structure of this information, along with it's description such as the occurrences, declaration scope, and it's type. This data structure is useful for many phases in the complier processes such as the analysis tasks and the optimization.
+The Symbol Table is a well-known data structure in programming languages. Generally, it is used as a truth table of reference between a named declaration, or symbol, associated with the source code. The term symbol refers to unique entities defined and used in the execution environment; the defined entities are such as variable names, functions names, classes, and so on.
+The Symbol Table is responsible for maintaining a data structure of this information and its description, such as the occurrences, declaration scope, and type. This data structure is useful throughout the program execution lifecycle, such as the analysis tasks and the optimization.
 
-For the support of module system in Jolie, the Symbol Table is used as a truth table of the declaration symbols in the source code.
-It is implemented with hash table and is associate to a single module.
-The symbol contains an essential information for performing a binding in later stage this include: symbol name, scope, privacy, and a pointer to abstract syntax node.
-Scope indicates location of the declaration node of the certain symbol either Internal or External; internal symbol specify that the symbol definition is declared within the module; on contrary, external symbol, created from an import statement, specify that the definition is declared from the external source.
-Privacy is used for controlling the access of the symbol from the external module. It can be defined as \texttt{public}, which allow access from external module, on contrary, \texttt{private} prohibit the access from external. A symbol will be set as public by default; it can be defined as private by adding `private' keyword.
+For the module system in Jolie, the Symbol Table is implemented with a hash table and associated with a single module.
+The symbol contains essential information for performing binding in later stage this include: symbol name, scope, access modifier, and a pointer to abstract syntax node.
+Scope indicates the location of the declaration node of the particular symbol, either internal or external; internal symbol specifies that the symbol definition declared within the module; on the contrary, external symbol, created from an import statement, determine that the interpretation defined from the external source.
+An access modifier defines the accessibility of a symbol from the external module. It can be defined as \texttt{public}, which accessible from external modules; on the contrary, \texttt{private} prohibits access from the external module. A symbol will be set as public by default; it can be defined as private by adding a `private' keyword.
 
-As a result of symbol table introduction, we have the definitions abstract syntaxes as defined in ~\ref{sec:jolie-def} and additionally, the Service node, implemented as a symbols. The Service node is a new abstract syntax of Jolie for declaring a service, which we will get back to in later section.
+As the introduction of the symbol table, we have the definitions abstract syntaxes as defined in ~\ref{sec:jolie-def} and, additionally, the Service node, implemented as a newly added symbols. The Service node is a new abstract syntax of Jolie for declaring a service, which we will get back to in later sections.
 
-The construction of symbol target consists of two stages; first stage, each node of definitions in AST get visited and assign to the symbol table, at the completion of this stage, every symbols that is defined within the module get assign its binding declaration abstraction node; on the second stage, executed after every related modules symbol table are finish their first stage creation, the entry of external scope record get assigned their corresponding abstract syntax node by a simple name lookup to the referring module's symbol table.
+The construction of the symbol target consists of two stages. During the first stage, definition nodes are visited and push as a new entry of the symbol table. After this stage, every symbol defined within the module is bound to an abstraction node. On the second stage, a simple name lookup assigns the entry of an external module record, the corresponding abstract syntax node to the referring module's symbol table.
 
 \begin{figure}[ht]
     \begin{subfigure}[b]{\textwidth}
@@ -48,16 +47,16 @@ private type from_b: b_imported
 \end{figure}
 
 From figure ~\ref{fig:jolie-ex-symbol-table} which demonstrates the construction of Symbol table.
-There are three entries gets created at first step of symbol table creation. The detail of each symbol is following:
+There are three entries gets created at the first step of symbol table creation. The detail of each symbol is the following:
 
 \begin{itemize}
-    \item \texttt{C*}, originated from an import statement, is instantiated as an \texttt{external(C*)} which determine that the definition node is referring to an external source module named B. In this first step, the symbol name get assigned as a unique name which to be removed later.
+    \item \texttt{C*}, originated from an import statement, is instantiated as an \texttt{external(C*)}, which determines that the definition node is referring to an external source module named B. In this first step, the symbol name gets assigned as a unique name.
     \item \texttt{b_import}, originated from an import statement, is instantiated as an \texttt{external(.B)} which determine that the definition node is referring to an external module named B at relative location respect to execution node.
-    \item \texttt{A}, as being defined within local execution, is a local scope symbol with public, the default privacy.
-    \item \texttt{from_b}, however, has a keyword private before the actual declaration, thus, this symbol cannot be import by others.
+    \item \texttt{A}, defined within local execution, is a local scope symbol with the public, the default privacy.
+    \item \texttt{from_b}, however, has a keyword private before the actual declaration; thus, this symbol cannot be imported by others.
 \end{itemize}
 
-After this step, the partially created symbol table of the module is created. This partially filled symbol table has an information of binding abstract syntax which is defined within its module. While the external scope symbol are left without pointer to a binding abstract syntax. In order to complete this field, we can simply perform a lookup to symbol table of the module target that the declaration is originated.
+After this step, the partially created symbol table of the module is created. This partially filled symbol table has information on syntaxes, which defined within its module. While the external scope symbol are left without pointer to a binding abstract syntax.Tto fully fill this field, we can simply perform a lookup to symbol table of the module target that the declaration is originated.
 
 Consider figure ~\ref{fig:jolie-ex-symbol-table} which defined a symbol of module \texttt{C} and the completed symbol table from previous example. Entry \texttt{C*} get replaced by exposed symbol in its module.
 

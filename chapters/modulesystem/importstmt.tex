@@ -1,6 +1,9 @@
 
 \section{Import Statement}
-An import statement allows Jolie module to gain an accessibility to symbols from others and copy the definitions into local execution the statement syntax is shown in figure ~\ref{fig:jolie-import-stmt-syntax}.
+
+An import statement enables the capability of importing a symbol from an external module. The declaration of an import statement consists of two specifiers, the module target and the target symbols, each used in different phases of import statement execution, the module lookup process, and the symbol binding process. Any error that occurs during the execution of an import statement, such as importing a restricted symbol or undefined symbol in the target module, will terminate the interpreter's execution.
+
+The syntax for an import statement is shown in figure ~\ref{fig:jolie-import-stmt-syntax}.
 
 \begin{figure}[ht]
     \begin{framed}
@@ -28,6 +31,6 @@ An import statement allows Jolie module to gain an accessibility to symbols from
     \label{fig:jolie-import-stmt-syntax}
 \end{figure}
 
-Import statement consisted of importing module target which is a dotted separated packages name with a module as the last element. Followed by a list of importing symbols target or a wildcard character ( `*' ), which targets every symbols in the importing target.
-Jolie import statement is similar to the one that Python has, thus this makes it approachable to programmers who are new to the language.
-the main advantage behind the decision of using \texttt{from \dots import \dots} syntax is the essence of specifying a module target before symbols helps the language server extension on editor to perform better suggestion to symbols.
+The module target specifier used to guide the location where the importing module resides. Jolie import system uses a dot(.) as a path separation to the importing module. Each identifier before last defines the packages and sub-packages where the importing module resides, while the token at the end represents the importing module name. A leading dot designates Jolie import mechanism to perform a relative path lookup.
+
+The second part of the import statement, target symbols, is a list of importing symbol names defined in the target module with an optional qualified name to bind to the local execution environment denoted by using 'as' keyword. For the current implementation of import statement wildcard import doesn't support importing with a qualified name (as).

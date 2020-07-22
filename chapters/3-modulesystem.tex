@@ -1,21 +1,21 @@
 \chapter{Jolie Module System}
 
 In this chapter, we present the module system for Jolie.
-Similarly to how we presented python module system, we will walk-though the definitions, components, import mechanism, and lastly the redesign of Jolie's code file layout.
+Similarly to how we presented the Python module system, we will walk-though the definitions, components, import mechanism, and lastly, the redesign of Jolie's code file layout.
 
 \section{Definitions}
 
-Before diving into the details, it is beneficial to define a definition of components in a module system. In Jolie:
+Before diving into the details, defining a definition of components in a module system is beneficial since the keyword has been using differently from programming languages. In Jolie:
 
 \begin{itemize}
       \item
-            A \texttt{symbol} is a declaration of file level definition AST node. Symbol target is defined along with a module target in the import statement to specify which definition node it to be imported.
+            A \texttt{symbol} is a declaration of file-level definition AST node. Symbol target is defined along with a module target in the import statement to specify an importing named definition node.
       \item
-            A \texttt{module} is defined as a Jolie execution code in the file system. A module is a file contains symbols and the execution target for running the jolie code.
+            A \texttt{module} is defined as a Jolie execution code in the file system. A module is a file that contains symbols and the execution target for running the Jolie code.
       \item
-            A \texttt{package} is defined as either a directory in the file system or a file. A package role in the jolie module system is a place to hold the modules and can be part of the module target. A file with \texttt{.jap} extension, the Jolie's JAR-like achieve. is consider as a package which it's entry can be referred as a module.
+            A \texttt{package} is defined as either a directory in the file system or a file. A package role in the Jolie module system is a place to hold the modules and can be part of the module target. A file with \texttt{.jap} extension, the Jolie's JAR-like achieve. is considered as a package which it's entry can be referred to as a module.
       \item
-            A \texttt{script} is an module which included a service definition named \texttt{main}. A script can be used as a execution target for jolie interpreter. 
+            A \texttt{script} is an module which included a service definition named \texttt{main}. A script can be used as an execution target for Jolie interpreter. 
 \end{itemize}
 
 \input{chapters/modulesystem/importstmt}
