@@ -1,4 +1,97 @@
-\chapter{Experimental Decide Choice}
+\subsection{Experimental Design: Refinement type}
 
-In this chapter, we list the discussion that we had experiment in Jolie module system but decided not to include in current version.
+In this chapter, we discuss an experimental feature of the refinement type. We believe that it has potential on the module system for defining a constrain on the type system. The current implementation is not accepted feature to the Jolie main repository, but it is available at https://github.com/kicito/jolie/tree/jolie-module-3.
 
+Tchitchigin et al. studied refinement Type of Jolie to implement a dynamic and static type checking for Jolie native type with the type verification done by the SMT solver \cite{DBLP:journals/corr/TchitchiginSMEM16}. The study resulted in the reduction of the testing effort and enhanced the security of the service.
+
+In our implementation, inspired by the JSON Schema\footnote{JSON Schema https://json-schema.org/}, extends Jolie type system to support the creation of a value format for each field, we also added a capability to define a default value for a service parameter. Whenever the value is missing during type validation, instead of raising an error, the default value will get assigned, and the execution proceeds.
+
+The syntax of the declaration of type is defined as follows.
+
+\begin{figure}[ht]
+    \begin{framed}
+        \begin{grammar}
+            <refinedType> ::= `type' <ID> `:' <type>  '(' refinedTypeRule ( ',' refinedTypeRule)* ')'
+            
+            <refinedTypeRule> ::= rulename '(' ruleArg ( ',' ruleArg )* ')'
+            
+            <ruleArg> ::= expression | refinedTypeRule
+            
+            <typename> ::= ID
+            
+            <rulename> ::= ID
+        \end{grammar}
+    \end{framed}
+    \caption{Jolie Refinement Syntax}
+    \label{fig:JolieRefinementGrammar}
+\end{figure}
+
+The syntax of refined type is extended from the existing type syntax, a set of type rules defined within the parenthesis after the type construction. Within the \textit{refineTypeRule}, two specifiers of \textit{rulename} it's expression is defined. The \textit{rulename} is a set of available predicates for the specific type. The following table describes the available predicate for each Jolie native type.
+
+\begin{figure}[ht]
+    \begin{tabular}{ |l|l|l| }
+        \hline
+        Type    & Predicate                                            & Description                   \\
+        \hline
+        boolean & default(x)                                           & is_defined(value) ? value : x \\
+        \hline
+        \multirow{5}{4em}{number}
+                & default(x)                                           & is_defined(value) ? value : x \\
+                & minimum(x)                                           & value $\ge$ x                 \\
+                & exclusiveMinimum(x)                                  & value $>$ x                   \\
+                & maximum(x)                                           & value $\le$ x                 \\
+                & exclusiveMaximum(x)                                  & value $<$ x                   \\
+        \hline
+        \multirow{4}{4em}{string}
+                & default(x)                                           & is_defined(value) ? value : x \\
+                & minLength(x)                                         & value $\ge$ x                 \\
+                & maxLength(x)                                         & value $\le$ x                 \\
+                & pattern(x) \footnotesize{where x is an regex expression} & x.match(value)                \\
+        \hline
+    \end{tabular}
+    \caption{Jolie refinement type rules}
+    \label{fig:jolie-refinement-rules}
+\end{figure}
+
+With this simple yet powerful set of predicates available in refinement type, the developer is capable of defining a value constraint and control the possible value of the receiving parameter as shown in the example below of the \textit{twiceService} ~\ref{fig:jolie-refinement-example}.
+
+\begin{listing}[ht]
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb,
+basicstyle=\footnotesize]{refinement-type-service.ol}
+interface twiceIface{
+    RequestResponse: twice(int)(int)
+}
+
+type twiceParam: void{
+    .location: string(
+        pattern(^socket:\/\/localhost:3000$)
+    )
+    .protocol: string(default("sodep"))
+}
+
+service twiceService(param : twiceParam){
+    inputPort myPort{
+        location: param.location
+        protocol: param.protocol
+        interfaces: twiceIface
+    }
+
+    main{
+        twice(req)(res){
+            res = req * 2
+        }
+    }
+}
+\end{lstlisting}
+    \caption{Jolie example service for refinement type}
+    \label{fig:jolie-refinement-example}
+\end{listing}
+
+Here, we defined \textit{twiceService}, which accepts a value of type \textit{twiceParam}; the received value is later used as a configuration of the incoming communication port \textit{myPort}. The refinement type of \textit{location} and \textit{protocol} are specify in the way that the service developer of \textit{twiceService} can assure that the received value from client it match the predicate given in type declaration.
+
+Refinement type is a practical and powerful feature that could be a research topic in the further development of Jolie. As we are seeing, the refinement type gives service owner authority to determine and limited possible information from the embedder service. Yet, with this specification, it also introduces the uncertainty of execution behavior for Jolie type checking and may yield an unexpected result; for example, given a list of condition predicate and the default rule, what is the proper execution order of predicate checking. One other crucial case is the method to determine that the rules have no conflict. For these reasons,  further study on the Type Refinement could be an interesting topic that could enhance the experience of developing a Jolie service in the future.

@@ -1,21 +1,18 @@
+\subsection{Code example}
 
-\subsection{Code Example}
+In this section, we introduce the reader to a simple example program of Jolie module system to a sophisticated design pattern \textit{Service Injection Pattern}, which is a dependency-injection like design pattern made possible from the implementation of the module system.
 
+The following code snippet is a hello-world example of the Jolie module system.
 
-\subsection{Service Injection Pattern}
-
-
-\begin{listing}
+\begin{listing}[ht]
     \lstset{language=Jolie,
         style=codeStyle,
         numbers=left,
         firstnumber=1
     }
     \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{service-injection.ol}
-
-from .console import ConsoleService, ConsoleInterface
-from .printer import main as PrinterService
+basicstyle=\footnotesize]{service-hello.ol}
+from console import ConsoleService, ConsoleInterface
 
 service main(){
 
@@ -23,8 +20,7 @@ service main(){
         interfaces: ConsoleInterface
     }
 
-    //embed ConsoleService() in new Console
-    embed PrinterService() in Console
+    embed ConsoleService() in Console
 
     main{
         print@Console("Hello")()
@@ -33,3 +29,318 @@ service main(){
 \end{lstlisting}
 
 \end{listing}
+
+At line 1, we declared an import statement to include the ConsoleService along with the interface exposed by this service. The ConsoleService is a build-in service that allows a Jolie program to communicate to the execution process's system console. Afterward, we declare a service node called \textit{main}, which consists of an output port with an assignment of operations in the ConsoleInterface binding to the embed service of the ConsoleService, and the main procedure of the service. 
+In our main procedure, we send an operation \textit{print} through the output port Console. Executing this program resulted in Hello is printed on the process console.
+
+\subsubsection{Service Injection Pattern}
+
+Our last example describes a way to compose a simple service in the Jolie module system. Here we can extend the previous example to an advanced scenario. Given a situation where we want to have our workflow on the operation \textit{print}, the developer can create a new service, \textit{PrinterService}, which exposes the operation \textit{print} and prefixing an incoming message before forwarding it to the system console.
+
+\begin{listing}[ht]
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb,
+basicstyle=\footnotesize]{printer.ol}
+
+from console import ConsoleService, ConsoleInterface
+
+interface PrinterInterface {
+RequestResponse:
+    print( undefined )( void )
+}
+
+service PrinterService() {
+
+    execution { concurrent }
+    
+    inputPort IP {
+        location: "local"
+        interfaces: PrinterInterface
+    }
+
+    embed ConsoleService in new _Console
+
+    main{
+        [print(req)(res){
+            res = "Printer receive: " + req
+            print@_Console(res)()
+        }]
+	// omitted code
+    }
+}
+
+\end{lstlisting}
+
+\end{listing}
+
+After the service has defined, the developer only has to import and embed \textit{PrinterService} instead of \textit{ConsoleService} in our last example. The client of this service will now point the operation target to the \textit{PrinterService}.
+
+\begin{listing}[ht]
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb,
+basicstyle=\footnotesize]{service-injection-hello.ol}
+from console import ConsoleInterface
+from .printer import PrinterService
+
+service main(){
+
+    outputPort Console {
+        interfaces: ConsoleInterface
+    }
+
+    embed PrinterService() in Console
+
+    main{
+        print@Console("Hello")()
+    }
+}
+\end{lstlisting}
+\end{listing}
+
+Since the \textit{PrinterService} operation \textit{print} is defined as a subset of operations in \textit{ConsoleService}. Thus, these two interfaces are compatible to each other.
+
+The module system extends the flexibility of the way we implement a service in Jolie and allows the service developer to create a new system in a modular approach. In the next section, we will look at the practical Jolie module system implementation of the Circuit Breaker, which is one of the prominent  Microservice pattern. 
+
+\subsubsection{Microservice Pattern: Circuit Breaker}
+
+The Circuit Breaker is a well-known pattern in the Microservice Architecture. Given the situation where the network of service communicates with each other to build up the client's response, and one of the services is making a longer than usual processing. This processing time can be a result of the network latency, or there might be a failure during processing, which cannot be foreseen from other services. The circuit breaker pattern is a pattern addressing a problem when a dependent service fails to process the request, within a reasonable time, the caller could decide to discard the awaiting response from the dependent service and proceed with the dedicated procedure. The pattern prevents an unexpected failure from cascading to other services by performing a cutout action, just like the circuit breaker in the physical world.
+
+Montesi and Weber have studied the implementation of the circuit breaker pattern for Jolie application\cite{10.1145/3167132.3167427}, which extends a decoration pattern and sketch an implementation of the circuit breaker pattern in Jolie. In our version, we exploit the capability of importing service to extend a single service with a circuit breaker extension service.
+
+\begin{listing}[ht]
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb,
+basicstyle=\footnotesize]{circuitbreaker.ol}
+from time import TimeService
+
+constants{
+    STATUS_CLOSED = 1,
+    STATUS_OPEN = 2,
+    STATUS_HALFOPEN = 3
+}
+
+interface HTTPInterface{
+    RequestResponse:
+        default(undefined)(undefined)
+}
+
+type httpRequest : void{
+    .data :  any {?}
+    .requestUri : string
+    .operation :  string
+    .cookies: any
+}
+
+type errorMessage: void{
+    message: string
+}
+
+interface CircuitBreakerServiceCallbackInterface{
+    requestResponse: callback(httpRequest)(int) throws UnexpectedError
+}
+
+type CircuitBreakerServiceParam : void {
+    inputLocation: string
+    outputLocation: string
+}
+
+private interface CircuitBreakerInternalInterface{
+    oneWay: timeout(undefined), reset(undefined)
+}
+
+service CircuitBreakerService (p : CircuitBreakerServiceParam) {
+
+    embed ConsoleService in new Console
+
+    inputPort HTTPInput {
+        protocol: "http" {
+            default = "default"
+        }
+        location: p.inputLocation
+        interfaces: HTTPInterface
+    }
+    outputPort toService {
+        protocol: "http" {
+            default = "default"
+        }
+        location: p.outputLocation
+        interfaces: CircuitBreakerServiceCallbackInterface
+    }
+    inputPort selfInput{
+        location: "local"
+        interfaces: CircuitBreakerInternalInterface
+    }
+    execution { concurrent }
+  private define resetCircuitProcedure{
+    if (global.status = STATUS_OPEN){
+        global.status = STATUS_HALFOPEN
+    }
+  }
+
+  private define trip{
+    global.status = STATUS_OPEN
+    scheduleTimeout@Time( 10000{.operation="reset"} )( global.resetId )
+  }
+
+  private define handleError{
+    if (global.status == STATUS_HALFOPEN){
+        trip
+    } else if (global.errorCount > 3){
+        trip
+    }
+  }
+
+    init {
+        global.errorCount = 0
+        global.status = STATUS_CLOSED
+    }
+
+    main {
+        [ reset() ]{
+            println@Console("CircuitBreaker <-:reset")()
+            resetCircuitProcedure
+        }
+        [ default( request )( response ) {
+            scope (circuitHandle){
+                if ( global.status == STATUS_OPEN){
+                    throw ( CircuitOpen )
+                }
+                scope (handleRequest){
+                    install( default =>
+                        global.errorCount++
+                        handleError
+                    )
+                    callback@toService(request)(serviceRes)
+                    if (global.status == STATUS_HALFOPEN){
+                        global.errorCount = 0
+                        global.status = STATUS_CLOSED
+                    }
+                    response << serviceRes
+                }
+            }
+        }]
+    }
+}
+\end{lstlisting}
+\end{listing}
+
+... explain the code default, image of the circuit breaker
+
+After we have defined the CircuitBreaker service, which can be imported and embed by any services, we can look at the Client service \textit{CalculatorService}, which integrates the CircuitBreaker extension to itself, so that the client of this service would embed the circuit breaker capability automatically.
+
+\begin{listing}[ht]
+    \lstset{language=Jolie,
+        style=codeStyle,
+        numbers=left,
+        firstnumber=1
+    }
+    \begin{lstlisting}[frame=tlrb,
+basicstyle=\footnotesize]{circuitbreaker-client.ol}
+from .circuitbreaker import CircuitBreakerService, CircuitBreakerServiceCallbackInterface
+from math import MathService
+
+constants {
+    error_rate = 0.3
+}
+
+type input: void{
+    x : int
+    y : int
+}
+
+interface calculatorIface {
+    requestResponse: 
+        add(input)(int),
+        minus(input)(int),
+        multiply(input)(int),
+        divide(input)(int)
+}
+
+service main {
+
+    embed ConsoleService in new Console
+    embed MathService in new Math
+
+    inputPort SelfIn {
+        location: "local://self"
+        interfaces: calculatorIface
+    }
+
+    outputPort SelfOp {
+        location: "local://self"
+        interfaces: calculatorIface
+    }
+
+    inputPort fromCircuitBreaker{
+        location: "socket://localhost:3001"
+        protocol: "http"
+        interfaces: CircuitBreakerServiceCallbackInterface
+    }
+
+    embed CircuitBreakerService( { 
+        inputLocation = "socket://localhost:3000"
+        outputLocation = "socket://localhost:3001" 
+    } )
+
+    execution { concurrent }
+
+    main{
+        [add(req)(res){
+            res = req.x+req.y
+        }]
+        [minus(req)(res){
+            res = req.x-req.y
+        }]
+        [multiply(req)(res){
+            res = req.x*req.y
+        }]
+        [divide(req)(res){
+            res = req.x/req.y
+        }]
+        [callback(req)(res){
+            scope (callback){
+                install ( 
+                    UnexpectedError => println@Console( "Calculator ->: UnexpectedError" )()
+                );
+                random@Math()(rand)
+                if (rand > error_rate){
+                    throw ( UnexpectedError )
+                } else {
+                    if (req.operation == "add"){
+                        add@SelfOp({x = int(req.data.x) y = int(req.data.y)})(response)
+                        res << response
+                    }else if  (req.operation == "minus"){
+                        minus@SelfOp({x = int(req.data.x) y = int(req.data.y)})(response)
+                        res << response
+                    }else if  (req.operation == "multiply"){
+                        multiply@SelfOp({x = int(req.data.x) y = int(req.data.y)})(response)
+                        res << response
+                    }else if  (req.operation == "divide"){
+                        divide@SelfOp({x = int(req.data.x) y = int(req.data.y)})(response)
+                        res << response
+                    }
+                }
+            }
+        }]
+    }
+    
+}
+\end{lstlisting}
+\end{listing}
+
+... describe how this service work
+
+
+% an image

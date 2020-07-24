@@ -26,9 +26,9 @@ The target string can specify as a Java JAR url \texttt{<scheme>:file:<location>
 
 \subsection{Jolie example program}
 
-Once we are familiar with Jolie's basic concept, we will demonstrate an example program of Jolie service and the client, a \textit{Sum Service}, which exposes an operation \textit{sum} that takes two integers and sum them together. There are three files involved in this example, a file containing an interface definition used by the service operation, the sum service program, and the client.
+Once we are familiar with Jolie's basic concept, we will demonstrate an example program of Jolie service and the client, a \textit{SumService}, which exposes an operation \textit{sum} that takes two integers and sum them together. There are three files involved in this example, a file containing an interface definition used by the service operation, the sum service program, and the client.
 
-Firstly, the interface declaration file defined a list of shared definitions between the client and \textit{Sum Service}. It contain a definition of type \textit{intPair} and an interface \textit{SumIface}, which defined an operation that is used for communication.
+Firstly, the interface declaration file defined a list of shared definitions between the client and \textit{SumService}. It contain a definition of type \textit{intPair} and an interface \textit{SumIface}, which defined an operation that is used for communication.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -73,7 +73,7 @@ main{
 \end{lstlisting}
 \end{listing}
 
-For our example of the service's client, we firstly include the standard library `console', which exposes us to the ability to perform console related tasks, e.g., print and receive console input. Later at line 4 in the service program, we declare a communication channel name \texttt{Calculator}, which defines the communication channel to the channel in \textit{Sum service}. Lastly, the client program, we build a message value and send it through invoking an operation \texttt{sum} in the output port.
+For our example of the service's client, we firstly include the standard library `console', which exposes us to the ability to perform console related tasks, e.g., print and receive console input. Later at line 4 in the service program, we declare a communication channel name \texttt{Calculator}, which defines the communication channel to the channel in \textit{SumService}. Lastly, the client program, we build a message value and send it through invoking an operation \texttt{sum} in the output port.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
