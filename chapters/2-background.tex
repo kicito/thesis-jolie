@@ -1,37 +1,38 @@
 \chapter{Background}
 
-\section{Service-oriented Architecture}
+\section{Service-oriented Architecture}In this section, we visit the history and definitions used in the Service-oriented Architecture, as well as the emergence of the Microservices Architecture, the state-of-the-art software design in the modern real-world system. At the end of this section, the reader should understand the problem that Jolie programming language is trying to solve.
 
-In this section, we visit the history and definitions used in the Service-oriented Architecture, as well as the emergence of Microservices Architecture, the state-of-the-art software design in the modern real-world system. At the end of this section, the reader should understand the problem that Jolie programming language is trying to achieve.
-
-\textbf{SOA} is a software architecture design that focuses on the composition of services via communication over a network protocol. The majority of \textbf{SOA} is implemented over Web Services technology, where services are composed together through the standard web protocol such as SOAP or HTTP. In \textbf{SOA}, A service is consist of four properties which are \cite{SOA_opengroup} :
+\textbf{SOA} is a software architecture design that focuses on the composition of services via communication over a network protocol. The majority of \textbf{SOA} implementation realized over Web Services technology, where services are composed together through standard web protocols such as SOAP\cite{Mendelsohn:07:SVP} or HTTP\cite{http-rfc}. In \textbf{SOA}, A service consist of four properties which are \cite{SOAopengroup} :
 
 \begin{itemize}
-    \item a logical representation of a repeatable business activity that has a specified outcome
-    \item self-contained
-    \item may be composed of other services
-    \item a "black box" to consumers of the service
+    \item a logical representation of a repeatable business activity that has a specified outcome;
+    \item self-contained;
+    \item may be composed of other services;
+    \item a "black box" to consumers of the service.
 \end{itemize}
 
-\textbf{SOA} became well-known since 2005 from the rising of the World-Wide-Web, where the emergence of web services has started to claim their interest in industry aspects. At the time, SOA focused on the development of document specifications or application interfaces, such that the client of the service can operate only through the interfaces from the service provider as the implementation detail has encapsulated. The well-received technology for SOA implementation was Web Services Description Language (WSDL) in conjunction with a web protocol. 
+\textbf{SOA} became well-known since 2005 from the rising of the World-Wide-Web, where the emergence of web services has started to raise their interest in industry aspects. At the time, SOA focused on the development of document specifications or application interfaces, such that the client of the service can operate only through the interfaces of the service provider, which encapsulated the implementation details of a given service. The well-received technology for interpolation of services in SOA is an XML-based open-standard\cite{mahmoud-2005}, such as Web Services Description Language (WSDL)\cite{Moreau:07:WSD}, which describes network services as a set of endpoints operating on messages.
 
-To apply SOA, the system architect must design thoughtfully for the processing model of the distributed network of services. It yields the reduction of service integration costs and better software architecture. However, criticisms rose as the system's complexity obscured the development budget, such as the complexity of the system's governance structure for controlling operational accessibility and the complex SOAP protocol data structure. After years of evolving to meet the requirement,
+To apply SOA, the system architect must design thoughtfully for the processing model of the distributed network of services\cite{SOAopengroup-digitalage}. It yields the reduction of service integration costs and better software architecture. However, criticisms rose as the system's complexity obscured the development budget, such as the complexity of the system's governance structure for controlling operational accessibility and the complex SOAP protocol data structure\cite{SOAopengroup-digitalage}. After years of evolution to meet the requirement,
 the new interpretation of SOA, the Microservices architecture, has emerged.
 
-The Microservices architecture (MSA) is one of the SOA offspring, as it takes out a subset of SOA definitions and simplifies so that the small scale software can effectively adopt the SOA design style. The main characteristic of MSA's service that differed from SOA's is the definition of a service. An MSA service should be responsible for one single business activity, bounded by contexts, autonomously developed, and independently deployable. For the communication-wise, MSA services commonly rely on a simple data model, such as REST-ful HTTP or messaging protocol, rather than the complex structure of SOAP data format.
+The Microservices architecture (MSA) is one of the SOA \say{offspring}, as it takes out a subset of SOA definitions and simplifies them so that small-scale software can effectively adopt the SOA design style\cite{SOAopengroup-msa}. The main characteristic of MSA that differed from SOA's is the definition of a service. According to Fowler et al. \cite{fowler-2014}, an MSA service should be responsible for one single business activity, bounded by contexts, autonomously developed, and independently deployable. Communication-wise, MSA services commonly rely on a simple data model, such as REST-ful HTTP or other messaging protocols, rather than the complex structure of SOAP data format\cite{SOAopengroup-msa, SOAopengroup-digitalage}.
 
-As the number of fine-grain services grown in the application ecosystem and the necessity of approaches to develop, deploy, and monitor those services, it is common to use new technology, such as container technology and DevOps practice, in conjunction with MSA design. The concept of Container technology, such as Docker, allows a service application and dependencies to be packed into a container image. Thus, the complexity of the installation process can be handled directly from the development team. Moreover, the operation team also benefits from container technology via its simplicity and useful tools and commands to maintain and operate the application. For example, Docker's container engine allows users to establish the network between services, as well as to configure the application from the container level, and the number of container orchestration tools available at present, such as Docker Swarm and Kubernetes.
+As the number of fine-grain services grew in the application ecosystem as well as the necessity of approaches to develop, deploy, and monitor those services, it has become typical to use additional technologies to manage and maintain the system's complexity. The containers technology, which is OS-level virtualization to deliver software in packages called containers, makes it easy to move the contained application between computing environments while retaining full functionality\cite{understanding-containers,docker-container}. While the software development practices for MSA development, such as DevOps\cite{wilsenach-2015}, in conjunction with MSA design.
 
-Almost a decade from experimenting with microservices architecture in software development, it is considered a well-received technology by the industry, as the survey on its maturity by O'Reilly/cite{MICROREP}. The report indicates that 86 percent of their respondents rate their microservices efforts at least partially successful, and more than 50 percent would use MSA design for their new application. 
+The container technology, such as Docker\footnote{https://www.docker.com/}, allows a service application and dependencies to be packed into a container image. Thus, the complexity of the installation process can be handled directly from the development team. Moreover, the operation team also benefits from containers thanks to their simplicity and useful tools to operate the application. For example, Docker's container engine allows users to establish the network between services, as well as to configure the application from the container level. On top of the container technology, there is a tool that manages, scales, and maintains containerized application, the so-called orchestrator \cite{docker-orchestration}. The orchestrator helps us scaling our application for better availability, such as automatically spin up new container to replace the failed one, and rollout  update and reconfiguration of our application. There are several container orchestration tools available at present, such as Docker Swarm\cite{docker-swarm} and Kubernetes\cite{kubernetes}.
+
+Almost a decade from experimenting with microservices architecture in software development, it is considered a well-received technology by the industry, as the survey on its maturity by O'Reilly\cite{MICROREP}. The report indicates that 86 percent of their respondents rate their microservices efforts at least partially successful, and more than 50 percent would use MSA design for their new application. 
+
 
 \section{Jolie Programming Language}
 
-\textbf{Jolie}\cite{JOLIE} is a general-purpose programming language with an emphasis on the communication between distributed processes. The goal of Jolie was initially an implementation of \textbf{SOCK} \cite{10.1007/11948148-27}, which is a formal model of a service composition calculus inspired by the process calculus, CSS\cite{10.5555/539036}, and workflow language, WS-BPEL\cite{OASIS}.
-As the language and the concept of SOA have evolved, to the extent of our knowledge, it is the first programming language such that tackles the difficulty of service development in the linguistic paradigm.
+\textbf{Jolie}\cite{JOLIE} is a general-purpose programming language with an emphasis on the communication between distributed processes. The foundation of Jolie is \textbf{SOCK} \cite{10.1007/11948148-27}, which is a formal model of a service composition calculus inspired by the process calculus, CCS\cite{10.5555/539036}, and the workflow language, WS-BPEL\cite{OASIS}.
+As the language and the concept of SOA have evolved to microservices architecture, to the extent of our knowledge, Jolie is the first programming language such that tackles the difficulty of service development in the linguistic paradigm\cite{DBLP:journals/corr/GuidiLMM17}.
 Without a need for external technology for orchestrating services, Jolie supports service orchestration from the language itself.
-For the syntax of the language, Jolie uses a block-structured programming syntax similar to C and Java combined with an effort to make the language simple and straightforward; as a result, Jolie's learning curve is flat for those who are already familiar with coding.
+For the syntax of the language, Jolie uses a block-structured programming syntax similar to C and Java, combined with an effort to make the language simple and straightforward; as a result, Jolie's learning curve is flat for those who are already familiar with coding.
 
-A Jolie program, or a service, is a file contained Jolie definitions, which consists of three types of components, namely, the definition declarations, the service deployment instructions, and the service workflow. Jolie's definition declarations represent the definition of a type or an interface to be used in message passing by a service. The deployment instruction defines the service's communication layer, such as protocol, location, and the interface of the communication port. In the last part, the service workflow describes the detail of service behavior when the operation gets invoked by the client.
+A Jolie program, or a service, is a file containing Jolie definitions, which consists of three types of components, namely, the types and interfaces definition declarations, the service deployment instructions, and the service workflow. Jolie's definition declarations represent the definition of a type or an interface to be used in message passing by a service. The deployment instruction defines the service's communication layer, such as protocol, location, and the interface of the communication port. In the last part, the service workflow describes the detail of service behavior when the operation gets invoked by the client.
 
 In this section, we briefly explain the Jolie program structure and components used in the Jolie module system. Those who are keen to know more about advanced topics in Jolie are recommended to visit \cite{joliedoc, JOLIE}.
 
@@ -52,22 +53,23 @@ Figure ~\ref{fig:JolieGrammar} demonstrate a syntax of Jolie program.
 \subsection{Definition}
 \label{sec:jolie-def}
 
-The definition declaration is a set of information related to Jolie's service, which can be either type, interface, or a procedure. Type definition, as said, is a definition that represents a message structure using for message passing in Jolie. The interface definition defines an abstraction of operations along with the expected incoming and outgoing message data structure referred to in the declaration of a communication port. The procedure definition defines a set of instructions to be called in runtime execution. These declarations are usually defined in an external file and retrieved using include statement, which is presented in section ~\ref{sec:jolie-include}.
+The definition declaration is a set of information related to Jolie's service, which can be either a type or an interface. Type definition, as said, is a definition that represents a message structure using for message passing in Jolie. The interface definition defines an abstraction of operations along with the expected incoming and outgoing message data structure referred to in the declaration of a communication port. 
+%The procedure definition defines a set of instructions to be called in runtime execution.
+These declarations are usually defined in an external file and retrieved using include statement, which is presented in section ~\ref{sec:jolie-include}.
 
 \input{chapters/background/jolie/jolie-typeDefinition}
 
 \input{chapters/background/jolie/jolie-interfaceDefinition}
 
-\input{chapters/background/jolie/jolie-procedureDefinition}
+% \input{chapters/background/jolie/jolie-procedureDefinition}
 
-We can revisit the syntax of the \(<definition>\) rules as it can be represented by three components which are types, interfaces, and procedures as shown in figure ~\ref{fig:jolie-definition}
+We can revisit the syntax of the \(<definition>\) rules as it can be represented by definition of types and interfaces as shown in figure ~\ref{fig:jolie-definition}
 
 \begin{figure}[h]
     \begin{framed}
         \begin{grammar}
             <definition> ::= <typeDefinition>
             \alt <interfaceDeclaration>
-            \alt <procedureDefinition>
         \end{grammar}
     \end{framed}
     \caption{Jolie Grammar for definition part}
@@ -109,9 +111,9 @@ As before, we can now define a syntax for the \(<deplInstruction>\) as following
 
 The behaviors in Jolie define a composition of tasks, called processes, invoked when the service receives a message matching the exposed operation or performing a sequential program. A process is essentially a program statement in other programming languages, but as it is built from a distributed system concept, Jolie processes are composing differently. Composing processes, as shown in the syntax rule \(<continuation>\) in figure ~\ref{fig:jolie-process}  uses semicolon \((;)\) to define a sequential statement and pipe \((|)\) for a parallel statement. For example given two statement \(A\) and \(B\) if we write \(A ; B\) Jolie interprets it as \textit{`execute A then B"} while \(A | B\) as \textit{`concurrently execute A and B"}. If the continuation is not defined, the default value is a sequential composition \((;)\).
 
-In addition to the support of basic statements as other programming languages, Jolie natively supports communication statements, consisting of two patterns, i.e., One-Way operation and Request-Response operation. As the name suggested, One-Way operation sends a message through a port and continues, while Request-Response waits for a response message from the target port then continue. With these concepts, a Jolie program encapsulates a whole communication procedure within a single statement. From the syntax, the \(<operationName>\), \(<outputPortName>\) are an identifier referring to the calling operation and port name respectively. In contrast, \(expr\) is a basic expression used to send and store the received data.
+In addition to the support of basic statements as other programming languages, Jolie natively supports communication statements, consisting of two patterns, i.e., One-Way operation and Request-Response operation. As the name suggested, a One-Way operation sends a message through a port and continues, while Request-Response waits for a response message from the target port and then continues. With these concepts, a Jolie program encapsulates a whole communication procedure within a single statement. From the syntax, the \(<operationName>\), \(<outputPortName>\) are an identifier referring to the calling operation and port name respectively. In contrast, \(expr\) is a basic expression used to send and store the received data.
 
-Another service-oriented statement supported by Jolie is a Nondeterministic Choice defined in \(<ndInputChoices>\), which determine a workflow of the service, when the accepted operation gets called. It is useful when a service is acting as a provider in the system. The workflow consists of two parts of the execution definition defined in \(<processes>\) syntax rule. Firstly, defined within square brackets scope, generally used for building a response for return to the client since it is executing upon the operation is invoked. The second one, defined after the brackets, is performed after service has responded to the client. It is useful in a situation where there are blocking tasks that do not contribute to the response message.
+Another service-oriented statement supported by Jolie is a Nondeterministic Choice defined in \(<ndInputChoices>\), which determines a workflow of the service, when the accepted operation gets called. It is useful when a service is acting as a provider in the system. The workflow consists of two parts of the execution definition defined in \(<processes>\) syntax rule. Firstly, defined within square brackets scope, generally used for building a response for return to the client since it is executing upon the operation is invoked. The second one, defined after the brackets, is performed after service has responded to the client. It is useful in a situation where there are blocking tasks that exclusively contribute to the response message.
 
 \begin{figure}[h]
     \begin{framed}
@@ -157,7 +159,7 @@ Now let us look back to the Jolie service in example ~\ref{list:example-port}, a
     }
 \end{lstlisting}
 
-The statement \texttt{createPerson(person)(result)} tells the runtime execution to wait for a receiving operation \texttt{createPerson} and assign the receiving message to \texttt{person} variable then an execution proceed with the processes defined in brace scope. After the execution in the brace finished, the value in variable \texttt{result} will be sent back to the operation caller.
+The statement \texttt{createPerson(person)(result)} tells the runtime execution to wait for a receiving operation \texttt{createPerson} and assigns the receiving message to the \texttt{person} variable, then the execution proceeds with the processes defined in braced scope. After the execution in the braces finished, the value in variable \texttt{result} will be sent back to the operation caller.
 
 
 \FloatBarrier
@@ -169,12 +171,14 @@ The statement \texttt{createPerson(person)(result)} tells the runtime execution 
 
 \section{Module System}
 
-Module system is a system consisting of composition of an independent executable program unit. A program unit contains every definition and functionality intended to solve one specific problem, each program unit is called Modules in the module system. Each module can be parsed into a module interface, which defines a name of public symbols and the required symbols from other modules. The module interface allows other modules access providing symbols and use its implementation details in their environment. The Module System targets the decomposition of large applications into smaller pieces. This led the developer of the supported module system programming language to reuse their codes and allow the concept of package managing tools, which helps engage its community to collaborate more and grow faster.
+Module system is a system consisting of composition of an independent executable program unit. A program unit contains every definition and functionality intended to solve one specific problem, each program unit is called Modules in the module system. Each module can be parsed into a module interface, which defines a name of public symbols and the required symbols from other modules. 
+As a result, the developers of the module system reuse their codes and allow the concept of package managing. This helps engage its community to collaborate and grow faster.
+The Module System targets the decomposition of large applications into smaller pieces. This led the developer of the supported module system programming language to reuse their codes and allow the concept of package managing tools, which helps engage its community to collaborate more and grow faster.
 
-Import statement is the statement that is commonly used in the Modular programming language to access and retrieve definitions between modules. It is generally responsible for locating the target module, and resolve the definition to the local execution environment.
+The import statement is the statement that is commonly used in the module system to access and retrieve definitions in modules. It is generally responsible for locating the target module and resolve the definition to the local execution environment.
 
 Usage of terms in the Module system varies between programming languages as their implementation detail of the module system. Before diving into the module's system of each selected popular programming language, the reader will be introduced with the term that is used within their context.
 
-In the sections below, we reviewed a module system supported programming language, Python programming language in particular. The choice had made from the documentation on its history, and design choices are well documented, and it inspired our implementation of Jolie's module system.
+In the sections below, we review some module systems supported by different programming languages, The Python programming language in particular. The choice on Python made because the documentation on its history and design choices are well documented and it inspired our implementation of the Jolie's module system.
 
 \input{chapters/background/module-system/module-python.tex}

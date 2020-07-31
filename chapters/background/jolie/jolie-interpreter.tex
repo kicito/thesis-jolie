@@ -1,8 +1,8 @@
 \subsection{Jolie Implementation}
 \label{sec:jolie-implementation}
-In this section, we will give an introduction to the implementation of Jolie programming language. After this chapter, the reader should follow the design and change made in Jolie's internal implementation for the module system's support.
+In this section, we give an introduction to the implementation of the Jolie programming language. After this chapter, the reader should follow the design and change made in Jolie's internal implementation for the module system's support.
 
-The implementation of Jolie language is based on the interpretation approach. Therefore, the interpreter is responsible for the total life-cycle of a Jolie program; parsing a program until executing it. Four components are working together to interpret a Jolie source code into an execution of the program. Firstly, the \textbf{parser} parses source code into an Abstract Syntax Tree (AST), each node that defined a runtime behavior of the program later transformed into a tree of Jolie executable process called \textbf{Object-oriented interpretation tree} ( OOIT ). The \textbf{runtime environment} stores the state and is responsible for executing the process. Lastly, the  \textbf{Communication Core} is the foundation of communication between Jolie runtime environment.
+The implementation of Jolie language is based on interpretation. Therefore, the interpreter is responsible for the total life-cycle of a Jolie program; parsing a program until executing it. Four components are working together to interpret Jolie source code into an execution of the program. Firstly, the \textit{parser} parses source code into an Abstract Syntax Tree (AST), each node that defined a runtime behavior of the program later transformed into a tree of Jolie executable process called \textit{Object-oriented interpretation tree} (OOIT). The \textit{runtime environment} stores the state and is responsible for executing the process. Lastly, the  \textit{Communication Core} is the foundation of communication between Jolie runtime environment.
 
 % an image for four components
 
@@ -11,10 +11,10 @@ The workflow of interpreting a Jolie source code is the following:
 \begin{enumerate}
     \item The command-line arguments for the interpreter configuration are parsed. And the target execution file is located.
     \item The source code gets parsed by the parser, where the AST is created.
-    \item The program's component nodes in AST get verified it's semantic and resolved type aliasing
-    \item Transform abstract syntax tree of the main procedure to the interpretation tree or the executable runtime object.
-    \item Initialize the Communication Core from incoming communication ports description, the service is ready to receive an incoming message after this process is finished.
-    \item Initialize the embedding services, and the communication configuration processes for outgoing communication port are executed.
+    \item The program's component nodes in the AST get verified semantically and all of the type aliasing is resolved
+    \item Transform abstract syntax tree of the main procedure into the interpretation tree or the executable runtime object.
+    \item Initialize the communication core for incoming communication ports description, the service is ready to receive an incoming message after the communication core is initialized.
+    \item Initialize the embedded services, and the communication configuration processes for outgoing communication port are executed.
     \item The runtime executes the main procedure definition process.
 \end{enumerate}.
 

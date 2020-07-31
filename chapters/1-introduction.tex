@@ -1,161 +1,32 @@
 \chapter*{Introduction}
+The need for principles and a methodology of designing software has always been a point of discussion in software development. The striving for better software quality is the goal of software engineering, a discipline in computer science. Bauer \cite{DBLP:conf/ifip/Bauer71} first coined the term ‘software engineering’ with the definition as \say{the establishment and use of sound engineering principles to obtain economically software that is reliable and works on real machines efficiently}. The study initiated from the lack of the method of writing an efficient program in the early days of computer science, as the computing power of computers started to outpace the capability of programmers to utilize those capabilities effectively.
 
-% introduction 
-% ความเป็นมาและความสำคัญของปัญหา,จุดประสงค์,ขอบเขต,benefit ที่จะได้จากโปรเจคนี้
-
-%idea 2 ---------------------
-% ทำไมถึงมี SOC / Modular เพราะsoftware มีความเปน module?
-% มีแล้วช่วยให้ software development ดีขึ้นยังไงลงดีเทลหน่อยนึง
-% ด้วยประโยชน์ของภาษาที่รองรับ modular programmingจะช่วยให้การพัฒนาsoftware ดีขึ้นยังไง ยกตัวอย่าง
-% ดังนั้นนี่จึงเป็นที่มาของ โปรเจคนี้โดยมีวัตถุประสงดังนี้ 
-% บอกจุดประสงค์ ---> ศึกษาส่วนประกอบของภาษาโปรแกรมมิ่งที่รองรับ module system และพัฒนา Module system สำหรับภาษา Jolie 
-% บอกขอบเขตของโปรเจคที่เราจะทำ(ของพี่แดนเขียนขอบเขตไว้ใน stucture of this thesis
-% ของเราก็เขียนว่า feature อะไรบ้างที่เพิ่มเข้าไป
-% ปิดท้ายด้วย benefit ที่จะได้จากการศึกษาและเพิ่ม feature ของ jolie
-
-% What - why - how
-% ทำไมถึงมี SOC / Modular เพราะsoftware มีความเปน module?
-
-
-% เขียนแนวว่า ปัจจุบันอุสาหกรรม software มีความใหญ่และซับซ้อนขึ้น ได้มีการศึกษาถึงวิธีและ practical guideline and methodology to create a หนึ่งในวิธีการที่จะทำให้โค้ด maintain ได้ง่ายขึ้นคือการ ทำให้ system มีความเป็น modular โดยการ apply Seperation of concerns to plan and write code, 
-
-For a long time, The demand for the principle and methodology of designing software has always been a point of discussion in software development.
 As the software continuously evolved from time to time, Israeli et al. studied Linux kernel evolution for over 800 new versions and found that the size, from various metrics, has been increasing linearly from 1994 to 2008 \cite{10.1016/j.jss.2009.09.042}. Even for the present day, the development of the Linux kernel between 2019 to 2020, 1.3 million new lines of codes have been added to Linux kernel source code by 4,190 different contributors \cite{anderson2020}. For this reason, the goal of having straightforward, maintainable details in software, from an architectural point of view to the implementation level is crucial for every software development cycle.
 
 The principle that is well known and adopted in many aspects of the related programming field is the Separation of Concerns (\textbf{SoC}). SoC aims to separate the problem into a small set of sub-problems to help the practitioner focus on one aspect, instead of being overwhelmed by the development complexity as a whole. Among many other principles, modularizing the system to smaller components is one of the prominent practices widely used in the industry.
 
-\begin{displayquote}
-    "the separation of concerns", which, even if not perfectly possible, is yet the only available technique for effective ordering of one's thoughts, that I know of. This is what I mean by "focussing one's attention upon some aspect"
-    - Edsger W.Dijkstra\cite{dijkstra1974}
-\end{displayquote}
+Many software designs and principles adopt SoC as its fundamental principle to pursue an easy to maintain, interchangeable, and reusable software. For example, the design of internet protocol we use nowadays consists of a stack of interchangeable technology which allows the developer to focus on the function of the specific layer and neglect the others\cite{stack-1994}. The Model-View-Controller (MVC) design pattern, which is a well-received pattern for web application development nowadays, is highly influenced by the SoC principle as it separates the program logic into three components as indicated by its name. The MVC pattern pursues the modularity for the interactive application and gives the developer a clear perspective on the application components and reuses the developed component in the new application \cite{GlennACF}.
 
+One paradigm that applies SoC for an architectural style of a system is  Service-oriented architecture (\textbf{SOA}). The SOA focuses on the composition of services via communication over a network protocol. A service usually represents an enterprise business process. The SOA approach allows the business operation to develop its service and interacts with other services via message exchanging. The SoA system benefits from its modularity on the functional and service reusability\cite{SOAopengroup}.
 
-The principle that is well known and adopted in many aspects of the related programming field is the Separation of Concerns (\textbf{SoC}). SoC aims to separate the problem into a small set of sub-problems to help the practitioner focus on one aspect, instead of being overwhelmed by the development complexity as a whole. Among many other principles, modularizing the system to smaller components is one of the prominent practices widely used in the industry.
+% SOA and microservice
+The SOA concept has started to gain recognition for almost two decades, as it helps reduce the integration cost of information between services by providing a standard of data format. However, the developers and designers suffer from the complexity of implementing an SOA. For example, the architecture of Hewlett-Packard's internal service is reported to be too complicated \cite{davenport-2016}. Moreover, a request handling from a service could involve an interaction with multiple services, which raises trust issues, especially if it is performed by a third-party service provider.
 
-Many software designs and principles adopt SoC as its fundamental principle to pursue an easy to maintain, interchangeable, and reusable software. From the architectural design point of view to the implementation detail aspect. From the very top level, Service-oriented architecture (\textbf{SOA}) focuses on the composition of services via communication over a network protocol. At the implementation level of software, modular programming is a design technique where the software is divided into several small, self-contain units, so-called a module. 
+Since the emergence of the SoA, one of the successful SoA applications that provide business value are those used by particular industries to standardize document message information between services. This formatted set of information significantly reduces the integration cost for different services within the same line of business e.g. the exchange of information between online travel agencies\footnote{
+    OpenTravel Alliance: https://opentravel.org/about-us/
+} and hotels 
+\footnote{
+    Hospitality Technology Next Generation: https://www.htng.org/
+}.
 
-% // Service in SOA and Microservice
-The SOA concept is well known for more than a decade, as it helped reduce the integration cost of information between services by providing a standard of data format. However, the developers and designers suffer from the complexity of implementing an SOA; one of the difficulties is the standard definition of the compositional protocol between services. Consequently, adopting the SOA concept has a trade-off between the integration cost as a business value and the additional cost of development. As we see, the beneficial organization for SOA, such as IT-related large companies or the business association, invested and experimented with the concept and published the definitions on their own\cite{cesar2020, ibmcloudeducation2019}.
-% //https://opentravel.org/about-us/ 
+The SOA system's complexity caused it to suffer from gaining technical maturity; thus, the attempt to rebrand SOA for real-world application has resulted in the Microservice Architecture. According to Dragoni et al., microservice architecture is considered the second iteration of SOA. Microservice architecture is a distributed application where all modules are microservices\cite{Dragoni2017}. Microservice architecture aims to reduce implementation complexity as it forces the designer to encapsulate the business logic into a composition of simple services. This makes the Microservice easier to implement and it became a prominent software design pattern. In recent years, it has become the state-of-the-art software development, adopted by companies such as Amazon \cite{iii-2015}, Netflix\cite{blog-2018}, and Spotify\cite{cope-2020}.
 
-The SOA system's complexity caused it to suffer from gaining technical maturity; thus, the attempt to rebrand SOA for the real-world application has resulted in the Microservice Architecture, which considered as an the second iteration of SOA \cite{Dragoni2017}. Microservice Architecture is a widespread software architectural paradigm whereby a service is defined as a standalone service, which means that it may not be composed of a combination of services. This definition reduces the complexity of implementing as it forces the designer to encapsulate only single business logic into a service, which makes the Microservice easier to implement and become a prominent software design at present. In recent years, it has become state-of-the-art software development, adopted by companies such as Amazon, Google, and Facebook.
+Jolie\cite{JOLIE} is a service-oriented programming language that addresses the difficulty of developing a distributed system of services. Jolie tackles the difficulty of service implementation from the linguistic approach. Rather than building up the program from objects or functions, Jolie code is contained in a service \cite{jolie-website}. Jolie contributes a seamless experience in developing microservice applications by providing a set of primitives to define both communication details and workflow for the language's invocation operation.
 
-Jolie\cite{JOLIE} is a service-oriented programming language that addresses the difficulty of developing a distributed system of services. Jolie tackles the difficulty of service implementation from the linguistic approach, unlike other general programming languages that usually require a combination of external technology building on top of each other to define a service. Jolie contributes a seamless experience for the developer in developing service as it provides the capability to define both communication method details and the workflow for the invocation operation.
+At the implementation level of software, modular programming is a design technique that applies SoC principle. The modular software concept divides an application functionality into several small, self-contained units, so-called a module. A modular program usually benefits the developer compared to monolithic application in many ways \cite{mall-2018}. As the size of modules is relatively small and encapsulates a single functionality, which helps the developer to focus and contribute to software quality. It also adds efficiency to the development process as the development could be achieved through collaboration between different development teams, who are responsible for different modules to be plugged together through predefined API.
 
-The goal of this thesis is to develop a foundation of the module system for Jolie programming languages. We explore the design choices module system a develop one that is best-suited for Jolie's. We also have an experimental implementation of enhancement in Jolie type system to allow Jolie developer to define value constraints for a type. It is inspired by the work defining a schema for the JavaScript Object Notation (JSON)\footnote{JSON Schema https://json-schema.org/}, which is a well-known
-data format used for communication between services in the present day.
+The support of the module concept in a programming language can significantly benefit the modular programming system. The programming language could implement a specific mechanism to handle module composition, so-called a module system. The module system can detect defections before the execution, such as module location resolution, and compatibility checking between symbols.
 
-The current work progress for Jolie Module System is partially merged into the Jolie the main development \url{https://github.com/jolie/jolie} repository is available at \url{https://github.com/kicito/jolie}.
+This thesis aims to develop a foundation of the module system for Jolie microservices, using Jolie programming language as a reference implementation technology. We explore the design choices of such a module system and develop one that is best-suited for Jolie. Our development led us to identify an additional companion feature for the module system: refinement type, which supports the type-level definition of constraints on data. This feature becomes useful to module developers in providing safer modules/ libraries to clients. Thus, we also developed an experimental implementation of enhancement of the Jolie type system to allow Jolie developer to define refinements on types. The latter development is inspired by the work defining a schema for the JavaScript Object Notation (JSON)\footnote{JSON Schema https://json-schema.org/}, which is one of the main data formats used for message passing between services in the present day.
 
-% \input{chapters/introduction/structureOfThesis.tex}
-% \input{chapters/introduction/usedNotation.tex}
-
-
-
-
-% SOC เพื่อ ปูไปยัง Jolie
-% Service-Oriented Computing (\textbf{SOC}) is a computing paradigm for developing an application by composing different services.
-% Each of service defines it's own role and functionality in the application context\cite{papazoglou2003service}. 
-% A service, or so called a program, proceeds it's execution by passing message from one to another. 
-% The interest on \textbf{SOC} concept has been continuously gain attraction since \cite{JOLIE}.
-% One of the research field related to \textbf{SOC} is the study of concurrency theory behind a process flow language, from it's specification of process by passing message, it can be formalizing the existing work flow language into message passing process calculus such as \(\pi\)-calculus.
-% Similarly in industrial field, despite of missing the usage of term \textbf{SOC}, is focusing on the standardize the structured message; It is emphasized on constructing a seamless integration between service providers.
-
-% Developing a service-oriented software had been criticized for being too constrained by the application it serve \cite{mckendrick_2009} \cite{SOA_opengroup}.
-% This leads to an attempt to realizing the concept in the current state and implementation approach for \textbf{SOC}.
-% The successful attempt of defining a modern service-oriented approach for develop a system is Microservice, where many of constrains has been relaxed in order to make implementation feasible for . 
-
-% By using a set of expressive service based primitives. Jolie is also defined as a programming language for develop microservices as a code \cite{DBLP:journals/corr/GuidiLMM17}.  Jolie is 
-% Supported modulesystem programming language
-
-% intro to microservice
-% Dragoni et al. studied and identified the history of the service-oriented architectural design and classified Microservice as a second iteration of an software design architecture that adopting \textbf{SOC} concept.
-% Microservice has been exponentially gained it's popularity from since the term first coined in 2005 by Dr. Peter Rodgers, one of the major reason of Microservice success is due to the availability of tools and technology, this let development team in a company adopts the design pattern easily.
-
-% SOA
-% From the very top level, a software design style that embracing the modular design is called service-oriented architecture (\textbf{SOA}). \textbf{SOA} is a software architecture design that is focusing on the composition of services via a communication over a network protocol. The majority of \textbf{SOA} is implemented with Web Services technology, where services are composed together with the internet protocol such as SOAP, or HTTP. The implementation of \textbf{SOA} has been suffered by many difficulties mostly due to the following: lacking of tooling and testing framework \cite{vithanage_2014} \cite{JPM} and standard definition on the composition protocol between services. The latter reason had led to publication of several company owned definitions \cite{cesar2020} \cite{ibmcloudeducation2019}. \textbf{SOA} has contribute to a business value in many industry, it provides a standard of specification to ensure a seamless experience for connecting multiple systems together, for example, OpenTravel Alliance is an association by travel companies, which is focusing on develop a message structure for communication between global travel agency. It can be seen that majority of system that has adopt \textbf{SOA} is mostly a group of existing companies which shared the enterprise business context. From these reason has led to the difficulty on for a software architect to design a proper \textbf{SOA} style in a small system, and resulted in a problematic software with high technical dept.
-
-
-
-
-
-% The early stage of \textbf{SOA} was focusing on defining a document format, in order to allow a service to be reuseable by different web service provider or
-
-% maybe to background
-% In \textbf{SOA}, A service is consist of four properties which are \cite{SOA_opengroup} :
-
-% \begin{itemize}
-%     \item a logical representation of a repeatable business activity that has a specified outcome
-%     \item self-contained
-%     \item may be composed of other services
-%     \item a “black box” to consumers of the service
-% \end{itemize}
-
-% \textbf{SOA} is being reknown from 2005 from the rising of World-Wide web, where the emerging of web services has start to claim their interest from industry aspects. The \textbf{SOA} during those time was about working on definition of documents to be communicate with others to be able to query. this 
-
-% The \textbf{SOA} had not initially got well received, due to it's complexity of the implementation and challenging of developing a testing framework \cite{vithanage_2014}.
-
-% The top level of designing a software that applying this fundamental is called
-% % collection of components defines a service, which usually responsible for a certain context in a business unit,
-
-
-% With modular system, the program is analyzed and build up from bottom point of view; separating the concerns that has to be address in order to achieve the end product.
-
-% Separation of concern
-
-% It also helps reducing complexity on designing a system.
-
-% Once it finished and get build up by composing as a whole.
-
-% Separating of concerns has been develop in many aspects of development cycle, from the high level architectural design such as
-
-% % what Module system for jolie
-% Modular system, a system that built from composing a small unit so called module, has becoming a well adopted principle for
-
-% Separation of concern is a
-
-% A Modular program is a program that
-
-% Sepa
-
-
-
-% Modular programming is one of the key
-
-
-
-
-% Jolie คืออะไร (ที่มา)
-% % Microservice
-% % เริ่มจาก SoC -> SOCK -> Jolie
-% % มาจาก process calculi SOCK
-% % Microservice is a programming practice that focusing on decomposing an application into small components which responsible for a single functionality for
-% % 
-% %  SOC
-% Service-Oriented Computing (\textbf{SOC}) is a computing paradigm for developing an application by composing different services. Each of service defines it's own functionality and role in the application context\cite{papazoglou2003service}. A service, or so called a program, proceeds it's execution by passing message from one to another. The interest on \textbf{SOC} concept has been continuously gain attraction since \cite{JOLIE}. One of the research field related to \textbf{SOC} is the study of concurrency theory behind \textbf{SOC}'s workflow language, from it's specification of process by passing message, it can be formalizing the existing work flow language into message passing process calculus such as \(\pi\)-calculus. Similarly in industrial field, despite of missing the usage of term \textbf{SOC}, Dragoni et al. studied and identified Microservice as a second iteration of an software design architecture that adopting \textbf{SOC} concept. Microservice has been exponentially gained it's popularity from since the term first coined in 2005 by Dr. Peter Rodgers, one of the major reason of Microservice success is due to the availability of tools and technology, this let development team in a company adopts the design pattern easily.
-
-% % SoA patterns chroreography and orchestration
-% Approaches for designing a service-oriented application can be classified, by composition of services, in two patterns. The definitions of these two patterns have been developed from observing arts performance. The first approach, \textbf{choreography}, is the pattern where composition of service is done by considering as each of services perform their execution on it's own context, exposing an interfaces and it's location for others to connect. A service in choreography
-% % A simple metaphor for describe this approach is considering a dancer who is performing their dance on a stage, without any leader, they perform their art by their self, only make a contract to other when the timing is right.
-% On the other hand, \textbf{orchestration} is a pattern of centralizing the service's behavior by having a single service so call an orchestrator, coordinate and conduct a group of service to perform a task.
-
-% % Jolie
-
-
-
-
-
-% The concept of separating the concerns design principle has been mentioned on a published paper from   , the Service-oriented architecture (\textbf{SOA})
-
-
-% % Modular Programming คืออะไร (ที่มา)
-% % มีรูปแบบยังไง
-% % ประโยชน์
-% % ภาษาอะไรมีบ้าง
-% % Module system
-% Modular programming is one of the key component in modern programming languages. The emphasis of modularity is to separate functionality or concerns of a program to be an independent module such that it is self sufficient; it contains every information needed to perform a specific task.
-
-
-
-
-% % Scope working importstatement for Jolie, alternate file Layout for jolie execution file
+The current work for the Jolie Module System is partially merged into the Jolie the master development \url{https://github.com/jolie/jolie} and the main repository is available at \url{https://github.com/kicito/jolie}.

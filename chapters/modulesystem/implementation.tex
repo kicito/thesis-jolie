@@ -1,22 +1,22 @@
 
 \section{Jolie Module System Implementation}
 
-In this section, we are looking into the Jolie interpreter's workflow for support of the module system. After discussions on necessary components for an import mechanism in Jolie, we are ready to revisit the flow we had mentioned before in section ~\ref{sec:jolie-implementation}; bold typesetting is used for indicating the additional flow.
+In this section, we are looking into the Jolie interpreter's workflow supporting the module system. After discussions on necessary components for an import mechanism in Jolie, we are ready to revisit the flow we had mentioned before, in section ~\ref{sec:jolie-implementation}. Below, bold typesetting is used for indicating the additional flow.
 
 \begin{enumerate}
-    \item The command-line arguments for the interpreter configuration are parsed. And the target execution file is located.
+    \item The command-line arguments for the interpreter configuration are parsed, and the target execution file is located.
     \item The source code gets parsed by the parser, where the \textbf{module record of execution target is created}.
     \item \textbf{The dependent modules gets crawled by Module Crawler, given the initial module record.}
     \item \textbf{Revisit symbols in symbol tables to link the reference between an external SymbolNode and the target reference node defined in the importing module.}
     \item \textbf{Perform symbol name resolution to link the Symbol to the appropriate definition node}
-    \item The program's component nodes in AST get semantically verified.
+    \item The program's component nodes in the AST get semantically verified.
     \item Transform abstract syntax tree \textbf{of the main procedure in main service} to the interpretation tree or the executable runtime object.
-    \item Initialize the Communication Core from incoming communication ports description, the service is ready to receive an incoming message after this process is finished.
-    \item Initialize the embedding services, and the communication configuration processes for outgoing communication port are executed.
+    \item Initialize the Communication Core from incoming communication ports description (the service is ready to receive an incoming message after it has been initialized).
+    \item Initialize the embedding services and the communication configuration processes for outgoing communication port.
     \item The runtime executes the main procedure definition process.
-\end{enumerate}.
+\end{enumerate}
 
-The resolving alias type process, which was performed during the semantic verification phase, is no longer needed since the symbol name resolution process already handles the task.
-Another notable change in the workflow is the target of OOIT creation, where we used to pass the whole AST of a Jolie file.
-This is no longer be the case since our definition of a Jolie executable file has changed from being a representation of a service into a module.
-Hence, we introduce a \textit{service definition} as an input of the interpretation tree creation process.
+The process resolving alias types, which was performed during the semantic verification phase, is no longer needed since the symbol-name resolution process already handles the task.
+
+Another notable change in the workflow is the target of OOIT creation, where we used to pass the whole AST of a Jolie file. This is no longer the case since our definition of a Jolie executable file has changed from being a representation of a service into a module.
+Hence, we introduce a new definition of a service, \textit{Service node}, as a representation of a service in the Jolie Module System. It is used as an input of the interpretation tree creation process.

@@ -2,7 +2,12 @@
 \usepackage[utf8]{inputenc}
 \usepackage{graphicx}
 \usepackage{hyperref}
-\usepackage{biblatex}
+\usepackage[
+    %backend=biber, 
+    natbib=true,
+    style=numeric,
+    sorting=none
+]{biblatex}
 \usepackage{listings,lstautogobble}
 \usepackage{xcolor}
 \usepackage{csquotes}
@@ -19,8 +24,10 @@
 \usepackage{forest}
 \usepackage{multirow}
 \usepackage{amsmath}
-
+\usepackage{dirtytalk}
+\usepackage{url}
 \usepackage{newfloat}
+
 \DeclareFloatingEnvironment[
    fileext=lol,
    name=Listing
@@ -116,7 +123,7 @@
 }
 
 \title{
-{Jolie: Toward Production ready}\\
+{A module system for Jolie microservices}\\
 {\large University of Southern Denmark}\\
 }
 

@@ -1,7 +1,7 @@
 \section{ Module Crawling }
 
 To fulfill the value in the abstract binding syntax of \texttt{b_import} in our previous example. The crawling procedure, which constructs a set of required Module Records for the execution of a program, is fulfilled by a Module Crawler. It is an object introduced in the Jolie module system, consisting of module finders and program parser.
-The crawling process takes an initial module record and scans for the dependent modules, particularly, the module defined in an import statement. After the module finder has found the dependent module, it gets parsed and scanned for the dependent modules. The module crawler repeatedly performs this procedure until every dependent module has successfully parsed to set of Symbol Table. The pseudo-code for its procedure is defined in procedure \texttt{crawl} in figure ~\ref{algo:crawl}.
+The crawling process takes an initial module record and scans for the dependent modules, particularly, the module defined in an import statement. After the module finder has found the dependent module, it gets parsed and scanned for the dependent modules. The module crawler repeatedly performs this procedure until every dependent module has successfully parsed into the Symbol Table. The pseudo-code for this procedure is defined in procedure \texttt{crawl} in algorithm ~\ref{algo:crawl}.
 
 \begin{algorithm}[h]
     \caption{Crawl module}
@@ -54,13 +54,13 @@ The crawling process takes an initial module record and scans for the dependent 
 \end{algorithm}
 \FloatBarrier
 
-Module finding is performed by a component of the module crawler called finder. The Jolie module system's current implementation has two types of finders, which define different strategies to locate a module. The Absolute Finder performs a lookup at a set of defined path locations—the Relative Finder, which performs a search from a relative path to the import statement caller. The finder is responsible for finding an importing module and making sure that the import target exists in the file system. If the finder failed to retrieve the module's information, the interpreter raises a ModuleNotFound error and stops its execution.
+The Module finding is performed by a component of the module crawler called finder. The current implementation of Jolie module system has two types of finders, which define different strategies to locate a module. The Absolute Finder performs a lookup at a set of defined path locations. The Relative Finder performs a search from a relative path to the import statement caller. The finder is responsible for finding an imported module and making sure that the import target exists in the file system. If the finder failed to retrieve the module's information, the interpreter raises a ModuleNotFound error and stops its execution.
 
 \subsection{ Absolute Path Resolution }
 
-For absolute import, which performs a search for the module at a defined path location, it is used for importing a library that does not reside in the package-specific modules. The use case for such import is the build-in modules.
+The absolute import, which performs a search for the module at a defined path location, is used for importing a library that does not reside in the package-specific modules. The use case for such an import resolution strategy is that of built-in modules.
 
-The Absolute Path Finder performs a lookup in two different locations; the working directory of the execution process is the first place to perform a lookup, where the finder directly tries to resolve the target module. then continue to the directory \texttt{lib} to look for \texttt{first.jap} where \texttt{first} is a first token defined in module target. Lastly, the finder will perform module lookup to the extensible list of directories defined in a special path called \texttt{packLib}. It contains a path to build-in libraries and can extend through command-line arguments. The procedure for the absolute path resolution is shown in figure ~\ref{algo:absolutePath}:
+The Absolute Path Finder performs a lookup in two different locations. The working directory of the execution process is the first place to perform a lookup, where the finder directly tries to resolve the target module. Then, it continues to the directory \texttt{lib} to look for \texttt{first.jap} where \texttt{first} is a first token defined in module target. Lastly, the finder will the perform module lookup to the extensible list of directories defined in a special path called \texttt{packLib}. It contains a path to built-in libraries and can be extended through command-line arguments. The procedure for the absolute path resolution is shown in algorithm ~\ref{algo:absolutePath}:
 
 \begin{algorithm}[h]
     \caption{AbsolutePathResolution Procedure}
@@ -103,7 +103,7 @@ The Absolute Path Finder performs a lookup in two different locations; the worki
     \end{algorithmic}
 \end{algorithm}
 
-Consider figure ~\ref{fig:jolie-absolute-import}, which demonstrates a working directory tree representation and a working code snippet in \texttt{main.ol}, shows the relation between module targets to the actual working directory structure. The import statement defined in the first line is resolved into a ./packages/somePackage.ol, while the second line demonstrates an example of importing a jap archive file. Lastly, the last line expresses an example of importing a built-in module \texttt{console}.
+Consider figure ~\ref{fig:jolie-absolute-import}, which shows a working-directory tree representation and a working-code snippet in \texttt{main.ol}, demonstrates the relation between module targets and the actual working directory structure. The import statement defined in the first line is resolved into a ./packages/somePackage.ol, while the second line demonstrates an example of importing a jap archive file. Lastly, the last line is an example of importing a built-in module \texttt{console}.
 
 \begin{figure}[]
     \begin{forest}

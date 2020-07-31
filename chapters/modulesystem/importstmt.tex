@@ -1,7 +1,7 @@
 
 \section{Import Statement}
 
-An import statement enables the capability of importing a symbol from an external module. The declaration of an import statement consists of two specifiers, the module target and the target symbols, each used in different phases of import statement execution, the module lookup process, and the symbol binding process. Any error that occurs during the execution of an import statement, such as importing a restricted symbol or undefined symbol in the target module, will terminate the interpreter's execution.
+An import statement enables the capability of importing a symbol from an external module. The declaration of an import statement consists of two specifiers, the module target and the target symbols, each used in different phases of the import statement execution, the module lookup process, and the symbol binding process. Any error that occurs during the execution of an import statement, such as importing a restricted symbol or undefined symbol in the target module, will terminate the interpreter's execution.
 
 The syntax for an import statement is shown in figure ~\ref{fig:jolie-import-stmt-syntax}.
 
@@ -31,6 +31,6 @@ The syntax for an import statement is shown in figure ~\ref{fig:jolie-import-stm
     \label{fig:jolie-import-stmt-syntax}
 \end{figure}
 
-The module target specifier used to guide the location where the importing module resides. Jolie import system uses a dot(.) as a path separation to the importing module. Each identifier before last defines the packages and sub-packages where the importing module resides, while the token at the end represents the importing module name. A leading dot designates Jolie import mechanism to perform a relative path lookup.
+The module target specifier is used to guide the location where the importing module resides. Jolie import system uses a dot (.) as a path separation to the importing module. Each identifier before the last defines the packages and sub-packages where the importing module resides, while the token at the end represents the importing module name. A leading dot designates Jolie import mechanism to perform a relative path lookup.
 
-The second part of the import statement, target symbols, is a list of importing symbol names defined in the target module with an optional qualified name to bind to the local execution environment denoted by using 'as' keyword. For the current implementation of import statement wildcard import doesn't support importing with a qualified name (as).
+The second part of the import statement, target symbols, is a list of imported symbol names. These target symbols are defined in the target module with an optional qualified name to bind to local execution environment which is denoted by using \say{as} keyword. For the current implementation of the import statement wildcard, the import does not support importing with a qualified name.

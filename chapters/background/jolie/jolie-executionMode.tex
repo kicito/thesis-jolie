@@ -1,12 +1,12 @@
 \subsubsection{Execution modality}
 
-In the previous port decoration example at ~\ref{list:example-port}, the runtime execution terminates after service has finished the workflow of \texttt{createPerson} operation. But as a service, we would like the service to keep listening to the incoming messages without terminates after the first message has been processed.
-Jolie offers a set of primitive of program execution behavior through \texttt{execution} statement which accepts three types of execution behaviors:
+In the previous port definition example at ~\ref{list:example-port}, the runtime execution terminates after service has finished the workflow of \texttt{createPerson} operation. But as a service, we would like it to keep listening to the incoming messages without terminating after the first message has been processed.
+Jolie offers a set of primitives of program execution behavior through \texttt{execution} statement which accepts three types of execution behaviors:
 
 \begin{itemize}
-    \item \textit{single}, a default behavior; which terminates the program after current process is finished.
-    \item \textit{sequential}, initiate new execution behavior when the current process is finished.
-    \item \textit{concurrent}, initiate new execution behavior whenever there is an operation invocation.
+    \item \textit{single}, the default behavior, which terminates the program after the current process is finished.
+    \item \textit{sequential}, which initiates a new execution whenever there is an operation invocation behavior \texttt{after} the current process is finished.
+    \item \textit{concurrent}, which initiates a new execution behavior whenever there is an operation invocation.
 \end{itemize}
 
 \begin{figure}[ht]

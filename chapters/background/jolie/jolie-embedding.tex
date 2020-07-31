@@ -1,15 +1,15 @@
 \subsubsection{Embedding Services}
 \label{sec:embedded}
 
-One of the service composition patterns wildly uses \textit{Orchestration}, which centralizing system logic and behavior in a single service so-called an orchestrator, coordinate and conduct a group of services to achieve their responsibility together. The service orchestration can be achieved with ease by the embedding mechanism of Jolie; it allows multiple services to be executed in a single execution environment in a hierarchical order.
+One of the service composition patterns widely uses is \textit{Orchestration}, which consist a central service, so-called an \say{orchestrator}, coordinates and conducts a group of services to achieve their responsibility together. The service orchestration can be achieved with ease by the embedding mechanism of Jolie; it allows multiple services to be executed in a single execution environment in a hierarchical order.
 Moreover, it allows rapid communication of services via local memory communication, which delivers messages internally within the virtual machine.
 
-The embedding mechanism expands a service into two roles; \textit{embedder} and \textit{embedded} service. The embedder conducts services it embedded. The mechanism allows the developer to separate a complex Jolie service into a small single responsibility service that can later be reused in another project. 
+The embedding mechanism expands a service into two roles; \textit{embedder} and \textit{embedded} service. The embedder conducts the services of the embedded. The mechanism allows the developer to separate a complex Jolie service into small single responsibility service that can later be reused in another project. 
 
 The local memory communication channel can be defined by specifying a communication medium as \textit{local} in a Location field
-Jolie offers a handy mechanism to embedded an external service into local execution. 
+Jolie offers a handy mechanism to embedded an external service into local execution.
 
-Jolie supports different technologies to be embedded as a service, as it is not limited to a service defined in Jolie language. Currently, Jolie supports two additional services from external technology, which are Java and Javascript. Table ~\ref{table:embedded-technology-path} The defined technology give Jolie program to expect different content in \(\langle Path \rangle\) as defined in table ~\ref{fig:embedded-syntax}
+Jolie supports different technologies to be embedded as a service, as it is not limited to a service defined in Jolie language. Currently, Jolie supports two additional services from external technology, which are Java and Javascript. Table ~\ref{table:embedded-technology-path} reports the list of supported technologies and the \(\langle path \rangle\) declaration a Jolie program must define to use the different supported technologies, as shown in table ~\ref{fig:embedded-syntax}
 
 \begin{table}[h]
     \centering
@@ -30,7 +30,7 @@ Jolie supports different technologies to be embedded as a service, as it is not 
 \begin{figure}[ht]
     \begin{framed}
         \begin{grammar}
-            <embedStmt> ::= `embedded' `{' <embedTechnology> `:' ( <Path> ( `in' <portName> )? )* `}'
+            <embedStmt> ::= `embedded' `{' <embedTechnology> `:' ( <path> ( `in' <portName> )? )* `}'
 
             <embedTechnology> ::= 'Java' | 'Javascript' | 'Jolie';
 
@@ -49,9 +49,9 @@ Jolie supports different technologies to be embedded as a service, as it is not 
 The syntax of \(\langle portName \rangle\) defined an output port name to be bound to the embedding service. There are three cases to be considered here, which is detailed in the list below:
 
 \begin{itemize}
-    \item If it is left blank, the embedding service will be launch as a standalone service.
-    \item If it is pointing to exited outputPort, the embedding service will bind communication channel to embedded service input ports declared \textit{`local'} in the location field.
-    \item If it is pointing to new outputPort, the embedding service will automatically create a new output port and bind communication channel to embedded service input ports declared \textit{`local'} in the location field.
+    \item If it is left blank, the embedding service will be launched as a standalone service.
+    \item If it is pointing to an existing outputPort, the embedding service will bind a communication channel to the embedded service input ports declared \textit{`local'} in the location field.
+    \item If it is pointing to a new outputPort, the embedding service will automatically create a new output port and bind communication channel to embedded service input ports declared \textit{`local'} in the location field.
 \end{itemize}
 
 The example below in figure ~\ref{list:jolie-embeded} shows the usage of an embedded statement in Jolie. Here the communication protocol and the location at line 1 are not defined in code. It will be bound automatically to the communication port of embedded service before the main process starts to execute. 

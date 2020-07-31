@@ -1,18 +1,18 @@
 \subsection{Include statement}
 \label{sec:jolie-include}
 
-Jolie supports modular programming via an include statement. Similarly to C programming language include directive, when the parser found an include statement, it substitutes the statement into the content of the target input file. Include statement is used for separate files into a smaller component such as the interface definition file (.iol) or used to add the functionality of the built-in library. The include statement required a string literal indicating the location of the included file. If the given path is an absolute location, Jolie will attempt to find it directly. Otherwise, the searching paths are the following.
+Jolie supports modular programming via an \say{include} statement. Similarly to the C programming language \say{include} directive, when the parser finds an include statement, it substitutes the statement with the content of the target input file. The include statement is used to separate files into smaller components such as the interface definition file (.iol) or used to add the functionality of the built-in library. The include statement requires a string literal indicating the location of the included file. If the given path is an absolute location, Jolie will attempt to find it directly. Otherwise, the searching paths are the following.
 
 \begin{itemize}
     \item A relative path resolved from the current working directory, where the Jolie interpreter is called
-    \item A relative path resolved from Jolie's standard \texttt{include} library directory.
+    \item A relative path resolved from Jolie's standard service library directory \texttt{include}.
     \item A relative path resolved from paths defined by the passing command-line argument.
 \end{itemize}
 
-It is worth noting that the searching path is a relative path to the current working directory, not the program itself directory.
+It is worth noting that the searching path is a relative path to the current working directory, not the current program's directory.
 
-Jolie also supports code inclusion from a Jolie specific achieve files.
-The target string can specify as a Java JAR url \texttt{<scheme>:file:<location>\newline!/{entry}} where \texttt{scheme} can be either a Java archive file (\texttt{jar}) or a Jolie achieve file (\texttt{jap}), \texttt{location} is a path to the archive file, and lastly \texttt{entry} is an internal path to a target inclusion file.
+Jolie also supports code inclusion from Jolie-specific achieve files.
+The target string can specify as a Java JAR url \textit{<scheme>:file:<location>\newline!/{entry}} where \texttt{<scheme>} can be either a Java archive file (\texttt{jar}) or a Jolie achieve file (\texttt{jap}), \texttt{<location>} is a path to the archive file, and lastly \textit{<entry>} is an internal path to a target inclusion file.
 
 \begin{figure}[h]
     \begin{framed}
@@ -21,14 +21,14 @@ The target string can specify as a Java JAR url \texttt{<scheme>:file:<location>
         \end{grammar}
     \end{framed}
     \caption{Jolie Grammar for include statement}
-    \label{fig:jolie-definition}
+    \label{fig:jolie-include}
 \end{figure}
 
 \subsection{Jolie example program}
 
-Once we are familiar with Jolie's basic concept, we will demonstrate an example program of Jolie service and the client, a \textit{SumService}, which exposes an operation \textit{sum} that takes two integers and sum them together. There are three files involved in this example, a file containing an interface definition used by the service operation, the sum service program, and the client.
+Now that we are familiar with Jolie's basic concept, we can demonstrate an example program of Jolie service and client, a \texttt{SumService}, which exposes an operation \texttt{sum} that takes two integers and sum them together. There are three files involved in this example, a file containing an interface definition used by the service operation, the sum service program, and the client.
 
-Firstly, the interface declaration file defined a list of shared definitions between the client and \textit{SumService}. It contain a definition of type \textit{intPair} and an interface \textit{SumIface}, which defined an operation that is used for communication.
+Firstly, the interface declaration file defines a list of shared definitions between the client and \texttt{SumService}. It contain a definition of type \texttt{intPair} and an interface \texttt{SumIface}, encapsulate an operation \texttt{sum} that is used for communication.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -46,7 +46,7 @@ interface SumIface{
 \end{lstlisting}
 \end{listing}
 
-Then we define the sum server shown in figure ~\ref{list:example-sum}, which capable of performing a sum operation when it is called through an input port \textit{IP}. At line 9, we specify the service execution mode to keep a service up and running after an operation is invoked. Lastly, in our main procedure, we create an operation handler for the operation \textit{sum} defined in \textit{SumIface}.
+Then we define the sum service shown in figure ~\ref{list:example-sum}, which is capable of performing a sum operation when it is called through an input port \textit{IP}. At line 9, we specify the service execution mode to keep a service up and running after an operation is invoked. Lastly, in our main procedure, we create an operation handler for the operation \textit{sum} defined in \textit{SumIface}.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -73,7 +73,7 @@ main{
 \end{lstlisting}
 \end{listing}
 
-For our example of the service's client, we firstly include the standard library `console', which exposes us to the ability to perform console related tasks, e.g., print and receive console input. Later at line 4 in the service program, we declare a communication channel name \texttt{Calculator}, which defines the communication channel to the channel in \textit{SumService}. Lastly, the client program, we build a message value and send it through invoking an operation \texttt{sum} in the output port.
+For our example of the service's client, we firstly include the standard library \texttt{console}, which exposes the ability to perform console related tasks, e.g., print and receive console input. Later at line 4 in the service program, we declare a communication channel name \texttt{Calculator}, which defines the communication channel to the channel in \texttt{SumService}. Lastly, in the client program, we build a message value and send it through invoking an operation \texttt{sum} in the output port.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -98,7 +98,7 @@ define printResult{
 main{
     req.x = 2;
     req.y = 3;
-    sum@Calculator(req)(result)
+    sum@Calculator(req)(result);
     printResult
 }
 \end{lstlisting}
