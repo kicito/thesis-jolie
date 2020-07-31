@@ -1,0 +1,14 @@
+\chapter{Conclusion}
+This paper aimed to contribute an implementation of the module system for Jolie programming language.
+The implementation we developed was ideated from the design choices implemented in other programming languages, mainly Python.
+Drawing from other well-established concepts and mechanisms for the implementation of the module system, we successfully implemented one for Jolie.
+This not only resulted in native support for the modular programming in Jolie, the module system also increased the efficiency of the workflow in its interpreter.
+
+Jolie is a service-oriented programming language which emphasizes on service development. It is designed as a tool to develop a microservice application from a language-based approach. The module system for Jolie enhances the flexibility of developing a service for microservice. We demonstrated an example of service development by using a well-known design pattern for software development such as the dependency injection pattern. Moreover, we explored an application of microservice patterns in the Jolie module system. This provides a service extension that enables the system to achieve additional property simply through embedding mechanism to such service; in this particular case, the circuit breaker.
+
+We also looked into the refinement type as an enhancement to Jolie’s type system using JSON schema as an inspiration. The refinement type provides service providers with enhanced possibilities to define constraints on types. We believe that this enhancement will contribute to a safer and more secured service as one of the module components.
+At this stage, our work has been partially accepted into the master branch of Jolie programming language
+
+\subsection{Future works}
+Meta-data, Package management tool
+Standardize refinement type for Jolie
