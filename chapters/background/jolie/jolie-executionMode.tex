@@ -1,11 +1,12 @@
 \subsubsection{Execution modality}
+\label{sec:jolie-execution-mode}
 
-In the previous port definition example at ~\ref{list:example-port}, the runtime execution terminates after service has finished the workflow of \texttt{createPerson} operation. But as a service, we would like it to keep listening to the incoming messages without terminating after the first message has been processed.
+In the previous port definition example, figure ~\ref{list:example-port}, the runtime execution terminates after service has finished the workflow of \texttt{createPerson} operation. But as a service, we would like it to keep listening to the incoming messages without terminating after the first message has been processed.
 Jolie offers a set of primitives of program execution behavior through \texttt{execution} statement which accepts three types of execution behaviors:
 
 \begin{itemize}
     \item \textit{single}, the default behavior, which terminates the program after the current process is finished.
-    \item \textit{sequential}, which initiates a new execution whenever there is an operation invocation behavior \texttt{after} the current process is finished.
+    \item \textit{sequential}, which initiates a new execution whenever there is an operation invocation behavior \textbf{after} the current process is finished.
     \item \textit{concurrent}, which initiates a new execution behavior whenever there is an operation invocation.
 \end{itemize}
 
@@ -21,10 +22,11 @@ Jolie offers a set of primitives of program execution behavior through \texttt{e
             \alt `sequential'
         \end{grammar}
     \end{framed}
-    \caption{Jolie Execution Modality Syntax}
+    \caption{Grammar for Jolie's execution modality}
+    \label{fig:execution-mod-syntax}
 \end{figure}
 
-Thus, it is possible to change the service behavior in figure ~\ref{list:example-port} to accept multiple operations invocation concurrently by adding one single line of code as shown in line 5 of figure ~\ref{list:example-port-concurrent}
+Thus, it is possible to change the service behavior in figure ~\ref{list:example-port} to accept multiple operations invocation concurrently by adding one single line of code as shown in line 5 of figure ~\ref{list:example-port-concurrent}.
 
 \begin{listing}[ht]
 
@@ -33,12 +35,12 @@ Thus, it is possible to change the service behavior in figure ~\ref{list:example
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb, caption= {Jolie concurrent service example}, label={list:example-port-concurrent} ]{typeDef-Jolie}
+    \begin{lstlisting}[frame=tlrb]{concurrent-ex-Jolie}
 outputPort LoggerOutputPort { ... }
 
 inputPort personInputPort { ... }
 
-execution {concurrent}
+execution { concurrent }
 
 main {
     createPerson(person)(result){
@@ -46,6 +48,8 @@ main {
     }
 }
 \end{lstlisting}
+\caption{Jolie implementation of the concurrent execution service}
+\label{list:example-port-concurrent}
 \end{listing}
 
 \FloatBarrier

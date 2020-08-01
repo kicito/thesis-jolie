@@ -1,23 +1,25 @@
-\subsubsection{Procedure Definition}
+\subsubsection{Workflow and Procedure Definition}
 \label{sec:jolie-procedure-def}
 
-Jolie allows the programmer to split process composition into a procedure that can be invoked by calling its name. Calling the procedure essentially tells the runtime execution to perform the instructions within the caller scope. As an example at ~\ref{list:procedure}, calling \texttt{doubleX} in main scope cause \texttt{X} in the procedure to be referred to same \texttt{X} as the \texttt{main} scope. There are two types of special procedures in Jolie that define target execution processes, which are \texttt{init}, the initialization procedure, and \texttt{main}, the main execution target.
+Jolie execution workflow is defined as a block of execution processes, the initialization block \texttt{init} which is executed once during initialization of the service. While the main execution block \texttt{main} is executed differently based on the execution modifier, as it may executed as a one time execution program, or it may act as a service which waits for an incoming message. The detail on execution mode can be found in section ~\ref{sec:jolie-execution-mode}. The main workflow is essential for a Jolie program as it is an execution target for running a program.
 
-\begin{figure}[h]
+Jolie allows the programmer to split process composition into a procedure that can be invoked by calling its name. Calling the procedure essentially tells the runtime execution to perform the instructions within the caller scope. As an example in figure ~\ref{list:procedure}, calling \texttt{doubleX} in main scope cause \texttt{X} in the procedure to be referred to same \texttt{X} as the \texttt{main} scope. 
+
+\begin{figure}[]
 	\begin{framed}
 		\begin{grammar}
 			<procedureDefinition> ::= `define' <ID> `{' <processes> `}'
 		\end{grammar}
 	\end{framed}
-	\caption{Jolie Procedure Definition Syntax}
+	\caption{Grammar for Jolie procedure declaration}
 \end{figure}
 
 
-\begin{listing}[h]
+\begin{listing}[]
 \lstset{language=Jolie,
 	style=codeStyle
 }
-\begin{lstlisting}[frame=tlrb, caption= {Jolie procedure example}, label={list:procedure}]{procedure-Jolie}
+\begin{lstlisting}[frame=tlrb]{Jolie-procedure}
 define doubleX{
 	X = X * 2
 }
@@ -28,8 +30,8 @@ main {
 	// now X == 10
 }
 \end{lstlisting}
+\caption{Jolie implementation of procedure calling}
+\label{list:procedure}
 \end{listing}
-
-The \(<process>\) rule is the composition of tasks to be perform by the service, it will be discuss at \autoref{sec:jolie-behavior}.
 
 \FloatBarrier

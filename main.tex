@@ -124,6 +124,7 @@
 
 \title{
 {A module system for Jolie microservices}\\
+{\large Master Thesis}\\
 {\large University of Southern Denmark}\\
 }
 
@@ -131,21 +132,35 @@
     Narongrit Unwerawattana\\
     Department of Mathematics and Computer Science\\
     \texttt{naunw18@student.sdu.dk}\vspace{40pt} \\
+    Supervisor:\\
+    Fabrizio Montesi\\\\
+    Co-supervisors:\\
+    Saverio Giallorenzo\\
+    Marco Peressotti\\
 }
  
 \begin{document}
 \maketitle
 
-\listoffigures
-\listoftables
+\begin{abstract}
+  Microservices architecture (MSA) is among one of well-received software designs. It aims to divide the application into a collection of self-contained services which communicate to each other over a network. Based on a formal model of service composition calculus, Jolie is a programming language which tackles the complexity of service development. Similar to Microservices architecture, the concept of separating a component into small sub-components also applies to the programming language level, referred to as a modular programming concept. This thesis aims to develop a foundation of the module system for microservices, using Jolie programming language as a reference implementation technology. We explore the design choices of such module system and develop one that is best-suited for Jolie. Moreover, we also implement a refinement type for Jolie which, we believe, will contribute to a safer and more secure service as a module.
+\end{abstract}
 
+\chapter*{Acknowledgement}
+I would like to express my respect and gratitude to my advisors - Fabrizio Montesi, Saverio Giallorenzo, and Marco Peressotti, who have guided me along my graduate study. Your attention to details and willingness to show me the way forward are highly appreciated. 
 
-\include{chapters/1-introduction}
+I would also like to thank my family without their support, none of this would
+be possible.
+
 \tableofcontents
+\include{chapters/1-introduction}
 \include{chapters/2-background}
 \include{chapters/3-modulesystem}
 \include{chapters/4-experimental}
-% \include{chapters/5-appendix}
+\include{chapters/5-conclusion}
+
+\listoffigures
+\listoftables
 
 \printbibliography
 

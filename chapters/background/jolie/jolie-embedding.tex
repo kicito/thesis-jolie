@@ -4,9 +4,9 @@
 One of the service composition patterns widely uses is \textit{Orchestration}, which consist a central service, so-called an \say{orchestrator}, coordinates and conducts a group of services to achieve their responsibility together. The service orchestration can be achieved with ease by the embedding mechanism of Jolie; it allows multiple services to be executed in a single execution environment in a hierarchical order.
 Moreover, it allows rapid communication of services via local memory communication, which delivers messages internally within the virtual machine.
 
-The embedding mechanism expands a service into two roles; \textit{embedder} and \textit{embedded} service. The embedder conducts the services of the embedded. The mechanism allows the developer to separate a complex Jolie service into small single responsibility service that can later be reused in another project. 
+The embedding mechanism expands a service into two roles, \textit{embedder} and \textit{embedded} service. The embedder conducts the services of the embedded. The mechanism allows the developer to separate a complex Jolie service into small single responsibility services that can later be reused in another project. 
 
-The local memory communication channel can be defined by specifying a communication medium as \textit{local} in a Location field
+The local memory communication channel can be defined by specifying a communication medium as \textit{local} in the \texttt{Location} field of the communication port.
 Jolie offers a handy mechanism to embedded an external service into local execution.
 
 Jolie supports different technologies to be embedded as a service, as it is not limited to a service defined in Jolie language. Currently, Jolie supports two additional services from external technology, which are Java and Javascript. Table ~\ref{table:embedded-technology-path} reports the list of supported technologies and the \(\langle path \rangle\) declaration a Jolie program must define to use the different supported technologies, as shown in table ~\ref{fig:embedded-syntax}
@@ -42,7 +42,7 @@ Jolie supports different technologies to be embedded as a service, as it is not 
             ::= 'service' <ServiceName> `{' processes `}';
         \end{grammar}
     \end{framed}
-    \caption{Jolie Embedding Syntax}
+    \caption{Grammar for Jolie embedding statement}
     \label{fig:embedded-syntax}
 \end{figure}
 
@@ -54,7 +54,7 @@ The syntax of \(\langle portName \rangle\) defined an output port name to be bou
     \item If it is pointing to a new outputPort, the embedding service will automatically create a new output port and bind communication channel to embedded service input ports declared \textit{`local'} in the location field.
 \end{itemize}
 
-The example below in figure ~\ref{list:jolie-embeded} shows the usage of an embedded statement in Jolie. Here the communication protocol and the location at line 1 are not defined in code. It will be bound automatically to the communication port of embedded service before the main process starts to execute. 
+The example in figure ~\ref{list:jolie-embeded} shows the usage of an embedded statement in Jolie. Here the communication protocol and the location at line 1 are not defined in code. It will be bound automatically to the communication port of embedded service before the main process starts to execute. 
 
 \begin{listing}[ht]
 
@@ -63,7 +63,7 @@ The example below in figure ~\ref{list:jolie-embeded} shows the usage of an embe
     numbers=left,
     firstnumber=1
 }
-\begin{lstlisting}[frame=tlrb, caption= {Jolie Embedding example}, label={list:jolie-embeded} ]{typeDef-Jolie}
+\begin{lstlisting}[frame=tlrb]{typeDef-Jolie}
 outputPort personService {
     interfaces: personInterface
 }
@@ -77,6 +77,8 @@ main {
     createPerson@personService(person)(result)
 }
 \end{lstlisting}
+\caption{Jolie implementation of the embedded statement}
+\label{list:jolie-embeded}
 \end{listing}
 
 \FloatBarrier

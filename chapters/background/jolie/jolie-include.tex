@@ -11,8 +11,8 @@ Jolie supports modular programming via an \say{include} statement. Similarly to 
 
 It is worth noting that the searching path is a relative path to the current working directory, not the current program's directory.
 
-Jolie also supports code inclusion from Jolie-specific achieve files.
-The target string can specify as a Java JAR url \textit{<scheme>:file:<location>\newline!/{entry}} where \texttt{<scheme>} can be either a Java archive file (\texttt{jar}) or a Jolie achieve file (\texttt{jap}), \texttt{<location>} is a path to the archive file, and lastly \textit{<entry>} is an internal path to a target inclusion file.
+Jolie also supports code inclusion from Jolie-specific archive files.
+The target string can specify as a Java JAR url \textit{<scheme>:file:<location>\newline!/{entry}} where \texttt{<scheme>} can be either a Java archive file (\texttt{jar}) or a Jolie archive file (\texttt{jap}), \texttt{<location>} is a path to the archive file, and lastly \textit{<entry>} is an internal path to a target inclusion file.
 
 \begin{figure}[h]
     \begin{framed}
@@ -20,21 +20,21 @@ The target string can specify as a Java JAR url \textit{<scheme>:file:<location>
             <includeStmt> ::= `include' StringLiteral
         \end{grammar}
     \end{framed}
-    \caption{Jolie Grammar for include statement}
+    \caption{Grammar for Jolie's include statement}
     \label{fig:jolie-include}
 \end{figure}
 
 \subsection{Jolie example program}
 
-Now that we are familiar with Jolie's basic concept, we can demonstrate an example program of Jolie service and client, a \texttt{SumService}, which exposes an operation \texttt{sum} that takes two integers and sum them together. There are three files involved in this example, a file containing an interface definition used by the service operation, the sum service program, and the client.
+Now that we are familiar with Jolie's basic concept, we can demonstrate an example program of Jolie service and client, a \texttt{SumService}, which exposes an operation \texttt{sum} that takes two integers and sums them together. There are three files involved in this example, a file containing an interface definition used by the service operation, the sum service program, and the client.
 
-Firstly, the interface declaration file defines a list of shared definitions between the client and \texttt{SumService}. It contain a definition of type \texttt{intPair} and an interface \texttt{SumIface}, encapsulate an operation \texttt{sum} that is used for communication.
+Firstly, the interface declaration file as shown in figure ~\ref{list:example-iol}, defines a list of shared definitions between the client and \texttt{SumService}. It contains a definition of type \texttt{intPair} and an interface \texttt{SumIface}, that encapsulates an operation \texttt{sum} that is used for communication.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
         style=codeStyle
     }
-    \begin{lstlisting}[frame=tlrb,caption={Sum service interface}, basicstyle=\footnotesize, label={list:example-iol}]{sumIface.iol}
+    \begin{lstlisting}[frame=tlrb]{sumIface.iol}
 // sumIface.iol
 type intPair: void{
     x : int
@@ -44,6 +44,8 @@ interface SumIface{
     requestResponse: sum(intPair)(int)
 }
 \end{lstlisting}
+\caption{Types and interfaces definitions for sum service, as a content in sumIface.iol }
+\label{list:example-iol}
 \end{listing}
 
 Then we define the sum service shown in figure ~\ref{list:example-sum}, which is capable of performing a sum operation when it is called through an input port \textit{IP}. At line 9, we specify the service execution mode to keep a service up and running after an operation is invoked. Lastly, in our main procedure, we create an operation handler for the operation \textit{sum} defined in \textit{SumIface}.
@@ -54,7 +56,7 @@ Then we define the sum service shown in figure ~\ref{list:example-sum}, which is
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb,basicstyle=\footnotesize, caption= {Sum service}, label={list:example-sum} ]{sumservice.ol}
+    \begin{lstlisting}[frame=tlrb]{sumservice.ol}
 include 'sumIface.iol' // include interface file
 
 inputPort IP{
@@ -71,9 +73,11 @@ main{
     }]
 }
 \end{lstlisting}
+\caption{Jolie implementation of the summation service}
+\label{list:example-sum}
 \end{listing}
 
-For our example of the service's client, we firstly include the standard library \texttt{console}, which exposes the ability to perform console related tasks, e.g., print and receive console input. Later at line 4 in the service program, we declare a communication channel name \texttt{Calculator}, which defines the communication channel to the channel in \texttt{SumService}. Lastly, in the client program, we build a message value and send it through invoking an operation \texttt{sum} in the output port.
+For our example of the service's client, shown in figure ~\ref{list:example-client}, we firstly include the standard library \texttt{console}, which exposes the ability to perform console related tasks, e.g., print and receive console input. Later at line 4, we declare a communication channel name \texttt{Calculator}, which defines the communication channel to the channel in \texttt{SumService}. Lastly, in the client main workflow, we build a message value and send it through invoking an operation \texttt{sum} in the output port.
 
 \begin{listing}[ht]
     \lstset{language=Jolie,
@@ -81,7 +85,7 @@ For our example of the service's client, we firstly include the standard library
         numbers=left,
         firstnumber=1
     }
-\begin{lstlisting}[frame=tlrb, basicstyle=\footnotesize, caption= {Sum Service client} , label={list:example-client}]{client.ol}
+\begin{lstlisting}[frame=tlrb]{client.ol}
 include 'console.iol' // use build-in service 'console'
 include 'sumIface.iol' // include an interface file 
 
@@ -102,6 +106,8 @@ main{
     printResult
 }
 \end{lstlisting}
+\caption{Jolie implementation of the summation service's client}
+\label{list:example-client}
 \end{listing}
 
 \FloatBarrier

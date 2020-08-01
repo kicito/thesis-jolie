@@ -5,20 +5,33 @@ As the approaching deadline (tomorrow midnight), I would like to send you the pa
 I am really appreciated your detailed comments as it helped me rethink on what was on my mind when I was writing the first draft. Although, I thought that I would be able to resolve all the comments last night, but unfortunately, I couldn't meet my self-expectation again. I am sorry for the inconvenient.
 
 WIP List:
-    Conclusion section
 
-    Discussion on workflow (procedures)
+    D Discussion on workflow (procedures) เอาใส่กลับเข้ามา
 
     Module System:
-      clarification first paragraph
+    D  clarification first paragraph
     
     Jolie Module System:
-      clarification Definitions
+    D  clarification Definitions
 
-    Module Crawler clarification
+    D Module Crawler clarification
 
     Embed servicenode
-      - clarification in order to...
+      D - clarification in order to...
       - clarification generalizing path reso alg
 
-    From Parameterize Service and below
+    Code example
+      D - service injection pattern
+      - clarify an assignment of operations in the ConsoleInterface binding to the embed service of the ConsoleService
+      - clarify Since the \textit{PrinterService} operation \textit{print} is defined as a subset of operations in \textit{ConsoleService}.
+
+    Experimental
+      - rulename 57
+
+Pawel's comment
+
+  - summary- python module system
+  - rearrage 2.1
+  - descriptive figure description
+  - move toc to front, unnumbered
+  - label consistency between figure/listing, ref for code ex

@@ -9,6 +9,8 @@ Jolie is a service-oriented programming language which emphasizes on service dev
 We also looked into the refinement type as an enhancement to Jolie’s type system using JSON schema as an inspiration. The refinement type provides service providers with enhanced possibilities to define constraints on types. We believe that this enhancement will contribute to a safer and more secured service as one of the module components.
 At this stage, our work has been partially accepted into the master branch of Jolie programming language
 
-\subsection{Future works}
-Meta-data, Package management tool
-Standardize refinement type for Jolie
+\section{Future works}
+
+Any given program will naturally go through changes over time. The changes might be an introduction of a new feature, or fixing an existing defect in the application. Depending on the policy of the application developer, these changes may involve the modification of an API, which causes incompatibility between different versions of the module. To handle potential incompatibility issues, it is common for a programming language to have a place for holding metadata relevant to the package, such as a version of current implementation and its requirement modules dependencies. The format and specification of such information should be designed to be human readable and machine writable. Additionally, it is common for a module system of a programming language to have a package management tool. This particular tool helps a developer to maintain their application dependencies by parsing these information and performing package-related tasks, such as fetching dependencies, and updating the dependencies. This extension of the module system could be a candidate for the future work regarding the module system.
+
+Our experimental implementation of the type refinement for Jolie type system has shown the potential of a safe and secure service as a module. Further study on the refinement type system and its implementation for a capability to define a predicate for Jolie types would also benefit Jolie as a whole, as it would open the opportunity to refine any constraint in passing messages between services.

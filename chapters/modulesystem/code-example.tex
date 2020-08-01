@@ -1,6 +1,6 @@
 \subsection{Code example}
 
-In this section, we introduce the reader to a simple example program of Jolie module system to a sophisticated design pattern \textit{Service Injection Pattern}, which is a dependency-injection like design pattern made possible from the implementation of the module system.
+In this section, we introduce the reader to a simple example program of Jolie. The program emphasizes the capability of the module system by interchanging a service through common interface operation.  
 
 The following code snippet is a hello-world example of the Jolie module system.
 
@@ -10,8 +10,7 @@ The following code snippet is a hello-world example of the Jolie module system.
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{service-hello.ol}
+    \begin{lstlisting}[frame=tlrb]{service-hello.ol}
 from console import ConsoleService, ConsoleInterface
 
 service main(){
@@ -30,12 +29,12 @@ service main(){
 
 \end{listing}
 
-At line 1, we declared an import statement to include the ConsoleService along with the interface exposed by this service. The ConsoleService is a build-in service that allows a Jolie program to communicate to the execution process's system console. Afterward, we declare a service node called \textit{main}, which consists of an output port with an assignment of operations in the ConsoleInterface binding to the embed service of the ConsoleService, and the main procedure of the service. 
-In our main procedure, we send an operation \textit{print} through the output port Console. Executing this program resulted in Hello is printed on the process console.
+At line 1, we have an import statement to import the ConsoleService along with the interface exposed by its service. The ConsoleService is a build-in service that allows a Jolie program to communicate to the execution process system console. Afterwards, we declare a service node called main, with an outgoing communication Console that uses an operation in ConsoleInterface. At line 9, The communication port Console is later bound with the service ConsoleService through the embed statement. It resulted in an usable Console port which communicates internally with ConsoleService, without specification on the location or protocol parameter in its declaration.
+In the main procedure, we invoke the operation \textit{print} through the output port Console. Executing this program results in \say{Hello} being printed at the process console.
 
 \subsubsection{Service Injection Pattern}
 
-Our last example describes a way to compose a simple service in the Jolie module system. Here we can extend the previous example to an advanced scenario. Given a situation where we want to have our workflow on the operation \textit{print}, the developer can create a new service, \textit{PrinterService}, which exposes the operation \textit{print} and prefixing an incoming message before forwarding it to the system console.
+Our last example describes a way to compose a simple service in the Jolie module system. Here, we can extend the previous example to an advanced scenario. Given a situation where we want to have our own workflow on the operation \textit{print}. We create a new service, \textit{PrinterService}, which exposes the operation \textit{print}, with a simple workflow of prefixing an incoming message before forwarding it to the system console.
 
 \begin{listing}[H]
     \lstset{language=Jolie,
@@ -43,9 +42,7 @@ Our last example describes a way to compose a simple service in the Jolie module
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{printer.ol}
-
+    \begin{lstlisting}[frame=tlrb]{printer.ol}
 from console import ConsoleService, ConsoleInterface
 
 interface PrinterInterface {
@@ -72,12 +69,8 @@ service PrinterService() {
 	// omitted code
     }
 }
-
 \end{lstlisting}
-
 \end{listing}
-
-After the service has defined, the developer only has to import and embed \textit{PrinterService} instead of \textit{ConsoleService} in our last example. The client of this service will now point the operation target to the \textit{PrinterService}.
 
 \begin{listing}[H]
     \lstset{language=Jolie,
@@ -85,8 +78,7 @@ After the service has defined, the developer only has to import and embed \texti
         numbers=left,
         firstnumber=1
     }
-    \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{service-injection-hello.ol}
+    \begin{lstlisting}[frame=tlrb]{service-injection-hello.ol}
 from console import ConsoleInterface
 from .printer import PrinterService
 
@@ -105,48 +97,69 @@ service main(){
 \end{lstlisting}
 \end{listing}
 
-Since the \textit{PrinterService} operation \textit{print} is defined as a subset of operations in \textit{ConsoleService}. Thus, these two interfaces are compatible to each other.
+After the service has been defined, we only have to import and embed the \textit{PrinterService} instead of \textit{ConsoleService} of our last example. The client of this service will now use the operation \textit{print} of the \textit{PrinterService} and program results in \say{Printer receive: Hello} being printed.
 
-The module system extends the flexibility of the way we implement a service in Jolie and allows the service developer to create a new system in a modular approach. In the next section, we will look at the practical Jolie module system implementation of the Circuit Breaker, which is one of the prominent  Microservice pattern. 
+Since the operation \textit{print} is commonly exposed by both services, thus, these two services are interchangeable for the operation \textit{print}. 
+
+The module system extends the flexibility of Jolie services and allows the service developer to create a new system in a modular approach. In the next section, we will look at the practical Jolie module system implementation of the Circuit Breaker, which is one of the prominent microservices patterns \cite{nygard2007release}.
+
+\FloatBarrier
 
 \subsubsection{Microservice Pattern: Circuit Breaker}
-In this section, we discuss an implementation of the circuit breaker pattern in Jolie and emphasize Jolie's capability as a language for microservices. After the discussion on implementation source code, we also explore the integration of this application with the container technology, particularly Docker container.
 
-The circuit breaker is a well-known pattern in the Microservice Architecture. It enables an application to proceed on a request properly on the situation of an arbitrary dependent service that has failed to progress. Given a situation where the network of service communicates with each other to build up the client's response, and one of the services is making a longer than usual processing time. This processing time can be a result of the network latency, or there might be a failure during processing, which cannot foresee by other services. The circuit breaker pattern is a pattern addressing a problem when a dependent service fails to process the request either from the longer than usual processing time or an unexpected error thrown from the invocation. The pattern increases the fault-tolerant of the whole system and helps the service maintainer investigate the issues precisely.
+In this section, we discuss an implementation of the circuit breaker pattern in Jolie and emphasize Jolie’s capability as a language for microservices. After the discussion on implementation source code, we also explore the integration of this application with the container technology, particularly Docker container.
 
-A circuit breaker implementation in the Microservice ecosystem is a proxy between a client to a service that might have failed to deliver the response. The circuit breaker monitors the request and counts the number of failures that happen through calls made to the destination service. If the number of failures reaches the threshold, it discards and returns a meaningful response for the client without attempting to make a call to the destination service. Later after a certain amount of time, on the invocation to the service, the circuit breaker slowly forwards the request again.
+The circuit breaker is a well-known pattern in the microservice architecture \cite{martin-2015-circuit, microservices.io-circuit}. It enables an application to proceed on a request properly on the situation of an arbitrary dependent service that has failed to progress. A possible application scenario of circuit breaker is where a network of services communicate with each other to build up a client’s response, and one of the services is taking a longer-than-usual processing time. This processing time can be a result of network latency. Otherwise, there might be a failure during the processing of a task, which cannot be foreseen by other services. The pattern increases the fault-tolerant of the whole system by monitoring the service behavior and prevents an unexpected failure from cascading to other services by performing a cutout action, just like the circuit breaker in the physical world.
 
-There are three states in Circuit breaker which determine the state of calls made to the destination service. Firstly, the \textit{Closed} state is a healthy state of the circuit breaker; at this state, every request for an operation will be passed to the service. Each failure occurred from the call, either internally from the service or the request timeout, the circuit breaker increases the counter. When the number of failures reaches the threshold number, the circuit breaker trips by changes its state to \textit{Open} state and start a reset timeout. At this state, any request making to the destination operation is skipped by the circuit breaker as it is presumed that the destination service is down. The developer of the circuit breaker can design the failback procedure, for example, return a cached response to the client or straightforwardly return an error response. After the reset timeout tick, the circuit breaker changes its state to \textit{Half-Open}, where any call will be passed to the service destination. If the service responds without any error, the circuit breaker sets its state to \textit{Close} or in a healthy state. Otherwise, the circuit breaker falls back to status \textit{Open} again. The states for a circuit status illustrate in the figure ~\ref{list:circuit-breaker}.
+A circuit breaker implementation in the microservices ecosystem is a proxy service between clients to a service. The circuit breaker monitors the request and counts the number of failures that happens through calls made to the destination service. If the number of failures reaches the threshold, it discards and returns a meaningful response for the client without attempting to make a call to the destination service. Later after a certain amount of time, on the invocation to the service, the circuit breaker slowly forwards the request again.
 
-\begin{figure}[ht]
-    \includegraphics[width=10cm]{CircuitBreaker}
+There are three states in circuit breaker which determine the state of calls made to the destination service. Firstly, the \textit{Closed} is a healthy state of the circuit breaker. At this state, every request for an operation will be passed to the service. Each failure occurred from the call, either internally from the service or the request timeout, the circuit breaker increases the counter.When the number of failures reaches the threshold number, the circuit breaker trips by changing its state to \textit{Open} and start a reset timeout. At this state, any request made to the destination operation is skipped by the circuit breaker as it is presumed that the destination service is down. The developer of the circuit breaker can design the fallback procedure, for example, return a cached response to the client or straightforwardly return an error response. After the reset timeout ticks, the circuit breaker changes its state to \textit{Half-Open}, where any call will be passed to the destination service. If the service responds without any error, the circuit breaker sets its state to \textit{Closed} or in a healthy state. Otherwise, the circuit breaker falls back to status \textit{Open} again. The states for a circuit status illustrate in the figure\ref{figure:circuit-breaker-state-diagram}. 
+
+\begin{figure}
     \centering
-    \caption{A state diagram for Circuit Breaker}
-    \label{list:circuit-breaker}
+    \includegraphics[width=\textwidth]{Doc-images-circuit-breaker.pdf}
+    \caption{State diagram for circuit breaker service}
+    \label{figure:circuit-breaker-state-diagram}
 \end{figure}
 
-Montesi and Weber have studied the implementation of the circuit breaker pattern for Jolie application\cite{10.1145/3167132.3167427}, which extends a decoration pattern and sketch an implementation of the circuit breaker pattern in Jolie. In our version, we exploit the capability of importing service to extend a single service with a circuit breaker extension service.
+Montesi and Weber have studied the implementation of circuit breaker pattern for Jolie application\cite{10.1145/3167132.3167427}, which extends a decorator pattern and sketches an implementation of circuit breaker pattern in Jolie. In our version, we exploit the capability of importing service to extend a single service with a circuit breaker extension service. We begin with a circuit breaker service, which is implemented as an extension service to be imported and embedded by others. We firstly define types and interfaces definitions for the circuit breaker, which is shown in figure.
 
-Start with a circuit breaker service, which implemented as an extension service to be imported and embedded by others. We firstly define definitions for the circuit breaker. As a requirement above, we define two communication ports to manage the functionality of the service, one for managing the communication between the circuit breaker to the destination service for handling the internal operation such as timeout for resetting the \textit{Opened} state and request timeout handler. Furthermore, we also define a type for configuring the service. As a proxy service, we require additional input from the embedder service, the exposing input location, and the target location. The source code for what we have mentioned so far is show at ~\ref{list:circuit-breaker-skel-application}
+Start with a circuit breaker service, which is implemented as an extension service to be imported and embedded by others. We firstly define types and interfaces definitions for the circuit breaker, as shown in figure ~\ref{list:circuit-breaker-def}. We required three interfaces for handling the operation as followed:
+\begin{itemize}
+    \item the \texttt{HTTPInterface} defines an operation for handling an communication between the circuit breaker to the client.
+    \item The \texttt{CircuitBreakerServiceCallbackInterface}, defines an operation for handling an communication between the circuit breaker to the destination service.
+    \item Lastly, \texttt{CircuitBreakerInternalInterface} defines the internal operation such as timeout for resetting the Opened state and request timeout handler. 
+\end{itemize}
 
-The client requests are handled through an HTTP protocol with a special configuration \textit{default}, which will be invoked as a default operation when the undefined operation is passed to the service. It is worth mentioning that we give the authority to importer service to configure \textit{location} of our \textit{HTTPInput} and \textit{DestService} field by assigning the service parameter.
+The client requests are handled through an HTTP protocol with a special configuration \textit{default}, which will be invoked as a default operation when the undefined operation is passed to the service.  field by assigning the service parameter. Figure ~\ref{list:circuit-breaker-component-diagram} demonstrated the interfaces exposed by the circuit breaker service.
 
-
-\begin{figure}[ht]
-    \includegraphics[width=10cm]{CircuitBreakerDiagram}
+\begin{figure}
     \centering
-    \caption{A service diagram for Circuit Breaker application}
-    \label{list:circuit-breaker-skel-application}
+    \includegraphics[width=\textwidth]{Doc-images-circuit-breaker-service.pdf}
+    \caption{Component diagram for the circuit breaker service}
+    \label{list:circuit-breaker-component-diagram}
 \end{figure}
 
-\begin{listing}[H]
+Furthermore, we also define a type for configuring the service. As a proxy service, we require additional input from the embedder service, the exposing input location, and the target location. 
+It is worth mentioning that we give the responsibility to importer service to configure \textit{location} of the communication channel. The source code for what we have mentioned so far is shown at figure ~\ref{list:circuit-breaker-def}
+
+\renewcommand{\topfraction}{.85}
+\renewcommand{\bottomfraction}{.7}
+\renewcommand{\textfraction}{.15}
+\renewcommand{\floatpagefraction}{.66}
+\renewcommand{\dbltopfraction}{.66}
+\renewcommand{\dblfloatpagefraction}{.66}
+\setcounter{topnumber}{9}
+\setcounter{bottomnumber}{9}
+\setcounter{totalnumber}{20}
+\setcounter{dbltopnumber}{9}
+
+\begin{listing}[]
     \lstset{language=Jolie,
         style=codeStyle,
-        numbers=left,
-        firstnumber=1
+        basicstyle=\ttfamily\footnotesize
     }
-    \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{circuitbreaker-definitions.ol}
+    \begin{lstlisting}[frame=tlrb]{circuitbreaker-definitions.ol}
 interface HTTPInterface{
     requestResponse:
         default(undefined)(undefined)
@@ -156,13 +169,13 @@ interface CircuitBreakerServiceCallbackInterface{
     requestResponse: callback(undefined)(undefined) throws UnexpectedError(string)
 }
 
+private interface CircuitBreakerInternalInterface{
+    oneWay: reset(undefined)
+}
+
 type CircuitBreakerServiceParam : void {
     inputLocation: string
     outputLocation: string
-}
-
-private interface CircuitBreakerInternalInterface{
-    oneWay: reset(undefined)
 }
 
 service CircuitBreakerService (p : CircuitBreakerServiceParam) { 
@@ -173,61 +186,45 @@ service CircuitBreakerService (p : CircuitBreakerServiceParam) {
         location: p.inputLocation
         interfaces: HTTPInterface
     }
-
     outputPort DestService {
         location: p.outputLocation
         protocol: "sodep"
         interfaces: CircuitBreakerServiceCallbackInterface
     }
-
     inputPort SelfInput{
         location: "local"
         interfaces: CircuitBreakerInternalInterface
     }
-
     ...
-
 }
-
 \end{lstlisting}
+\caption{Definitions and communication ports for the circuit breaker service}
+\label{list:circuit-breaker-def}
 \end{listing}
 
-Next, we define procedures and workflow for each operation exposed by the circuit breaker. The procedures included in this service encapsulate the actions made for state transformation. We use a global state, a shared state lived in every session initiated by the service, to store the counter of error number and the flag of the current status of the circuit breaker.
+Next as shown in figure ~\ref{list:circuit-breaker-workflow}, we define procedures and workflow for each operation exposed by the circuit breaker. The procedures included in this service encapsulate the actions made for state transformation. We use a global state, a shared state lived in every session initiated by the service, to store the counter of error number and the flag of the current status of the circuit breaker.
 
+\begin{listing}[]
+    \centering
     \lstset{language=Jolie,
         style=codeStyle,
-        breaklines=true,
-        columns=fullflexible,
-        numbers=left,
-        breaklines=true,
-        firstnumber=1
+        basicstyle=\ttfamily\footnotesize
     }
-    \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{circuitbreaker-port.ol}
-constants {
-    STATUS_CLOSED = 1,
-    STATUS_OPEN = 2,
-    STATUS_HALFOPEN = 3,
-    ERROR_THRESHOLD = 3,
-    TIMEOUT_REQUEST = 1000
-}
-
+\begin{lstlisting}[frame=tlrb]{circuitbreaker-port.ol}
+// constants declaration
 service CircuitBreakerService (p : CircuitBreakerServiceParam) {
     ...
     define closeCircuit {
         global.errorCount = 0
         global.status = STATUS_CLOSED
     }
-
     define resetCircuit {
         global.status = STATUS_HALFOPEN
     }
-
     define trip {
         global.status = STATUS_OPEN
         scheduleTimeout@Time( TIMEOUT_REQUEST{.operation="reset"} )( )
     }
-
     define handleError {
         if (global.status == STATUS_HALFOPEN){
             trip
@@ -235,13 +232,9 @@ service CircuitBreakerService (p : CircuitBreakerServiceParam) {
             trip
         }
     }
-
-    execution { concurrent }
-
     init {
         closeCircuit
     }
-
     main {        
         [ reset() ]{
             resetCircuit
@@ -267,23 +260,25 @@ service CircuitBreakerService (p : CircuitBreakerServiceParam) {
     }
 }
 \end{lstlisting}
+\caption{Workflow for circuit breaker service}
+\label{list:circuit-breaker-workflow}
+\end{listing}
 
-The \textit{trip} procedure defines the instruction set to turn on the circuit, which is determined by procedure \textit{handleError}. After modifying the state, it proceeds with scheduling the timeout request for state recovery, defined in \textit{resetCircuit}, by invoking the operation from build-in service \textit{time} \footnote{Time service specification https://jolielang.gitbook.io/docs/language-tools-and-standard-library/standard-library-api/time}. 
+The \textit{trip} procedure defines the instruction set to turn on the circuit, which is determined by procedure \textit{handleError}. After modifying the state, it proceeds with scheduling the timeout request for state recovery, defined in \textit{resetCircuit}, by invoking the operation from build-in service \textit{time}
+\footnote{Time service specification \url{https://jolielang.gitbook.io/docs/language-tools-and-standard-library/standard-library-api/time}}.
 
-The circuit breaker's initialization begins with a call to procedure \textit{closeCircuit}, which sets the state of the circuit to \textit{Closed} state. Later in the main execution, the service exposes and wait for two operations \textit{reset} and \textit{default}. The \textit{reset} operation is responsible for turn an Opened state of the circuit breaker to \textit{Half-Opened} by calling \textit{resetCircuit} procedure defined above. The operation for handling client requests, \textit{default}, as mention above, is invoked whenever the client is passing a message to the circuit breaker and forward the request to the destination service. The workflow of operation can be described as the following:
-If the state of the circuit breaker, return a response without passing the request to destination service.
-Otherwise, forward the request to destination service, if there is an error occur, call the error handling procedure and return a response to the client.
+The circuit breaker's initialization begins with a call to procedure \textit{closeCircuit}, which sets the state of the circuit to \textit{Closed} state. Later in the main execution, the service exposes and waits for two operations \textit{reset} and \textit{default}. The \textit{reset} operation is responsible for turn an Opened state of the circuit breaker to \textit{Half-Opened} by calling \textit{resetCircuit} procedure defined above. The operation for handling client requests, \textit{default}, as mention above, is invoked whenever the client is passing a message to the circuit breaker and forward the request to the destination service. The workflow of operation can be described as the following:
+if the state of the circuit breaker, return a response without passing the request to destination service.
+Otherwise, forward the request to destination service, if there is an error occurrence, call the error handling procedure and return a response to the client.
 
-After we have defined the CircuitBreaker service, which can be imported and embed by any services, we look into an example service \textit{AddService}, which integrates the CircuitBreaker extension to handle the possible error that might occur internally. 
+After we have defined the CircuitBreaker proxy service, which can be imported and embedded by any service, we look into an example service \textit{AddService}, which integrates the CircuitBreaker extension to handle the possible error that might occur internally.
 
-\begin{listing}[ht]
+\begin{listing}[]
     \lstset{language=Jolie,
         style=codeStyle,
-        numbers=left,
-        firstnumber=1
-    }
-    \begin{lstlisting}[frame=tlrb,
-basicstyle=\footnotesize]{circuitbreaker-client.ol}
+        basicstyle=\ttfamily\footnotesize
+        }
+    \begin{lstlisting}[frame=tlrb]{circuitbreaker-client.ol}
 from .circuitbreaker import CircuitBreakerService, CircuitBreakerServiceCallbackInterface
 
 type input: void{
@@ -297,16 +292,8 @@ interface calculatorIface {
 }
 
 service main {
-
-    inputPort SelfIn {
-        location: "local://self"
-        interfaces: calculatorIface
-    }
-
-    outputPort SelfOp {
-        location: "local://self"
-        interfaces: calculatorIface
-    }
+    
+    // definition of self ports to redirect the request
 
     inputPort fromCircuitBreaker{
         location: "socket://localhost:3001"
@@ -326,22 +313,23 @@ service main {
 		...
         }]
         [callback(req)(res){
-                    if (req.operation == "add"){
-                        add@SelfOp({x = int(req.data.x) y = int(req.data.y)})(response)               
-                    }       
+            if (req.operation == "add"){
+                add@SelfOp({x = int(req.data.x) y = int(req.data.y)})(response)               
+            }       
 
 		    if (error){
 	    		throw ( UnexpectedError )
-		    }else{
-			res << response
+		    } else {
+                res << response
          	}                  
-            }
         }]
     }
 }
 \end{lstlisting}
+\caption{Jolie implementation of a service embedding the circuit breaker service}
+\label{circuitbreaker-client.ol}
 \end{listing}
 
-Our implementation of the circuit breaker embedder ~\ref{circuitbreaker-client.ol} requires defining an operation \textit{callback}, which receives a message from the circuit breaker and redirect the request to proper operation. In this case, the workflow includes checking the request operation from \textit{operation} field then forward the message to an internal input port, defined using \textit{local} scheme for location. After the call is complete, return the corresponding result to the circuit breaker.
+Our implementation of the circuit breaker embedder, as shown in figure ~\ref{circuitbreaker-client.ol}, requires defining an operation \textit{callback}, which receives a message from the circuit breaker and redirect the request to proper operation. In this case, the workflow includes checking the request operation from \textit{operation} field then forward the message to an internal input port, defined using \textit{local} scheme for location. After the call is complete, return the corresponding result to the circuit breaker.
 
 We had demonstrated an implementation of the microservice architecture, the circuit breaker, using the new feature of the module system. The Jolie module system enables Jolie developer to create and compose multiple sole responsibility services and create a more complex application using the import mechanism.

@@ -10,7 +10,7 @@ A \textbf{module} is an object with a list of python definitions and executable 
 
 A \textbf{package} is a module which might contain sub-modules or a sub-packages.
 Thus, in the file system, directories are recognized as Python packages.
-In the current version of Python, the packages are categorized into two types called regular packages and namespace packages.
+In Python 3, the packages are categorized into two types called regular packages and namespace packages.
 A \textbf{regular package} is a package that is implemented as a directory containing \textbf{\_\_init\_\_.py} file.
 The directory without a \textbf{\_\_init\_\_.py} is consider as a newer type package so-called \textbf{namespace package}.
 The namespace package was introduced to natively support the declaration of a module from different locations \cite{pep420}. The element in the namespace package is called a portion, which can be a set of files in a single directory or an entry in a zip file.
@@ -52,7 +52,7 @@ The syntax of import statements in Python is defined as follows in figure ~\ref{
             <NAME> ::= <ID>
         \end{grammar}
     \end{framed}
-    \caption{Python import statement syntax }
+    \caption{Grammar for Python's import statement }
     \label{fig:python-import-stmt-syntax}
 \end{figure}
 
@@ -81,18 +81,18 @@ For the second form, \texttt{<importFrom>}, the item element can be a module or 
         from pkg.mod import item    & \textit{pkg} is a package and mod is a module in \textit{pkg}, while \textit{item} can be a module of \textit{mod}, or a definition symbol defined in \textit{mod}. \\
         \hline
     \end{tabular}
-    \caption{Python import element definition}
+    \caption{Definition of elements in Python's import statement }
     \label{table:python-import-def}
 \end{table}
 
 There are two types of import statement in Python which determine the module lookup location \cite{pep328}. Absolute import is the default behavior for an import statement, where it will perform a lookup based on the list of system module lookup path. Other types of import statements, relative import, instruct the system to perform a lookup for module relatively from the module that an import statement resides.
 
-A useful feature that \texttt{<importFrom>} provides to Python developer is an ability to specified a module target location. If the module target is prefixed with a dot (.), it will be considered a relative import, where a dot serves as go one level up.
+A useful feature that \texttt{<importFrom>} provides to Python developer is an ability to specify a module target location. If the module target is prefixed with a dot (.), it will be considered a relative import, where a dot serves as go one level up.
 
 
 \subsubsection{Import Mechanism}
 
-After the import statement's execution is completed, it results to a set of defined definitions ready to use in the caller's execution context.
+After the import statement's execution is completed, it results to a set of definitions ready to use in the caller's execution context.
 To achieve this goal, Python processes import statement in two steps, during the creation of symbol table, which the importing target symbols are created the global execution scope of the import statement caller, then the runtime execution of it combines the search of the named module and the binding of the result to the importing module's symbol reference.
 
 At the implementation level, these two operations are performed by an abstraction called \texttt{importer}, which consists of two other crucial abstraction objects: finders and loaders.
@@ -108,4 +108,4 @@ After the module has been loaded into the execution environment, the importing t
 
 \subsubsection{Symbol Privacy}
 
-In Python, every declaration of the symbol is considered a private symbol if it having a prefixed underscore (\_). Such a symbol will be ignored for a wildcard import (from ... import *), and an error will be raised when it is implicitly referred to, as the declaration can only be used in its module scope.
+In Python, every declaration of the symbol is considered a private symbol if it have a prefixed underscore (\_). Such a symbol will be ignored for a wildcard import (from ... import *), and an error will be raised when it is implicitly referred to, as the declaration can only be used in its module scope.

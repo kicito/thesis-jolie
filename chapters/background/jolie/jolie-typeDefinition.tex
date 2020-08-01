@@ -1,15 +1,15 @@
 \subsubsection{Type and Value Representation}
 \label{sec:jolie-type-def}
 
-The type system in Jolie is based on structural typing\cite{jolie-type-2019}, where the compatibility and equivalence are determined from the actual structure of the comparing target. It is used to define the message's structure both incoming and outgoing. A type can be defined as a nested tree where each node contains a value. Jolie support common primitive types with an additional two build-in types \textbf{raw} and \textbf{any}. The \textbf{raw} type is an internal type used for passing data, and the programmer cannot create it. The \textbf{any} type indicates that the value can be in any form of the basic types. One of Jolie's data structure's key features is that every variable is a dynamic array.
+The type system in Jolie is based on structural typing\cite{jolie-type-2019}, where the compatibility and equivalence are determined from the actual structure of the comparing target. It is used to define the message's structure both incoming and outgoing. A type can be defined as a nested tree where each node contains a value. Jolie supports common primitive types with an additional two build-in types \textbf{raw} and \textbf{any}. The \textbf{raw} type is an internal type used for passing data, and the programmer cannot create it. The \textbf{any} type indicates that the value can be in any form of the basic types. One of Jolie's data structure's key features is that every variable is a dynamic array.
 
-The type cardinality can be defined to ensure the range of occurrences for a node in the form of \textit{[ min, max ]} where min and max is a positive number that indicates the range. The common quantifier shorthands such as ? and *  are also supported here. If the cardinality is not defined, it will use the default value of [1,1]. As shown in the reference of \texttt{pet} field in listing ~\ref{list:TypeDefinitonUsage}. 
+The type cardinality can be defined to ensure the range of occurrences for a node in the form of \textit{[ min, max ]} where min and max is a positive number that indicates the range. The common quantifier shorthands such as ? and *  are also supported here. If the cardinality is not defined, it will use the default value of [1,1]. As shown in the reference of \texttt{pet} field in figure ~\ref{list:TypeDefinitonUsage}.
 
-The syntax of Jolie type definition grammar is shown in ~\ref{fig:TypeDefinitonSyntax} where \(<ID>\) is a name defined for it's type structure.
+The syntax of Jolie type definition grammar is shown in figure ~\ref{fig:TypeDefinitonSyntax}.
 
 A type can be defined in three ways:
 \begin{itemize}
-	\item \texttt{typeInline} is a structural composition of types, as illustrated in listing ~\ref{list:TypeDefinitonUsage}.
+	\item \texttt{typeInline} is a structural composition of types, as illustrated in figure ~\ref{list:TypeDefinitonUsage}.
 	\item \texttt{typeLink} is a definition aliasing to a previously defined type.
 	\item \texttt{typeChoice} is a type that can be represent from multiple types.
 \end{itemize}
@@ -38,19 +38,19 @@ A type can be defined in three ways:
 			<nativeType> ::= 'void' | 'string' | 'raw' | 'any' | 'int' | 'double' | 'long' | 'bool'
 		\end{grammar}
 	\end{framed}
-	\caption{Jolie Type Definition Grammar\protect\footnotemark}
+	\caption{Grammar for Jolie's type Definition \protect\footnotemark}
 	\label{fig:TypeDefinitonSyntax}
 \end{figure}
 
-\footnotetext{ID denote an Identifier}
+\footnotetext{ID denote an identifier}
 
 \begin{listing}
-\begin{sublisting}{\linewidth}
+	\begin{sublisting}{\linewidth}
 
-\lstset{language=Jolie,
-	style=codeStyle
-}
-\begin{lstlisting}[frame=tlrb, caption= {Constructing a type and value in Jolie}, label={list:type-value}]{typeDef-Jolie}
+		\lstset{language=Jolie,
+			style=codeStyle
+		}
+		\begin{lstlisting}[frame=tlrb]{typeDef-Jolie}
 type person: int{
 	name: void {
 		firstname: string
@@ -69,12 +69,14 @@ person.pet = "Johnny"
 person.pet[1] = "Max"
 person.age = 20
 \end{lstlisting}
-\end{sublisting}\\[2ex]
-\begin{sublisting}{\linewidth}
-\lstset{language=XML,
-showspaces=false
-}
-\begin{lstlisting}[frame=tlrb, caption= {XML representation of ~\ref{list:type-value}}, label={list:type-value-xml}]
+		\caption{ Construction of type and value in Jolie }
+		\label{list:type-value}
+	\end{sublisting}\\[2ex]
+	\begin{sublisting}{\linewidth}
+		\lstset{language=XML,
+			showspaces=false
+		}
+		\begin{lstlisting}[frame=tlrb]
 <person>
 	1
 	<isMarried>false</isMarried>
@@ -87,9 +89,11 @@ showspaces=false
 	<age>20</age>
 </person>
 \end{lstlisting}
-\end{sublisting}
-\caption{ Jolie type Example }
-\label{list:TypeDefinitonUsage}
+		\caption{ XML representation of \ref{list:type-value} }
+		\label{list:type-value-xml}
+	\end{sublisting}
+	\caption{ Jolie type construction and its representation }
+	\label{list:TypeDefinitonUsage}
 \end{listing}
 
 \FloatBarrier
